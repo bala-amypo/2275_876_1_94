@@ -26,11 +26,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Email already exists");
         }
 
-        User user = new User(
-                fullName,
-                email,
-                passwordEncoder.encode(password),
-                "USER"
+        User user = new User(fullName,email,passwordEncoder.encode(password),"USER"
         );
 
         return userRepository.save(user);
@@ -38,11 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "User not found"
-                        ));
+        return userRepository.findByEmail(email).orElseThrow(() ->new ResourceNotFoundException("User not found"));
     }
 
     @Override
