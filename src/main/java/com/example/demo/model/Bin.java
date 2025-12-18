@@ -85,10 +85,87 @@
 
 
 
+// package com.example.demo.model;
+
+// import jakarta.persistence.*;
+// import java.sql.Timestamp;
+
+// @Entity
+// public class Bin {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+
+//     private String identifier;
+//     private Double capacityLiters;
+//     private boolean active = true;
+
+//     private String locationDescription;
+//     private Double latitude;
+//     private Double longitude;
+
+//     private Timestamp createdAt;
+//     private Timestamp updatedAt;
+
+//     /* ---------- GETTERS ---------- */
+
+//     public Long getId() { return id; }
+//     public String getIdentifier() { return identifier; }
+//     public Double getCapacityLiters() { return capacityLiters; }
+//     public boolean getActive() { return active; }
+//     public String getLocationDescription() { return locationDescription; }
+//     public Double getLatitude() { return latitude; }
+//     public Double getLongitude() { return longitude; }
+//     public Timestamp getCreatedAt() { return createdAt; }
+//     public Timestamp getUpdatedAt() { return updatedAt; }
+
+//     /* ---------- SETTERS ---------- */
+
+//     public void setIdentifier(String identifier) {
+//         this.identifier = identifier;
+//     }
+
+//     public void setCapacityLiters(Double capacityLiters) {
+//         this.capacityLiters = capacityLiters;
+//     }
+
+//     public void setActive(boolean active) {
+//         this.active = active;
+//     }
+
+//     public void setLocationDescription(String locationDescription) {
+//         this.locationDescription = locationDescription;
+//     }
+
+//     public void setLatitude(Double latitude) {
+//         this.latitude = latitude;
+//     }
+
+//     public void setLongitude(Double longitude) {
+//         this.longitude = longitude;
+//     }
+
+//     public void setCreatedAt(Timestamp createdAt) {
+//         this.createdAt = createdAt;
+//     }
+
+//     public void setUpdatedAt(Timestamp updatedAt) {
+//         this.updatedAt = updatedAt;
+//     }
+// }
+
+
+
+
+
+
+
+
+
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 public class Bin {
@@ -98,59 +175,79 @@ public class Bin {
     private Long id;
 
     private String identifier;
-    private Double capacityLiters;
-    private boolean active = true;
 
     private String locationDescription;
+
     private Double latitude;
+
     private Double longitude;
 
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    private Double capacityLiters;
 
-    /* ---------- GETTERS ---------- */
+    private Boolean active = true;
 
-    public Long getId() { return id; }
-    public String getIdentifier() { return identifier; }
-    public Double getCapacityLiters() { return capacityLiters; }
-    public boolean getActive() { return active; }
-    public String getLocationDescription() { return locationDescription; }
-    public Double getLatitude() { return latitude; }
-    public Double getLongitude() { return longitude; }
-    public Timestamp getCreatedAt() { return createdAt; }
-    public Timestamp getUpdatedAt() { return updatedAt; }
+    @ManyToOne
+    private Zone zone;
 
-    /* ---------- SETTERS ---------- */
+    // ===== GETTERS & SETTERS =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
-    public void setCapacityLiters(Double capacityLiters) {
-        this.capacityLiters = capacityLiters;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
+    public String getLocationDescription() {
+        return locationDescription;
     }
 
     public void setLocationDescription(String locationDescription) {
         this.locationDescription = locationDescription;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
     }
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public Double getCapacityLiters() {
+        return capacityLiters;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setCapacityLiters(Double capacityLiters) {
+        this.capacityLiters = capacityLiters;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone zone) {
+        this.zone = zone;
     }
 }
