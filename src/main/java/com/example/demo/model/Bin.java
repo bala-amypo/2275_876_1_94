@@ -5,7 +5,7 @@ import java.time.Instant;
 
 @Entity
 @Table(
-    name = "bins",
+    // name = "bins",
     uniqueConstraints = @UniqueConstraint(columnNames = "identifier")
 )
 public class Bin {

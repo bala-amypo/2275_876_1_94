@@ -5,7 +5,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "overflow_predictions")
+// @Table(name = "overflow_predictions")
 public class OverflowPrediction {
 
     @Id

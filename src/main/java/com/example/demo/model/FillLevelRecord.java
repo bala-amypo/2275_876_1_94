@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "fill_level_records")
+// @Table(name = "fill_level_records")
 public class FillLevelRecord {
 
     @Id

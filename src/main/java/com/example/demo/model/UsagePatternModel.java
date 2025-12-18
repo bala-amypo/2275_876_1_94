@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "usage_pattern_models")
+// @Table(name = "usage_pattern_models")
 public class UsagePatternModel {
 
     @Id

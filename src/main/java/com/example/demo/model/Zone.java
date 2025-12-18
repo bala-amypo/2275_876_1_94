@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(
-    name = "zones",
+    // name = "zones",
     uniqueConstraints = @UniqueConstraint(columnNames = "zoneName")
 )
 public class Zone {
