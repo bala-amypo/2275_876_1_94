@@ -1,43 +1,92 @@
+// package com.example.demo.model;
+
+// import jakarta.persistence.*;
+// import java.sql.Timestamp;
+
+// @Entity
+// @Table(name = "usage_pattern_models")
+// public class UsagePatternModel {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+
+//     @ManyToOne
+//     private Bin bin;
+
+//     private Double avgDailyIncreaseWeekday;
+//     private Double avgDailyIncreaseWeekend;
+//     private Timestamp lastUpdated;
+
+//     public UsagePatternModel() {
+
+//     }
+
+//     public UsagePatternModel(Bin bin, Double weekday,Double weekend, Timestamp lastUpdated) {
+//         this.bin = bin;
+//         this.avgDailyIncreaseWeekday = weekday;
+//         this.avgDailyIncreaseWeekend = weekend;
+//         this.lastUpdated = lastUpdated;
+//     }
+
+//     // Getters
+//     public Bin getBin() { 
+//         return bin; 
+//     }
+//     public Double getAvgDailyIncreaseWeekday() { 
+//         return avgDailyIncreaseWeekday; 
+//     }
+//     public Double getAvgDailyIncreaseWeekend() { 
+//         return avgDailyIncreaseWeekend; 
+//     }
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
 package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "usage_pattern_models")
 public class UsagePatternModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Bin bin;
-
     private Double avgDailyIncreaseWeekday;
     private Double avgDailyIncreaseWeekend;
     private Timestamp lastUpdated;
 
-    public UsagePatternModel() {
+    @ManyToOne
+    private Bin bin;
 
+    // GETTERS & SETTERS
+    public void setBin(Bin bin) {
+        this.bin = bin;
     }
 
-    public UsagePatternModel(Bin bin, Double weekday,Double weekend, Timestamp lastUpdated) {
-        this.bin = bin;
-        this.avgDailyIncreaseWeekday = weekday;
-        this.avgDailyIncreaseWeekend = weekend;
+    public void setLastUpdated(Timestamp lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
-    // Getters
-    public Bin getBin() { 
-        return bin; 
-    }
-    public Double getAvgDailyIncreaseWeekday() { 
-        return avgDailyIncreaseWeekday; 
-    }
-    public Double getAvgDailyIncreaseWeekend() { 
-        return avgDailyIncreaseWeekend; 
+    public void setAvgDailyIncreaseWeekday(Double v) {
+        this.avgDailyIncreaseWeekday = v;
     }
 
+    public void setAvgDailyIncreaseWeekend(Double v) {
+        this.avgDailyIncreaseWeekend = v;
+    }
 }
