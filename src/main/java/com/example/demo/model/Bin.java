@@ -455,42 +455,137 @@
 
 
 
+// package com.example.demo.model;
+
+// import jakarta.persistence.*;
+// import java.sql.Timestamp;
+
+// @Entity
+// @Table(name = "bins")
+// public class Bin {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+
+//     @Column(nullable = false)
+//     private String name;
+
+//     private Integer capacity;
+
+//     private Boolean active;          // 🔥 NEW FIELD
+
+//     @Column(name = "created_at")
+//     private Timestamp createdAt;
+
+//     @Column(name = "updated_at")
+//     private Timestamp updatedAt;
+
+//     // ✅ NO-ARG CONSTRUCTOR
+//     public Bin() {}
+
+//     // ✅ GETTERS AND SETTERS
+//     public Long getId() {
+//         return id;
+//     }
+
+//     public void setId(Long id) {
+//         this.id = id;
+//     }
+
+//     public String getName() {
+//         return name;
+//     }
+
+//     public void setName(String name) {
+//         this.name = name;
+//     }
+
+//     public Integer getCapacity() {
+//         return capacity;
+//     }
+
+//     public void setCapacity(Integer capacity) {
+//         this.capacity = capacity;
+//     }
+
+//     public Boolean getActive() {      // 🔥 REQUIRED
+//         return active;
+//     }
+
+//     public void setActive(Boolean active) {  // 🔥 REQUIRED
+//         this.active = active;
+//     }
+
+//     public Timestamp getCreatedAt() {
+//         return createdAt;
+//     }
+
+//     public void setCreatedAt(Timestamp createdAt) {
+//         this.createdAt = createdAt;
+//     }
+
+//     public Timestamp getUpdatedAt() {
+//         return updatedAt;
+//     }
+
+//     public void setUpdatedAt(Timestamp updatedAt) {
+//         this.updatedAt = updatedAt;
+//     }
+// }
+
+
+
+
+
+
+
+
 package com.example.demo.model;
 
-import jakarta.persistence.*;
-import java.sql.Timestamp;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "bins")
 public class Bin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    private String identifier; // Used for repository search
+    private String name;       // Name of the bin
+    private int capacity;      // Capacity of the bin
+    private boolean active;    // Whether bin is active
 
-    private Integer capacity;
-
-    private Boolean active;          // 🔥 NEW FIELD
-
-    @Column(name = "created_at")
-    private Timestamp createdAt;
-
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-
-    // ✅ NO-ARG CONSTRUCTOR
+    // Default constructor
     public Bin() {}
 
-    // ✅ GETTERS AND SETTERS
+    // Constructor with fields
+    public Bin(String identifier, String name, int capacity, boolean active) {
+        this.identifier = identifier;
+        this.name = name;
+        this.capacity = capacity;
+        this.active = active;
+    }
+
+    // Getters and setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public String getName() {
@@ -501,35 +596,19 @@ public class Bin {
         this.name = name;
     }
 
-    public Integer getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Integer capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
-    public Boolean getActive() {      // 🔥 REQUIRED
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {  // 🔥 REQUIRED
+    public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

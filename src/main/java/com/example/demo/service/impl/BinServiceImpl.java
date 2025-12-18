@@ -85,17 +85,80 @@
 
 
 
+// package com.example.demo.service.impl;
+
+// import com.example.demo.model.Bin;
+// import com.example.demo.repository.BinRepository;
+// import com.example.demo.service.BinService;
+// import org.springframework.stereotype.Service;
+
+// import java.sql.Timestamp;
+// import java.util.List;
+
+// @Service   
+// public class BinServiceImpl implements BinService {
+
+//     private final BinRepository binRepository;
+
+//     public BinServiceImpl(BinRepository binRepository) {
+//         this.binRepository = binRepository;
+//     }
+
+//     @Override
+//     public Bin createBin(Bin bin) {
+//         Timestamp now = new Timestamp(System.currentTimeMillis());
+//         bin.setCreatedAt(now);
+//         bin.setUpdatedAt(now);
+//         return binRepository.save(bin);
+//     }
+
+//     @Override
+//     public Bin updateBin(Long id, Bin bin) {
+//         Bin existing = binRepository.findById(id)
+//                 .orElseThrow(() -> new RuntimeException("Bin not found"));
+
+//         existing.setName(bin.getName());
+//         existing.setCapacity(bin.getCapacity());
+//         existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+//         return binRepository.save(existing);
+//     }
+
+//     @Override
+//     public Bin getBinById(Long id) {
+//         return binRepository.findById(id)
+//                 .orElseThrow(() -> new RuntimeException("Bin not found"));
+//     }
+
+//     @Override
+//     public List<Bin> getAllBins() {
+//         return binRepository.findAll();
+//     }
+
+//     @Override
+//     public void deleteBin(Long id) {
+//         binRepository.deleteById(id);
+//     }
+// }
+
+
+
+
+
+
+
+
+
 package com.example.demo.service.impl;
 
 import com.example.demo.model.Bin;
 import com.example.demo.repository.BinRepository;
 import com.example.demo.service.BinService;
 import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
-@Service   
+@Service
 public class BinServiceImpl implements BinService {
 
     private final BinRepository binRepository;
@@ -105,34 +168,23 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
+    public List<Bin> getAllBins() {
+        return binRepository.findAll();
+    }
+
+    @Override
+    public Optional<Bin> getBinByIdentifier(String identifier) {
+        return binRepository.findByIdentifier(identifier);
+    }
+
+    @Override
     public Bin createBin(Bin bin) {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        bin.setCreatedAt(now);
-        bin.setUpdatedAt(now);
         return binRepository.save(bin);
     }
 
     @Override
-    public Bin updateBin(Long id, Bin bin) {
-        Bin existing = binRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bin not found"));
-
-        existing.setName(bin.getName());
-        existing.setCapacity(bin.getCapacity());
-        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-
-        return binRepository.save(existing);
-    }
-
-    @Override
-    public Bin getBinById(Long id) {
-        return binRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Bin not found"));
-    }
-
-    @Override
-    public List<Bin> getAllBins() {
-        return binRepository.findAll();
+    public Bin updateBin(Bin bin) {
+        return binRepository.save(bin);
     }
 
     @Override

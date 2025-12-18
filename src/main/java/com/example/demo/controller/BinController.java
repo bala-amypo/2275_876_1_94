@@ -67,16 +67,51 @@
 
 
 
+// package com.example.demo.controller;
+
+// import com.example.demo.model.Bin;
+// import com.example.demo.service.BinService;
+// import org.springframework.web.bind.annotation.*;
+
+// import java.util.List;
+
+// @RestController
+// @RequestMapping("/api/bins")
+// public class BinController {
+
+//     private final BinService binService;
+
+//     public BinController(BinService binService) {
+//         this.binService = binService;
+//     }
+
+//     @PostMapping
+//     public Bin create(@RequestBody Bin bin) {
+//         return binService.createBin(bin);
+//     }
+
+//     @GetMapping
+//     public List<Bin> getAll() {
+//         return binService.getAllBins();
+//     }
+// }
+
+
+
+
+
+
+
 package com.example.demo.controller;
 
 import com.example.demo.model.Bin;
 import com.example.demo.service.BinService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/bins")
+@RequestMapping("/bins")
 public class BinController {
 
     private final BinService binService;
@@ -85,13 +120,28 @@ public class BinController {
         this.binService = binService;
     }
 
+    @GetMapping
+    public List<Bin> getAllBins() {
+        return binService.getAllBins();
+    }
+
+    @GetMapping("/{identifier}")
+    public Optional<Bin> getBinByIdentifier(@PathVariable String identifier) {
+        return binService.getBinByIdentifier(identifier);
+    }
+
     @PostMapping
-    public Bin create(@RequestBody Bin bin) {
+    public Bin createBin(@RequestBody Bin bin) {
         return binService.createBin(bin);
     }
 
-    @GetMapping
-    public List<Bin> getAll() {
-        return binService.getAllBins();
+    @PutMapping
+    public Bin updateBin(@RequestBody Bin bin) {
+        return binService.updateBin(bin);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBin(@PathVariable Long id) {
+        binService.deleteBin(id);
     }
 }
