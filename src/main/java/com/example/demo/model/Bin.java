@@ -38,8 +38,7 @@ public class Bin {
     public Bin() {}
 
     // Parameterized Constructor
-    public Bin(String identifier, String locationDescription, Double latitude,
-               Double longitude, Zone zone, Double capacityLiters) {
+    public Bin(String identifier, String locationDescription, Double latitude,Double longitude, Zone zone, Double capacityLiters) {
         this.identifier = identifier;
         this.locationDescription = locationDescription;
         this.latitude = latitude;
@@ -61,8 +60,11 @@ public class Bin {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+    this.id = id; }
 
     public String getIdentifier() { return identifier; }
     public void setIdentifier(String identifier) { this.identifier = identifier; }
