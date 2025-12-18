@@ -27,12 +27,11 @@ public class Bin {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Bin() {}
+    public Bin() {
 
-    public Bin(String identifier, String locationDescription,
-               Double latitude, Double longitude,
-               Zone zone, Double capacityLiters,
-               Boolean active, Timestamp createdAt, Timestamp updatedAt) {
+    }
+
+    public Bin(String identifier, String locationDescription,Double latitude, Double longitude,Zone zone, Double capacityLiters,Boolean active, Timestamp createdAt, Timestamp updatedAt) {
         this.identifier = identifier;
         this.locationDescription = locationDescription;
         this.latitude = latitude;
@@ -45,13 +44,32 @@ public class Bin {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public String getIdentifier() { return identifier; }
-    public void setIdentifier(String identifier) { this.identifier = identifier; }
-    public Zone getZone() { return zone; }
-    public void setZone(Zone zone) { this.zone = zone; }
-    public Double getCapacityLiters() { return capacityLiters; }
-    public void setCapacityLiters(Double capacityLiters) { this.capacityLiters = capacityLiters; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Long getId() { 
+        return id; 
+    }
+    public String getIdentifier() { 
+        return identifier; 
+    }
+    public void setIdentifier(String identifier) { 
+        this.identifier = identifier; 
+    }
+    public Zone getZone() { 
+        return zone; 
+    }
+    public void setZone(Zone zone) { 
+        this.zone = zone; 
+    }
+    public Double getCapacityLiters() { 
+        return capacityLiters;
+    }
+    public void setCapacityLiters(Double capacityLiters) { 
+        this.capacityLiters = capacityLiters; 
+    }
+    public Boolean getActive() { 
+        return active; 
+    }
+    public void setActive(Boolean active) { 
+        this.active = active; 
+    }
+
 }
