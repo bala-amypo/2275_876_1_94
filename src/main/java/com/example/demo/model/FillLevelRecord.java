@@ -53,6 +53,11 @@
 
 
 
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import java.sql.Timestamp;
+
 @Entity
 public class FillLevelRecord {
 
@@ -68,11 +73,8 @@ public class FillLevelRecord {
     private Bin bin;
 
     public Double getFillPercentage() { return fillPercentage; }
-
     public boolean isWeekend() { return weekend; }
-
     public Timestamp getRecordedAt() { return recordedAt; }
-
     public Bin getBin() { return bin; }
 
     public void setBin(Bin bin) { this.bin = bin; }

@@ -85,6 +85,11 @@
 
 
 
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import java.sql.Timestamp;
+
 @Entity
 public class Bin {
 
@@ -100,33 +105,18 @@ public class Bin {
     private Double latitude;
     private Double longitude;
 
-    @ManyToOne
-    private Zone zone;
-
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     public Long getId() { return id; }
-
     public String getIdentifier() { return identifier; }
-
     public Double getCapacityLiters() { return capacityLiters; }
-
-    public Zone getZone() { return zone; }
-
-    public boolean getActive() { return active; }
-
-    public void setZone(Zone zone) { this.zone = zone; }
+    public boolean isActive() { return active; }
+    public String getLocationDescription() { return locationDescription; }
+    public Double getLatitude() { return latitude; }
+    public Double getLongitude() { return longitude; }
 
     public void setActive(boolean active) { this.active = active; }
-
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
-
-    public String getLocationDescription() { return locationDescription; }
-
-    public Double getLatitude() { return latitude; }
-
-    public Double getLongitude() { return longitude; }
 }

@@ -41,6 +41,10 @@
 
 
 
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -54,10 +58,8 @@ public class User {
     private String password;
     private String role;
 
-    // REQUIRED BY JPA
     public User() {}
 
-    // ✅ REQUIRED BY UserServiceImpl
     public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
@@ -66,6 +68,7 @@ public class User {
     }
 
     public Long getId() { return id; }
+    public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
     public String getRole() { return role; }
