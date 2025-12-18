@@ -25,9 +25,7 @@ public class BinController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateBin(
-            @PathVariable Long id,
-            @RequestBody Bin bin) {
+    public ApiResponse updateBin(@PathVariable Long id,@RequestBody Bin bin) {
         return new ApiResponse(
                 true,
                 "Bin updated",

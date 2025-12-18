@@ -24,8 +24,7 @@ public class OverflowPredictionController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse getPrediction(
-            @PathVariable Long id) {
+    public ApiResponse getPrediction(@PathVariable Long id) {
         return new ApiResponse(
                 true,
                 "Prediction fetched",
@@ -34,8 +33,7 @@ public class OverflowPredictionController {
     }
 
     @GetMapping("/bin/{binId}")
-    public ApiResponse getPredictionsForBin(
-            @PathVariable Long binId) {
+    public ApiResponse getPredictionsForBin(@PathVariable Long binId) {
         return new ApiResponse(
                 true,
                 "Predictions fetched",
@@ -44,8 +42,7 @@ public class OverflowPredictionController {
     }
 
     @GetMapping("/zone/{zoneId}/latest")
-    public ApiResponse getLatestPredictionsForZone(
-            @PathVariable Long zoneId) {
+    public ApiResponse getLatestPredictionsForZone(@PathVariable Long zoneId) {
         return new ApiResponse(
                 true,
                 "Zone predictions fetched",

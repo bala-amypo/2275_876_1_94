@@ -11,14 +11,12 @@ public class FillLevelRecordController {
 
     private final FillLevelRecordService recordService;
 
-    public FillLevelRecordController(
-            FillLevelRecordService recordService) {
+    public FillLevelRecordController(FillLevelRecordService recordService) {
         this.recordService = recordService;
     }
 
     @PostMapping
-    public ApiResponse createRecord(
-            @RequestBody FillLevelRecord record) {
+    public ApiResponse createRecord(@RequestBody FillLevelRecord record) {
         return new ApiResponse(
                 true,
                 "Record created",
@@ -36,8 +34,7 @@ public class FillLevelRecordController {
     }
 
     @GetMapping("/bin/{binId}")
-    public ApiResponse getRecordsForBin(
-            @PathVariable Long binId) {
+    public ApiResponse getRecordsForBin(@PathVariable Long binId) {
         return new ApiResponse(
                 true,
                 "Records fetched",
@@ -46,9 +43,7 @@ public class FillLevelRecordController {
     }
 
     @GetMapping("/bin/{binId}/recent")
-    public ApiResponse getRecentRecords(
-            @PathVariable Long binId,
-            @RequestParam int limit) {
+    public ApiResponse getRecentRecords(@PathVariable Long binId,@RequestParam int limit) {
         return new ApiResponse(
                 true,
                 "Recent records fetched",

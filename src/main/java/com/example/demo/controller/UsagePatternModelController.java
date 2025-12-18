@@ -11,14 +11,12 @@ public class UsagePatternModelController {
 
     private final UsagePatternModelService modelService;
 
-    public UsagePatternModelController(
-            UsagePatternModelService modelService) {
+    public UsagePatternModelController(UsagePatternModelService modelService) {
         this.modelService = modelService;
     }
 
     @PostMapping
-    public ApiResponse createModel(
-            @RequestBody UsagePatternModel model) {
+    public ApiResponse createModel(@RequestBody UsagePatternModel model) {
         return new ApiResponse(
                 true,
                 "Model created",
@@ -27,9 +25,7 @@ public class UsagePatternModelController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateModel(
-            @PathVariable Long id,
-            @RequestBody UsagePatternModel model) {
+    public ApiResponse updateModel(@PathVariable Long id,@RequestBody UsagePatternModel model) {
         return new ApiResponse(
                 true,
                 "Model updated",
@@ -38,8 +34,7 @@ public class UsagePatternModelController {
     }
 
     @GetMapping("/bin/{binId}")
-    public ApiResponse getModelForBin(
-            @PathVariable Long binId) {
+    public ApiResponse getModelForBin(@PathVariable Long binId) {
         return new ApiResponse(
                 true,
                 "Model fetched",

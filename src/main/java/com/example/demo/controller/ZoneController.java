@@ -25,9 +25,7 @@ public class ZoneController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateZone(
-            @PathVariable Long id,
-            @RequestBody Zone zone) {
+    public ApiResponse updateZone(@PathVariable Long id,@RequestBody Zone zone) {
         return new ApiResponse(
                 true,
                 "Zone updated",
