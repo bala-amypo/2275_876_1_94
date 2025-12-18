@@ -97,19 +97,34 @@ public class Bin {
         this.longitude = longitude; 
     }
 
-    public Zone getZone() { return zone; }
-    public void setZone(Zone zone) { this.zone = zone; }
+    public Zone getZone() { 
+        return zone; 
+    }
+    public void setZone(Zone zone) { 
+        this.zone = zone; 
+    }
 
-    public Double getCapacityLiters() { return capacityLiters; }
+    public Double getCapacityLiters() { 
+        return capacityLiters; 
+    }
     public void setCapacityLiters(Double capacityLiters) {
         if (capacityLiters <= 0)
             throw new IllegalArgumentException("Capacity must be greater than 0");
         this.capacityLiters = capacityLiters;
     }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Boolean getActive() { 
+        return active; 
+    }
+    public void setActive(Boolean active) { 
+        this.active = active; 
+    }
 
-    public Instant getCreatedAt() { return createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
+    public Instant getCreatedAt() { 
+        return createdAt; 
+    }
+    public Instant getUpdatedAt() { 
+        return updatedAt; 
+    }
+
 }
