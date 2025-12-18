@@ -30,9 +30,7 @@ public class BinServiceImpl implements BinService {
             throw new BadRequestException("Invalid capacity");
         }
 
-        Zone zone = zoneRepository.findById(bin.getZone().getId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Zone not found"));
+        Zone zone = zoneRepository.findById(bin.getZone().getId()).orElseThrow(() ->new ResourceNotFoundException("Zone not found"));
 
         bin.setZone(zone);
         bin.setActive(true);
@@ -47,8 +45,7 @@ public class BinServiceImpl implements BinService {
 
         Bin existing = getBinById(id);
 
-        if (updatedBin.getCapacityLiters() != null &&
-                updatedBin.getCapacityLiters() <= 0) {
+        if (updatedBin.getCapacityLiters() != null && updatedBin.getCapacityLiters() <= 0) {
             throw new BadRequestException("capacity");
         }
 
@@ -64,9 +61,7 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public Bin getBinById(Long id) {
-        return binRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Bin not found"));
+        return binRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("Bin not found"));
     }
 
     @Override
