@@ -54,11 +54,6 @@
 
 
 
-package com.example.demo.model;
-
-import jakarta.persistence.*;
-import java.sql.Timestamp;
-
 @Entity
 public class UsagePatternModel {
 
@@ -68,25 +63,25 @@ public class UsagePatternModel {
 
     private Double avgDailyIncreaseWeekday;
     private Double avgDailyIncreaseWeekend;
-    private Timestamp lastUpdated;
 
     @ManyToOne
     private Bin bin;
 
-    // GETTERS & SETTERS
-    public void setBin(Bin bin) {
-        this.bin = bin;
+    private Timestamp lastUpdated;
+
+    public Double getAvgDailyIncreaseWeekday() {
+        return avgDailyIncreaseWeekday;
     }
+
+    public Double getAvgDailyIncreaseWeekend() {
+        return avgDailyIncreaseWeekend;
+    }
+
+    public Bin getBin() { return bin; }
+
+    public void setBin(Bin bin) { this.bin = bin; }
 
     public void setLastUpdated(Timestamp lastUpdated) {
         this.lastUpdated = lastUpdated;
-    }
-
-    public void setAvgDailyIncreaseWeekday(Double v) {
-        this.avgDailyIncreaseWeekday = v;
-    }
-
-    public void setAvgDailyIncreaseWeekend(Double v) {
-        this.avgDailyIncreaseWeekend = v;
     }
 }

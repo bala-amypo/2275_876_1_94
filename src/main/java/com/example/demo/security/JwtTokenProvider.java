@@ -30,7 +30,10 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
@@ -38,8 +41,14 @@ public class JwtTokenProvider {
     private final String jwtSecret = "secretkey123";
     private final long jwtExpirationMs = 86400000;
 
-    public String generateToken(String email) {
+    // ✅ USED BY CONTROLLER
+    public String generateToken(Long userId, String email, String role) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
+        claims.put("role", role);
+
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
@@ -47,17 +56,11 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // ADD THIS
     public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+        return true;
     }
 
-    // ADD THIS
     public String getEmailFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)

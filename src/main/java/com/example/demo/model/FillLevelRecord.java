@@ -53,10 +53,6 @@
 
 
 
-package com.example.demo.model;
-
-import jakarta.persistence.*;
-
 @Entity
 public class FillLevelRecord {
 
@@ -66,24 +62,18 @@ public class FillLevelRecord {
 
     private Double fillPercentage;
     private boolean weekend;
+    private Timestamp recordedAt;
 
     @ManyToOne
     private Bin bin;
 
-    // GETTERS & SETTERS
-    public boolean isWeekend() {   // 🔥 FIXED
-        return weekend;
-    }
+    public Double getFillPercentage() { return fillPercentage; }
 
-    public void setWeekend(boolean weekend) {
-        this.weekend = weekend;
-    }
+    public boolean isWeekend() { return weekend; }
 
-    public Bin getBin() {
-        return bin;
-    }
+    public Timestamp getRecordedAt() { return recordedAt; }
 
-    public void setBin(Bin bin) {
-        this.bin = bin;
-    }
+    public Bin getBin() { return bin; }
+
+    public void setBin(Bin bin) { this.bin = bin; }
 }

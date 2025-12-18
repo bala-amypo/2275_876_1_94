@@ -85,11 +85,6 @@
 
 
 
-package com.example.demo.model;
-
-import jakarta.persistence.*;
-import java.sql.Timestamp;
-
 @Entity
 public class Bin {
 
@@ -97,45 +92,41 @@ public class Bin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String identifier;
+    private Double capacityLiters;
+    private boolean active = true;
+
     private String locationDescription;
     private Double latitude;
     private Double longitude;
 
+    @ManyToOne
+    private Zone zone;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // GETTERS & SETTERS
     public Long getId() { return id; }
 
-    public String getLocationDescription() {
-        return locationDescription;
-    }
+    public String getIdentifier() { return identifier; }
 
-    public void setLocationDescription(String locationDescription) {
-        this.locationDescription = locationDescription;
-    }
+    public Double getCapacityLiters() { return capacityLiters; }
+
+    public Zone getZone() { return zone; }
+
+    public boolean getActive() { return active; }
+
+    public void setZone(Zone zone) { this.zone = zone; }
+
+    public void setActive(boolean active) { this.active = active; }
+
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getLocationDescription() { return locationDescription; }
 
     public Double getLatitude() { return latitude; }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
     public Double getLongitude() { return longitude; }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Timestamp getCreatedAt() { return createdAt; }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() { return updatedAt; }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }
