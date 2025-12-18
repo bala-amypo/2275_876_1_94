@@ -95,7 +95,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Service   // 🔥 THIS WAS MISSING OR WRONG
+@Service   
 public class BinServiceImpl implements BinService {
 
     private final BinRepository binRepository;
