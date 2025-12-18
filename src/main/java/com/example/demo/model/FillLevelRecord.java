@@ -24,11 +24,12 @@ public class FillLevelRecord {
     private Boolean isWeekend;
 
     // Default Constructor
-    public FillLevelRecord() {}
+    public FillLevelRecord() {
+
+    }
 
     // Parameterized Constructor
-    public FillLevelRecord(Bin bin, Double fillPercentage,
-                           Instant recordedAt, Boolean isWeekend) {
+    public FillLevelRecord(Bin bin, Double fillPercentage,Instant recordedAt, Boolean isWeekend) {
         this.bin = bin;
         this.fillPercentage = fillPercentage;
         this.recordedAt = recordedAt;
@@ -44,24 +45,39 @@ public class FillLevelRecord {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
 
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
+    public Bin getBin() { 
+        return bin; 
+    }
+    public void setBin(Bin bin) { 
+        this.bin = bin; 
+    }
 
-    public Double getFillPercentage() { return fillPercentage; }
+    public Double getFillPercentage() { 
+        return fillPercentage; 
+    }
     public void setFillPercentage(Double fillPercentage) {
         this.fillPercentage = fillPercentage;
     }
 
-    public Instant getRecordedAt() { return recordedAt; }
+    public Instant getRecordedAt() { 
+        return recordedAt; 
+    }
     public void setRecordedAt(Instant recordedAt) {
         this.recordedAt = recordedAt;
     }
 
-    public Boolean getIsWeekend() { return isWeekend; }
+    public Boolean getIsWeekend() { 
+        return isWeekend; 
+    }
     public void setIsWeekend(Boolean isWeekend) {
         this.isWeekend = isWeekend;
     }
+
 }

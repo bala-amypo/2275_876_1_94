@@ -33,8 +33,7 @@ public class OverflowPrediction {
 
     // Parameterized Constructor
     public OverflowPrediction(Bin bin, LocalDate predictedFullDate,
-                              Integer daysUntilFull,
-                              UsagePatternModel modelUsed) {
+                              Integer daysUntilFull,UsagePatternModel modelUsed) {
         this.bin = bin;
         this.predictedFullDate = predictedFullDate;
         this.daysUntilFull = daysUntilFull;
