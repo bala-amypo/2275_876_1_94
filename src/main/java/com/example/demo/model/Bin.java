@@ -108,15 +108,49 @@ public class Bin {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    /* ---------- GETTERS ---------- */
+
     public Long getId() { return id; }
     public String getIdentifier() { return identifier; }
     public Double getCapacityLiters() { return capacityLiters; }
-    public boolean isActive() { return active; }
+    public boolean getActive() { return active; }
     public String getLocationDescription() { return locationDescription; }
     public Double getLatitude() { return latitude; }
     public Double getLongitude() { return longitude; }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public Timestamp getUpdatedAt() { return updatedAt; }
 
-    public void setActive(boolean active) { this.active = active; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    /* ---------- SETTERS ---------- */
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    public void setCapacityLiters(Double capacityLiters) {
+        this.capacityLiters = capacityLiters;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setLocationDescription(String locationDescription) {
+        this.locationDescription = locationDescription;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

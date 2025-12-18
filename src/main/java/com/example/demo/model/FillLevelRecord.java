@@ -66,16 +66,29 @@ public class FillLevelRecord {
     private Long id;
 
     private Double fillPercentage;
-    private boolean weekend;
+    private boolean isWeekend;
     private Timestamp recordedAt;
 
     @ManyToOne
     private Bin bin;
 
-    public Double getFillPercentage() { return fillPercentage; }
-    public boolean isWeekend() { return weekend; }
-    public Timestamp getRecordedAt() { return recordedAt; }
-    public Bin getBin() { return bin; }
+    public Double getFillPercentage() {
+        return fillPercentage;
+    }
 
-    public void setBin(Bin bin) { this.bin = bin; }
+    public boolean getIsWeekend() {
+        return isWeekend;
+    }
+
+    public Timestamp getRecordedAt() {
+        return recordedAt;
+    }
+
+    public Bin getBin() {
+        return bin;
+    }
+
+    public void setBin(Bin bin) {
+        this.bin = bin;
+    }
 }
