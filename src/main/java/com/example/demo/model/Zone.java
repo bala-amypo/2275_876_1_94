@@ -68,6 +68,43 @@
 
 
 
+// package com.example.demo.model;
+
+// import jakarta.persistence.*;
+
+// @Entity
+// public class Zone {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+
+//     private String name;
+
+//     // ===== GETTERS & SETTERS =====
+
+//     public Long getId() {
+//         return id;
+//     }
+
+//     public String getName() {
+//         return name;
+//     }
+
+//     public void setName(String name) {
+//         this.name = name;
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
 package com.example.demo.model;
 
 import jakarta.persistence.*;
@@ -79,7 +116,11 @@ public class Zone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String zoneName;
+
+    private String description;
+
+    private Boolean active = true;
 
     // ===== GETTERS & SETTERS =====
 
@@ -87,11 +128,27 @@ public class Zone {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getZoneName() {
+        return zoneName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setZoneName(String zoneName) {
+        this.zoneName = zoneName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
