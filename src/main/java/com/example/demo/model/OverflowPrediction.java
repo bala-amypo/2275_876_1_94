@@ -32,8 +32,7 @@ public class OverflowPrediction {
     public OverflowPrediction() {}
 
     // Parameterized Constructor
-    public OverflowPrediction(Bin bin, LocalDate predictedFullDate,
-                              Integer daysUntilFull,UsagePatternModel modelUsed) {
+    public OverflowPrediction(Bin bin, LocalDate predictedFullDate,Integer daysUntilFull,UsagePatternModel modelUsed) {
         this.bin = bin;
         this.predictedFullDate = predictedFullDate;
         this.daysUntilFull = daysUntilFull;
@@ -50,11 +49,19 @@ public class OverflowPrediction {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
 
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
+    public Bin getBin() { 
+        return bin; 
+    }
+    public void setBin(Bin bin) { 
+        this.bin = bin; 
+    }
 
     public LocalDate getPredictedFullDate() {
         return predictedFullDate;
@@ -63,15 +70,22 @@ public class OverflowPrediction {
         this.predictedFullDate = predictedFullDate;
     }
 
-    public Integer getDaysUntilFull() { return daysUntilFull; }
+    public Integer getDaysUntilFull() { 
+        return daysUntilFull; 
+    }
     public void setDaysUntilFull(Integer daysUntilFull) {
         this.daysUntilFull = daysUntilFull;
     }
 
-    public UsagePatternModel getModelUsed() { return modelUsed; }
+    public UsagePatternModel getModelUsed() { 
+        return modelUsed; 
+    }
     public void setModelUsed(UsagePatternModel modelUsed) {
         this.modelUsed = modelUsed;
     }
 
-    public Instant getGeneratedAt() { return generatedAt; }
+    public Instant getGeneratedAt() { 
+        return generatedAt; 
+    }
+
 }

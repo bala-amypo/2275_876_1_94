@@ -42,11 +42,19 @@ public class UsagePatternModel {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
 
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
+    public Bin getBin() { 
+        return bin; 
+    }
+    public void setBin(Bin bin) { 
+        this.bin = bin; 
+    }
 
     public Double getAvgDailyIncreaseWeekday() {
         return avgDailyIncreaseWeekday;
@@ -62,5 +70,8 @@ public class UsagePatternModel {
         this.avgDailyIncreaseWeekend = value;
     }
 
-    public Instant getLastUpdated() { return lastUpdated; }
+    public Instant getLastUpdated() { 
+        return lastUpdated; 
+    }
+
 }

@@ -32,17 +32,32 @@ public class Zone {
     }
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
 
-    public String getZoneName() { return zoneName; }
-    public void setZoneName(String zoneName) { this.zoneName = zoneName; }
+    public String getZoneName() { 
+        return zoneName; 
+    }
+    public void setZoneName(String zoneName) { 
+        this.zoneName = zoneName; 
+    }
 
-    public String getDescription() { return description; }
+    public String getDescription() { 
+        return description; 
+    }
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public Boolean getActive() { 
+        return active; 
+    }
+    public void setActive(Boolean active) { 
+        this.active = active; 
+    }
+
 }
