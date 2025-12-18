@@ -14,16 +14,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User registerUser(String fullName,
-                             String email,
-                             String password) {
+    public User registerUser(String fullName,String email,String password) {
 
         if (userRepository.findByEmail(email).isPresent()) {
             throw new BadRequestException("Email already exists");

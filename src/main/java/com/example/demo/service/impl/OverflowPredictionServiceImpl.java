@@ -50,43 +50,28 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
 
         LocalDate predictedDate =LocalDate.now().plusDays(daysUntilFull);
 
-        OverflowPrediction prediction =new OverflowPrediction(
-                        bin,Date.from(predictedDate.atStartOfDay().atZone(java.time.ZoneId.systemDefault())
-                                .toInstant()),
-                        daysUntilFull,
-                        model,
-                        Timestamp.from(Instant.now())
-                );
+        OverflowPrediction prediction =new OverflowPrediction(bin,Date.from(predictedDate.atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant()),daysUntilFull,model,Timestamp.from(Instant.now()));
 
         return predictionRepository.save(prediction);
     }
 
     @Override
     public OverflowPrediction getPredictionById(Long id) {
-        return predictionRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Prediction not found"));
+        return predictionRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("Prediction not found"));
     }
 
     @Override
     public List<OverflowPrediction> getPredictionsForBin(Long binId) {
 
-        Bin bin = binRepository.findById(binId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Bin not found"));
+        Bin bin = binRepository.findById(binId).orElseThrow(() ->new ResourceNotFoundException("Bin not found"));
 
-        return predictionRepository.findAll()
-                .stream()
-                .filter(p -> p.getBin().getId().equals(bin.getId()))
-                .toList();
+        return predictionRepository.findAll().stream().filter(p -> p.getBin().getId().equals(bin.getId())).toList();
     }
 
     @Override
     public List<OverflowPrediction> getLatestPredictionsForZone(Long zoneId) {
 
-        Zone zone = zoneRepository.findById(zoneId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Zone not found"));
+        Zone zone = zoneRepository.findById(zoneId).orElseThrow(() ->new ResourceNotFoundException("Zone not found"));
 
         return predictionRepository.findLatestPredictionsForZone(zone);
     }
