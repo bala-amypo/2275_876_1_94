@@ -12,18 +12,14 @@ public class JwtTokenProvider {
         this.secret = secret;
     }
 
-    public String generateToken(Long userId,
-                                String email,
-                                String role) {
+    public String generateToken(Long userId,String email,String role) {
 
         return Jwts.builder()
                 .setSubject(email)
                 .claim("userId", userId)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + expiration)
-                )
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
