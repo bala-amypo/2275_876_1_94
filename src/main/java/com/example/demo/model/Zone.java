@@ -41,7 +41,13 @@ public class Zone {
         return description; 
     }
     public void setDescription(String description) { 
-        this.description = description; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+        this.description = description; 
+    }
+    public Boolean getActive() { 
+        return active; 
+    }
+    public void setActive(Boolean active) { 
+        this.active = active; 
+    }
+
 }

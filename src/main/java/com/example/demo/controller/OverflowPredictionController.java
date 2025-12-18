@@ -10,14 +10,12 @@ public class OverflowPredictionController {
 
     private final OverflowPredictionService predictionService;
 
-    public OverflowPredictionController(
-            OverflowPredictionService predictionService) {
+    public OverflowPredictionController(OverflowPredictionService predictionService) {
         this.predictionService = predictionService;
     }
 
     @PostMapping("/generate/{binId}")
-    public ApiResponse generatePrediction(
-            @PathVariable Long binId) {
+    public ApiResponse generatePrediction(@PathVariable Long binId) {
         return new ApiResponse(
                 true,
                 "Prediction generated",
