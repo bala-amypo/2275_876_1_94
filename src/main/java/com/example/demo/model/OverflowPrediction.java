@@ -23,16 +23,16 @@ public class OverflowPrediction {
 
     private Timestamp generatedAt;
 
-    public OverflowPrediction() {}
+    public OverflowPrediction() {
+        
+    }
 
-    public OverflowPrediction(Bin bin, Date predictedFullDate,
-                              Integer daysUntilFull,
-                              UsagePatternModel modelUsed,
-                              Timestamp generatedAt) {
+    public OverflowPrediction(Bin bin, Date predictedFullDate,Integer daysUntilFull,UsagePatternModel modelUsed,Timestamp generatedAt) {
         this.bin = bin;
         this.predictedFullDate = predictedFullDate;
         this.daysUntilFull = daysUntilFull;
         this.modelUsed = modelUsed;
         this.generatedAt = generatedAt;
     }
+
 }

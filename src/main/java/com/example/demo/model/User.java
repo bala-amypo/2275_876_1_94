@@ -18,16 +18,22 @@ public class User {
     private String password;
     private String role;
 
-    public User() {}
+    public User() {
 
-    public User(String fullName, String email,
-                String password, String role) {
+    }
+
+    public User(String fullName, String email,String password, String role) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    public String getEmail() { return email; }
-    public String getRole() { return role; }
+    public String getEmail() { 
+        return email; 
+    }
+    public String getRole() { 
+        return role; 
+    }
+
 }

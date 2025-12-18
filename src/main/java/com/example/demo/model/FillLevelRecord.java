@@ -18,10 +18,11 @@ public class FillLevelRecord {
     private Timestamp recordedAt;
     private Boolean isWeekend;
 
-    public FillLevelRecord() {}
+    public FillLevelRecord() {
 
-    public FillLevelRecord(Bin bin, Double fillPercentage,
-                           Timestamp recordedAt, Boolean isWeekend) {
+    }
+
+    public FillLevelRecord(Bin bin, Double fillPercentage,Timestamp recordedAt, Boolean isWeekend) {
         this.bin = bin;
         this.fillPercentage = fillPercentage;
         this.recordedAt = recordedAt;
@@ -29,7 +30,14 @@ public class FillLevelRecord {
     }
 
     // Getters & Setters
-    public Bin getBin() { return bin; }
-    public Double getFillPercentage() { return fillPercentage; }
-    public Timestamp getRecordedAt() { return recordedAt; }
+    public Bin getBin() { 
+        return bin; 
+    }
+    public Double getFillPercentage() { 
+        return fillPercentage; 
+    }
+    public Timestamp getRecordedAt() { 
+        return recordedAt; 
+    
+    }
 }

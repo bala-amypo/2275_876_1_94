@@ -18,10 +18,11 @@ public class UsagePatternModel {
     private Double avgDailyIncreaseWeekend;
     private Timestamp lastUpdated;
 
-    public UsagePatternModel() {}
+    public UsagePatternModel() {
 
-    public UsagePatternModel(Bin bin, Double weekday,
-                             Double weekend, Timestamp lastUpdated) {
+    }
+
+    public UsagePatternModel(Bin bin, Double weekday,Double weekend, Timestamp lastUpdated) {
         this.bin = bin;
         this.avgDailyIncreaseWeekday = weekday;
         this.avgDailyIncreaseWeekend = weekend;
@@ -29,7 +30,14 @@ public class UsagePatternModel {
     }
 
     // Getters
-    public Bin getBin() { return bin; }
-    public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
-    public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
+    public Bin getBin() { 
+        return bin; 
+    }
+    public Double getAvgDailyIncreaseWeekday() { 
+        return avgDailyIncreaseWeekday; 
+    }
+    public Double getAvgDailyIncreaseWeekend() { 
+        return avgDailyIncreaseWeekend; 
+    }
+
 }

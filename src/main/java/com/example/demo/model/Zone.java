@@ -17,7 +17,9 @@ public class Zone {
 
     private Boolean active;
 
-    public Zone() {}
+    public Zone() {
+
+    }
 
     public Zone(String zoneName, String description, Boolean active) {
         this.zoneName = zoneName;
@@ -26,11 +28,20 @@ public class Zone {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public String getZoneName() { return zoneName; }
-    public void setZoneName(String zoneName) { this.zoneName = zoneName; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public Long getId() { 
+        return id; 
+    }
+    public String getZoneName() { 
+        return zoneName; 
+    }
+    public void setZoneName(String zoneName) { 
+        this.zoneName = zoneName; 
+    }
+    public String getDescription() { 
+        return description; 
+    }
+    public void setDescription(String description) { 
+        this.description = description; }
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 }
