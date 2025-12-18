@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface OverflowPredictionRepository
-        extends JpaRepository<OverflowPrediction, Long> {
+public interface OverflowPredictionRepository extends JpaRepository<OverflowPrediction, Long> {
 
     @Query("""
         SELECT p FROM OverflowPrediction p
