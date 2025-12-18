@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse> handleNotFound(
-            ResourceNotFoundException ex) {
+    public ResponseEntity<ApiResponse> handleNotFound(ResourceNotFoundException ex) {
 
         return new ResponseEntity<>(
                 new ApiResponse(false, ex.getMessage()),
@@ -18,8 +17,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiResponse> handleBadRequest(
-            BadRequestException ex) {
+    public ResponseEntity<ApiResponse> handleBadRequest(BadRequestException ex) {
 
         return new ResponseEntity<>(
                 new ApiResponse(false, ex.getMessage()),
@@ -28,8 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGeneral(
-            Exception ex) {
+    public ResponseEntity<ApiResponse> handleGeneral(Exception ex) {
 
         return new ResponseEntity<>(
                 new ApiResponse(false, "Internal server error"),
