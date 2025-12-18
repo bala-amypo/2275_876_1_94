@@ -1,10 +1,10 @@
 package com.yourpackage.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.*;
 
 @Entity
-// @Table(name = "fill_level_records")
+
 public class FillLevelRecord {
 
     @Id

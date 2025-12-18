@@ -4,10 +4,6 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(
-    // name = "bins",
-    uniqueConstraints = @UniqueConstraint(columnNames = "identifier")
-)
 public class Bin {
 
     @Id

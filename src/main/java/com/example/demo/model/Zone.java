@@ -3,10 +3,6 @@ package com.yourpackage.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-    // name = "zones",
-    uniqueConstraints = @UniqueConstraint(columnNames = "zoneName")
-)
 public class Zone {
 
     @Id

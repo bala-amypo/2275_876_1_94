@@ -1,10 +1,9 @@
 package com.yourpackage.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.*;
 
 @Entity
-// @Table(name = "usage_pattern_models")
 public class UsagePatternModel {
 
     @Id

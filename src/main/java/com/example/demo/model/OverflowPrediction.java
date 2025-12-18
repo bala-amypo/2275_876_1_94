@@ -1,11 +1,9 @@
 package com.yourpackage.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
-import java.time.LocalDate;
+import java.time.*;
 
 @Entity
-// @Table(name = "overflow_predictions")
 public class OverflowPrediction {
 
     @Id
