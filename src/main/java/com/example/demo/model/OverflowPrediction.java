@@ -52,6 +52,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 public class OverflowPrediction {
@@ -63,7 +65,27 @@ public class OverflowPrediction {
     @ManyToOne
     private Bin bin;
 
-    public Bin getBin() {
-        return bin;
+    private Date predictedOverflowDate;
+    private int daysRemaining;
+
+    @ManyToOne
+    private UsagePatternModel usagePatternModel;
+
+    private Timestamp createdAt;
+
+    public OverflowPrediction() {}
+
+    public OverflowPrediction(
+            Bin bin,
+            Date predictedOverflowDate,
+            int daysRemaining,
+            UsagePatternModel usagePatternModel,
+            Timestamp createdAt
+    ) {
+        this.bin = bin;
+        this.predictedOverflowDate = predictedOverflowDate;
+        this.daysRemaining = daysRemaining;
+        this.usagePatternModel = usagePatternModel;
+        this.createdAt = createdAt;
     }
 }

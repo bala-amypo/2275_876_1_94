@@ -82,9 +82,21 @@ public class UsagePatternModel {
         return avgDailyIncreaseWeekend;
     }
 
-    public Bin getBin() { return bin; }
+    public void setAvgDailyIncreaseWeekday(Double value) {
+        this.avgDailyIncreaseWeekday = value;
+    }
 
-    public void setBin(Bin bin) { this.bin = bin; }
+    public void setAvgDailyIncreaseWeekend(Double value) {
+        this.avgDailyIncreaseWeekend = value;
+    }
+
+    public Bin getBin() {
+        return bin;
+    }
+
+    public void setBin(Bin bin) {
+        this.bin = bin;
+    }
 
     public void setLastUpdated(Timestamp lastUpdated) {
         this.lastUpdated = lastUpdated;
