@@ -12,8 +12,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-public class OverflowPredictionServiceImpl
-        implements OverflowPredictionService {
+public class OverflowPredictionServiceImpl implements OverflowPredictionService {
 
     private final BinRepository binRepository;
     private final FillLevelRecordRepository recordRepository;
@@ -21,12 +20,7 @@ public class OverflowPredictionServiceImpl
     private final OverflowPredictionRepository predictionRepository;
     private final ZoneRepository zoneRepository;
 
-    public OverflowPredictionServiceImpl(
-            BinRepository binRepository,
-            FillLevelRecordRepository recordRepository,
-            UsagePatternModelRepository modelRepository,
-            OverflowPredictionRepository predictionRepository,
-            ZoneRepository zoneRepository) {
+    public OverflowPredictionServiceImpl(BinRepository binRepository,FillLevelRecordRepository recordRepository,UsagePatternModelRepository modelRepository,OverflowPredictionRepository predictionRepository,ZoneRepository zoneRepository) {
 
         this.binRepository = binRepository;
         this.recordRepository = recordRepository;
@@ -38,46 +32,26 @@ public class OverflowPredictionServiceImpl
     @Override
     public OverflowPrediction generatePrediction(Long binId) {
 
-        Bin bin = binRepository.findById(binId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Bin not found"));
+        Bin bin = binRepository.findById(binId).orElseThrow(() ->new ResourceNotFoundException("Bin not found"));
 
-        FillLevelRecord latestRecord =
-                recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("No records"));
+        FillLevelRecord latestRecord =recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin).orElseThrow(() ->new ResourceNotFoundException("No records"));
 
-        UsagePatternModel model =
-                modelRepository
-                        .findTop1ByBinOrderByLastUpdatedDesc(bin)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("Model not found"));
+        UsagePatternModel model =modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin).orElseThrow(() ->new ResourceNotFoundException("Model not found"));
 
-        double remaining =
-                100 - latestRecord.getFillPercentage();
+        double remaining =100 - latestRecord.getFillPercentage();
 
-        double dailyIncrease =
-                latestRecord.getIsWeekend()
-                        ? model.getAvgDailyIncreaseWeekend()
-                        : model.getAvgDailyIncreaseWeekday();
+        double dailyIncrease =latestRecord.getIsWeekend()? model.getAvgDailyIncreaseWeekend(): model.getAvgDailyIncreaseWeekday();
 
         if (dailyIncrease <= 0) {
             throw new BadRequestException("Invalid daily increase");
         }
 
-        int daysUntilFull =
-                (int) Math.ceil(remaining / dailyIncrease);
+        int daysUntilFull =(int) Math.ceil(remaining / dailyIncrease);
 
-        LocalDate predictedDate =
-                LocalDate.now().plusDays(daysUntilFull);
+        LocalDate predictedDate =LocalDate.now().plusDays(daysUntilFull);
 
-        OverflowPrediction prediction =
-                new OverflowPrediction(
-                        bin,
-                        Date.from(predictedDate
-                                .atStartOfDay()
-                                .atZone(
-                                        java.time.ZoneId.systemDefault())
+        OverflowPrediction prediction =new OverflowPrediction(
+                        bin,Date.from(predictedDate.atStartOfDay().atZone(java.time.ZoneId.systemDefault())
                                 .toInstant()),
                         daysUntilFull,
                         model,
