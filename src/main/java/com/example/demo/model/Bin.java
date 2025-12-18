@@ -1,7 +1,7 @@
 package com.yourpackage.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.*;
 
 @Entity
 public class Bin {
