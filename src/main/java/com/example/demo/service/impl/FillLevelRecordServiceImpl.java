@@ -66,3 +66,44 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
         return records.stream().limit(limit).toList();
     }
 }
+
+
+
+
+
+
+// package com.example.demo.service.impl;
+
+// import com.example.demo.model.Bin;
+// import com.example.demo.repository.BinRepository;
+// import com.example.demo.model.FillLevelRecord;
+// import com.example.demo.repository.FillLevelRecordRepository;
+// import com.example.demo.service.FillLevelRecordService;
+// import org.springframework.stereotype.Service;
+
+// import java.util.List;
+
+// @Service
+// public class FillLevelRecordServiceImpl implements FillLevelRecordService {
+
+//     private final FillLevelRecordRepository fillLevelRecordRepository;
+//     private final BinRepository binRepository;
+
+//     public FillLevelRecordServiceImpl(FillLevelRecordRepository fillLevelRecordRepository,
+//                                       BinRepository binRepository) {
+//         this.fillLevelRecordRepository = fillLevelRecordRepository;
+//         this.binRepository = binRepository;
+//     }
+
+//     @Override
+//     public List<FillLevelRecord> getRecordsForActiveBins() {
+//         List<Bin> bins = binRepository.findAll();
+//         // Filter only active bins
+//         List<Bin> activeBins = bins.stream()
+//                                    .filter(Bin::getActive) // make sure getActive() exists
+//                                    .toList();
+
+//         // Return records for active bins
+//         return fillLevelRecordRepository.findByBinIn(activeBins);
+//     }
+// }
