@@ -1,63 +1,7 @@
-// package com.example.demo.model;
-
-// import jakarta.persistence.*;
-// import java.sql.Timestamp;
-
-// @Entity
-// @Table(name = "usage_pattern_models")
-// public class UsagePatternModel {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     @ManyToOne
-//     private Bin bin;
-
-//     private Double avgDailyIncreaseWeekday;
-//     private Double avgDailyIncreaseWeekend;
-//     private Timestamp lastUpdated;
-
-//     public UsagePatternModel() {
-
-//     }
-
-//     public UsagePatternModel(Bin bin, Double weekday,Double weekend, Timestamp lastUpdated) {
-//         this.bin = bin;
-//         this.avgDailyIncreaseWeekday = weekday;
-//         this.avgDailyIncreaseWeekend = weekend;
-//         this.lastUpdated = lastUpdated;
-//     }
-
-//     // Getters
-//     public Bin getBin() { 
-//         return bin; 
-//     }
-//     public Double getAvgDailyIncreaseWeekday() { 
-//         return avgDailyIncreaseWeekday; 
-//     }
-//     public Double getAvgDailyIncreaseWeekend() { 
-//         return avgDailyIncreaseWeekend; 
-//     }
-
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.time.*;
 
 @Entity
 public class UsagePatternModel {
@@ -66,39 +10,67 @@ public class UsagePatternModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double avgDailyIncreaseWeekday;
-    private Double avgDailyIncreaseWeekend;
-
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bin_id")
     private Bin bin;
 
-    private Timestamp lastUpdated;
+    @Column(nullable = false)
+    private Double avgDailyIncreaseWeekday;
+
+    @Column(nullable = false)
+    private Double avgDailyIncreaseWeekend;
+
+    private Instant lastUpdated;
+
+    // Default Constructor
+    public UsagePatternModel() {}
+
+    // Parameterized Constructor
+    public UsagePatternModel(Bin bin, Double weekday, Double weekend) {
+        this.bin = bin;
+        this.avgDailyIncreaseWeekday = weekday;
+        this.avgDailyIncreaseWeekend = weekend;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void validate() {
+        if (avgDailyIncreaseWeekday < 0 || avgDailyIncreaseWeekend < 0)
+            throw new IllegalArgumentException("Daily increase must be >= 0");
+        lastUpdated = Instant.now();
+    }
+
+    // Getters & Setters
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
+
+    public Bin getBin() { 
+        return bin; 
+    }
+    public void setBin(Bin bin) { 
+        this.bin = bin; 
+    }
 
     public Double getAvgDailyIncreaseWeekday() {
         return avgDailyIncreaseWeekday;
+    }
+    public void setAvgDailyIncreaseWeekday(Double value) {
+        this.avgDailyIncreaseWeekday = value;
     }
 
     public Double getAvgDailyIncreaseWeekend() {
         return avgDailyIncreaseWeekend;
     }
-
-    public void setAvgDailyIncreaseWeekday(Double value) {
-        this.avgDailyIncreaseWeekday = value;
-    }
-
     public void setAvgDailyIncreaseWeekend(Double value) {
         this.avgDailyIncreaseWeekend = value;
     }
 
-    public Bin getBin() {
-        return bin;
+    public Instant getLastUpdated() { 
+        return lastUpdated; 
     }
 
-    public void setBin(Bin bin) {
-        this.bin = bin;
-    }
-
-    public void setLastUpdated(Timestamp lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 }

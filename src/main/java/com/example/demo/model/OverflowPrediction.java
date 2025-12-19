@@ -1,112 +1,7 @@
-// package com.example.demo.model;
-
-// import jakarta.persistence.*;
-// import java.sql.Timestamp;
-// import java.util.Date;
-
-// @Entity
-// @Table(name = "overflow_predictions")
-// public class OverflowPrediction {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     @ManyToOne
-//     private Bin bin;
-
-//     private Date predictedFullDate;
-//     private Integer daysUntilFull;
-
-//     @ManyToOne
-//     private UsagePatternModel modelUsed;
-
-//     private Timestamp generatedAt;
-
-//     public OverflowPrediction() {
-
-//     }
-
-//     public OverflowPrediction(Bin bin, Date predictedFullDate,Integer daysUntilFull,UsagePatternModel modelUsed,Timestamp generatedAt) {
-//         this.bin = bin;
-//         this.predictedFullDate = predictedFullDate;
-//         this.daysUntilFull = daysUntilFull;
-//         this.modelUsed = modelUsed;
-//         this.generatedAt = generatedAt;
-//     }
-
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// package com.example.demo.model;
-
-// import jakarta.persistence.*;
-// import java.sql.Timestamp;
-// import java.util.Date;
-
-// @Entity
-// public class OverflowPrediction {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     @ManyToOne
-//     private Bin bin;
-
-//     private Date predictedOverflowDate;
-//     private int daysRemaining;
-
-//     @ManyToOne
-//     private UsagePatternModel usagePatternModel;
-
-//     private Timestamp createdAt;
-
-//     public OverflowPrediction() {}
-
-//     public OverflowPrediction(
-//             Bin bin,
-//             Date predictedOverflowDate,
-//             int daysRemaining,
-//             UsagePatternModel usagePatternModel,
-//             Timestamp createdAt
-//     ) {
-//         this.bin = bin;
-//         this.predictedOverflowDate = predictedOverflowDate;
-//         this.daysRemaining = daysRemaining;
-//         this.usagePatternModel = usagePatternModel;
-//         this.createdAt = createdAt;
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.*;
 
 @Entity
 public class OverflowPrediction {
@@ -115,80 +10,80 @@ public class OverflowPrediction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bin_id")
     private Bin bin;
 
-    private Date predictedOverflowDate;
+    @Column(nullable = false)
+    private LocalDate predictedFullDate;
 
-    private Integer predictedFillPercentage;
+    @Column(nullable = false)
+    private Integer daysUntilFull;
 
     @ManyToOne
-    private UsagePatternModel usagePatternModel;
+    @JoinColumn(name = "model_id")
+    private UsagePatternModel modelUsed;
 
-    private Timestamp createdAt;
+    private Instant generatedAt;
 
-    // ===== NO-ARGS CONSTRUCTOR =====
-    public OverflowPrediction() {
-    }
+    // Default Constructor
+    public OverflowPrediction() {}
 
-    // ===== ALL-ARGS CONSTRUCTOR =====
-    public OverflowPrediction(
-            Bin bin,
-            Date predictedOverflowDate,
-            Integer predictedFillPercentage,
-            UsagePatternModel usagePatternModel,
-            Timestamp createdAt
-    ) {
+    // Parameterized Constructor
+    public OverflowPrediction(Bin bin, LocalDate predictedFullDate,Integer daysUntilFull,UsagePatternModel modelUsed) {
         this.bin = bin;
-        this.predictedOverflowDate = predictedOverflowDate;
-        this.predictedFillPercentage = predictedFillPercentage;
-        this.usagePatternModel = usagePatternModel;
-        this.createdAt = createdAt;
+        this.predictedFullDate = predictedFullDate;
+        this.daysUntilFull = daysUntilFull;
+        this.modelUsed = modelUsed;
     }
 
-    // ===== GETTERS & SETTERS =====
-
-    public Long getId() {
-        return id;
+    @PrePersist
+    private void validate() {
+        if (daysUntilFull < 0)
+            throw new IllegalArgumentException("daysUntilFull must be >= 0");
+        if (predictedFullDate.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("Predicted date must be today or future");
+        generatedAt = Instant.now();
     }
 
-    public Bin getBin() {
-        return bin;
+    // Getters & Setters
+    public Long getId() { 
+        return id; 
+    }
+    public void setId(Long id) { 
+        this.id = id; 
     }
 
-    public void setBin(Bin bin) {
-        this.bin = bin;
+    public Bin getBin() { 
+        return bin; 
+    }
+    public void setBin(Bin bin) { 
+        this.bin = bin; 
     }
 
-    public Date getPredictedOverflowDate() {
-        return predictedOverflowDate;
+    public LocalDate getPredictedFullDate() {
+        return predictedFullDate;
+    }
+    public void setPredictedFullDate(LocalDate predictedFullDate) {
+        this.predictedFullDate = predictedFullDate;
     }
 
-    public void setPredictedOverflowDate(Date predictedOverflowDate) {
-        this.predictedOverflowDate = predictedOverflowDate;
+    public Integer getDaysUntilFull() { 
+        return daysUntilFull; 
+    }
+    public void setDaysUntilFull(Integer daysUntilFull) {
+        this.daysUntilFull = daysUntilFull;
     }
 
-    public Integer getPredictedFillPercentage() {
-        return predictedFillPercentage;
+    public UsagePatternModel getModelUsed() { 
+        return modelUsed; 
+    }
+    public void setModelUsed(UsagePatternModel modelUsed) {
+        this.modelUsed = modelUsed;
     }
 
-    public void setPredictedFillPercentage(Integer predictedFillPercentage) {
-        this.predictedFillPercentage = predictedFillPercentage;
+    public Instant getGeneratedAt() { 
+        return generatedAt; 
     }
 
-    public UsagePatternModel getUsagePatternModel() {
-        return usagePatternModel;
-    }
-
-    public void setUsagePatternModel(UsagePatternModel usagePatternModel) {
-        this.usagePatternModel = usagePatternModel;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
 }
