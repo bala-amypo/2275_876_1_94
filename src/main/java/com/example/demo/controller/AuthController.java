@@ -12,18 +12,23 @@ public class AuthController {
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthController(CustomUserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
+    public AuthController(CustomUserDetailsService userDetailsService,
+                          JwtTokenProvider jwtTokenProvider) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/register")
     public String register(@RequestParam String name,
-                       @RequestParam String email,
-                       @RequestParam String password) {
+                           @RequestParam String email,
+                           @RequestParam String password) {
 
         DemoUser user = userDetailsService.registerUser(name, email, password);
-        return jwtTokenProvider.generateToken(user.getId(), user.getName(), user.getEmail());
-    }
 
+        return jwtTokenProvider.generateToken(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
 }
