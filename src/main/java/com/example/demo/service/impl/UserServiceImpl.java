@@ -1,11 +1,8 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import com.example.demo.model.DemoUser;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,7 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<DemoUser> getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public DemoUser getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
