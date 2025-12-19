@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.Zone;
 import com.example.demo.service.ZoneService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/zones")
@@ -16,45 +17,27 @@ public class ZoneController {
     }
 
     @PostMapping
-    public ApiResponse createZone(@RequestBody Zone zone) {
-        return new ApiResponse(
-                true,
-                "Zone created",
-                zoneService.createZone(zone)
-        );
+    public Zone createZone(@RequestBody Zone zone) {
+        return zoneService.createZone(zone);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateZone(@PathVariable Long id,@RequestBody Zone zone) {
-        return new ApiResponse(
-                true,
-                "Zone updated",
-                zoneService.updateZone(id, zone)
-        );
+    public Zone updateZone(@PathVariable Long id, @RequestBody Zone zone) {
+        return zoneService.updateZone(id, zone);
     }
 
     @GetMapping("/{id}")
-    public ApiResponse getZone(@PathVariable Long id) {
-        return new ApiResponse(
-                true,
-                "Zone fetched",
-                zoneService.getZoneById(id)
-        );
+    public Zone getZone(@PathVariable Long id) {
+        return zoneService.getZoneById(id);
     }
 
     @GetMapping
-    public ApiResponse getAllZones() {
-        return new ApiResponse(
-                true,
-                "Zones fetched",
-                zoneService.getAllZones()
-        );
+    public List<Zone> getAllZones() {
+        return zoneService.getAllZones();
     }
 
     @PutMapping("/{id}/deactivate")
-    public ApiResponse deactivateZone(
-            @PathVariable Long id) {
+    public void deactivateZone(@PathVariable Long id) {
         zoneService.deactivateZone(id);
-        return new ApiResponse(true, "Zone deactivated");
     }
 }

@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
+import com.example.demo.model.OverflowPrediction;
 import com.example.demo.service.OverflowPredictionService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/predictions")
@@ -15,38 +17,22 @@ public class OverflowPredictionController {
     }
 
     @PostMapping("/generate/{binId}")
-    public ApiResponse generatePrediction(@PathVariable Long binId) {
-        return new ApiResponse(
-                true,
-                "Prediction generated",
-                predictionService.generatePrediction(binId)
-        );
+    public OverflowPrediction generatePrediction(@PathVariable Long binId) {
+        return predictionService.generatePrediction(binId);
     }
 
     @GetMapping("/{id}")
-    public ApiResponse getPrediction(@PathVariable Long id) {
-        return new ApiResponse(
-                true,
-                "Prediction fetched",
-                predictionService.getPredictionById(id)
-        );
+    public OverflowPrediction getPrediction(@PathVariable Long id) {
+        return predictionService.getPredictionById(id);
     }
 
     @GetMapping("/bin/{binId}")
-    public ApiResponse getPredictionsForBin(@PathVariable Long binId) {
-        return new ApiResponse(
-                true,
-                "Predictions fetched",
-                predictionService.getPredictionsForBin(binId)
-        );
+    public List<OverflowPrediction> getPredictionsForBin(@PathVariable Long binId) {
+        return predictionService.getPredictionsForBin(binId);
     }
 
     @GetMapping("/zone/{zoneId}/latest")
-    public ApiResponse getLatestPredictionsForZone(@PathVariable Long zoneId) {
-        return new ApiResponse(
-                true,
-                "Zone predictions fetched",
-                predictionService.getLatestPredictionsForZone(zoneId)
-        );
+    public List<OverflowPrediction> getLatestPredictionsForZone(@PathVariable Long zoneId) {
+        return predictionService.getLatestPredictionsForZone(zoneId);
     }
 }

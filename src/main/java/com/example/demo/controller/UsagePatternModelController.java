@@ -1,9 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.UsagePatternModel;
 import com.example.demo.service.UsagePatternModelService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/models")
@@ -16,38 +17,23 @@ public class UsagePatternModelController {
     }
 
     @PostMapping
-    public ApiResponse createModel(@RequestBody UsagePatternModel model) {
-        return new ApiResponse(
-                true,
-                "Model created",
-                modelService.createModel(model)
-        );
+    public UsagePatternModel createModel(@RequestBody UsagePatternModel model) {
+        return modelService.createModel(model);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateModel(@PathVariable Long id,@RequestBody UsagePatternModel model) {
-        return new ApiResponse(
-                true,
-                "Model updated",
-                modelService.updateModel(id, model)
-        );
+    public UsagePatternModel updateModel(@PathVariable Long id,
+                                         @RequestBody UsagePatternModel model) {
+        return modelService.updateModel(id, model);
     }
 
     @GetMapping("/bin/{binId}")
-    public ApiResponse getModelForBin(@PathVariable Long binId) {
-        return new ApiResponse(
-                true,
-                "Model fetched",
-                modelService.getModelForBin(binId)
-        );
+    public UsagePatternModel getModelForBin(@PathVariable Long binId) {
+        return modelService.getModelForBin(binId);
     }
 
     @GetMapping
-    public ApiResponse getAllModels() {
-        return new ApiResponse(
-                true,
-                "Models fetched",
-                modelService.getAllModels()
-        );
+    public List<UsagePatternModel> getAllModels() {
+        return modelService.getAllModels();
     }
 }

@@ -22,18 +22,17 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public Zone updateZone(Long id, Zone updated) {
-
+    public Zone updateZone(Long id, Zone zone) {
         Zone existing = getZoneById(id);
-        existing.setZoneName(updated.getZoneName());
-        existing.setDescription(updated.getDescription());
-
+        existing.setZoneName(zone.getZoneName());
+        existing.setDescription(zone.getDescription());
         return zoneRepository.save(existing);
     }
 
     @Override
     public Zone getZoneById(Long id) {
-        return zoneRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("Zone not found"));
+        return zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("zone not found"));
     }
 
     @Override
