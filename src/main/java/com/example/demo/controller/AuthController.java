@@ -1,34 +1,22 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.DemoUser;
-import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final CustomUserDetailsService userDetailsService;
-    private final JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserService userService;
 
-    public AuthController(CustomUserDetailsService userDetailsService,
-                          JwtTokenProvider jwtTokenProvider) {
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/register")
-    public String register(@RequestParam String name,
-                           @RequestParam String email,
-                           @RequestParam String password) {
-
-        DemoUser user = userDetailsService.registerUser(name, email, password);
-
-        return jwtTokenProvider.generateToken(
-                user.getId(),
-                user.getName(),
-                user.getEmail()
-        );
+    @GetMapping("/test")
+    public String test() {
+        return "Auth OK";
     }
 }
