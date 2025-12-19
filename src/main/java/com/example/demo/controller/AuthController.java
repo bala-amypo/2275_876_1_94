@@ -22,8 +22,8 @@ public class AuthController {
                        @RequestParam String email,
                        @RequestParam String password) {
 
-    DemoUser user = userDetailsService.registerUser(name, email, password);
-    return jwtTokenProvider.generateToken(user.getId(), user.getName(), user.getEmail());
-}
+        DemoUser user = userDetailsService.registerUser(name, email, password);
+        return jwtTokenProvider.generateToken(user.getId(), user.getName(), user.getEmail());
+    }
 
 }
