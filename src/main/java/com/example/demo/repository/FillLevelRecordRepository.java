@@ -1,18 +1,15 @@
-package com.example.demo.repository;
+package com.yourpackage.repository;
 
-import com.example.demo.model.Bin;
-import com.example.demo.model.FillLevelRecord;
+import com.yourpackage.entity.FillLevelRecord;
+import com.yourpackage.entity.Bin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-public interface FillLevelRecordRepository extends JpaRepository<FillLevelRecord, Long> {
+public interface FillLevelRecordRepository
+        extends JpaRepository<FillLevelRecord, Long> {
 
-    List<FillLevelRecord> findByBinOrderByRecordedAtDesc(Bin bin);
+    List<FillLevelRecord> findByBin(Bin bin);
 
-    Optional<FillLevelRecord> findTop1ByBinOrderByRecordedAtDesc(Bin bin);
-
-    List<FillLevelRecord> findByBinAndRecordedAtBetween(Bin bin,LocalDateTime start,LocalDateTime end);
+    List<FillLevelRecord> findByBinId(Long binId);
 }
