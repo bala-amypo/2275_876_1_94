@@ -1,29 +1,29 @@
-package com.example.demo.dto;
+// package com.example.demo.dto;
 
-public class ApiResponse {
+// public class ApiResponse {
 
-    private boolean success;
-    private String message;
-    private Object data;
+//     private boolean success;
+//     private String message;
+//     private Object data;
 
-    public ApiResponse() {
-    }
+//     public ApiResponse() {
+//     }
 
-    public ApiResponse(boolean success, String message, Object data) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
-    }
+//     public ApiResponse(boolean success, String message, Object data) {
+//         this.success = success;
+//         this.message = message;
+//         this.data = data;
+//     }
 
-    public boolean isSuccess() {
-        return success;
-    }
+//     public boolean isSuccess() {
+//         return success;
+//     }
 
-    public String getMessage() {
-        return message;
-    }
+//     public String getMessage() {
+//         return message;
+//     }
 
-    public Object getData() {
-        return data;
-    }
-}
+//     public Object getData() {
+//         return data;
+//     }
+// }
