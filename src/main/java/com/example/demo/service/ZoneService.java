@@ -4,7 +4,6 @@ import com.example.demo.model.Zone;
 
 import java.util.List;
 
-@Service
 public interface ZoneService {
 
     Zone createZone(Zone zone);

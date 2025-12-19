@@ -4,7 +4,6 @@ import com.example.demo.model.OverflowPrediction;
 
 import java.util.List;
 
-@Service
 public interface OverflowPredictionService {
 
     OverflowPrediction generatePrediction(Long binId);
