@@ -20,3 +20,29 @@
 //         return "Auth OK";
 //     }
 // }
+
+
+
+
+
+package com.example.demo.controller;
+
+import com.example.demo.model.User;
+import com.example.demo.security.CustomUserDetailsService;
+import com.example.demo.security.JwtTokenProvider;
+
+public class AuthController {
+
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public AuthController(CustomUserDetailsService uds, JwtTokenProvider jwt) {
+        this.userDetailsService = uds;
+        this.jwtTokenProvider = jwt;
+    }
+
+    public String register(String name, String email, String password) {
+        User user = userDetailsService.registerUser(name, email, password);
+        return jwtTokenProvider.generateToken(user.getId(), user.getEmail(), user.getRole());
+    }
+}
