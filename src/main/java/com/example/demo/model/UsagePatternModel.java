@@ -1,76 +1,69 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.*;
+import java.sql.Timestamp;
 
 @Entity
+@Table(name = "usage_pattern_models")
 public class UsagePatternModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "bin_id")
     private Bin bin;
 
-    @Column(nullable = false)
     private Double avgDailyIncreaseWeekday;
-
-    @Column(nullable = false)
     private Double avgDailyIncreaseWeekend;
+    private Timestamp lastUpdated;
 
-    private Instant lastUpdated;
+    public UsagePatternModel() {
+    }
 
-    // Default Constructor
-    public UsagePatternModel() {}
-
-    // Parameterized Constructor
-    public UsagePatternModel(Bin bin, Double weekday, Double weekend) {
+    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday,
+                             Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
         this.bin = bin;
-        this.avgDailyIncreaseWeekday = weekday;
-        this.avgDailyIncreaseWeekend = weekend;
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
+        this.lastUpdated = lastUpdated;
     }
 
-    @PrePersist
-    @PreUpdate
-    private void validate() {
-        if (avgDailyIncreaseWeekday < 0 || avgDailyIncreaseWeekend < 0)
-            throw new IllegalArgumentException("Daily increase must be >= 0");
-        lastUpdated = Instant.now();
+    public Long getId() {
+        return id;
     }
 
-    // Getters & Setters
-    public Long getId() { 
-        return id; 
-    }
-    public void setId(Long id) { 
-        this.id = id; 
+    public Bin getBin() {
+        return bin;
     }
 
-    public Bin getBin() { 
-        return bin; 
-    }
-    public void setBin(Bin bin) { 
-        this.bin = bin; 
+    public void setBin(Bin bin) {
+        this.bin = bin;
     }
 
     public Double getAvgDailyIncreaseWeekday() {
         return avgDailyIncreaseWeekday;
     }
-    public void setAvgDailyIncreaseWeekday(Double value) {
-        this.avgDailyIncreaseWeekday = value;
+
+    public void setAvgDailyIncreaseWeekday(Double avgDailyIncreaseWeekday) {
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
     }
 
     public Double getAvgDailyIncreaseWeekend() {
         return avgDailyIncreaseWeekend;
     }
-    public void setAvgDailyIncreaseWeekend(Double value) {
-        this.avgDailyIncreaseWeekend = value;
+
+    public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) {
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
     }
 
-    public Instant getLastUpdated() { 
-        return lastUpdated; 
+    public Timestamp getLastUpdated() {
+        return lastUpdated;
     }
 
+    public void setLastUpdated(Timestamp lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }
+
