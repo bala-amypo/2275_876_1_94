@@ -1,12 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.model.User;
+import com.example.demo.model.DemoUser;
 
 public interface UserService {
 
-    User registerUser(String fullName, String email, String password);
+    DemoUser saveUser(DemoUser user);
 
-    User getByEmail(String email);
-
-    boolean exists(String email);
+    DemoUser getUserByEmail(String email);
 }
