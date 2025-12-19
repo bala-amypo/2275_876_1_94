@@ -4,7 +4,7 @@ import com.example.demo.model.DemoUser;
 
 public interface UserService {
 
-    DemoUser saveUser(DemoUser user);
+    DemoUser registerUser(String email, String password, String role);
 
-    DemoUser getUserByEmail(String email);
+    DemoUser getByEmail(String email);
 }

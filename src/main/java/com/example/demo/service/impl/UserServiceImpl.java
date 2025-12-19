@@ -15,13 +15,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public DemoUser saveUser(DemoUser user) {
+    public DemoUser registerUser(String email, String password, String role) {
+        DemoUser user = new DemoUser(email, password, role);
         return userRepository.save(user);
     }
 
     @Override
-    public DemoUser getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public DemoUser getByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
