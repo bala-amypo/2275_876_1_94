@@ -4,6 +4,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.OverflowPredictionService;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;

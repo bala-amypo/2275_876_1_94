@@ -7,6 +7,7 @@ import com.example.demo.model.FillLevelRecord;
 import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.FillLevelRecordRepository;
 import com.example.demo.service.FillLevelRecordService;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;

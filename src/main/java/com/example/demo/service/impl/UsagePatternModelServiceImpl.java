@@ -7,6 +7,7 @@ import com.example.demo.model.UsagePatternModel;
 import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.UsagePatternModelRepository;
 import com.example.demo.service.UsagePatternModelService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

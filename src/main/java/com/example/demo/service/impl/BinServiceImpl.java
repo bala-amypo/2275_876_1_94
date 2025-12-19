@@ -7,6 +7,8 @@ import com.example.demo.model.Zone;
 import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.BinService;
+import org.springframework.stereotype.Service;
+
 
 import java.sql.Timestamp;
 import java.time.Instant;
