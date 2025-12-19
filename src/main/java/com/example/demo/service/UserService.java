@@ -1,8 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.DemoUser;
+import java.util.Optional;
 
 public interface UserService {
     DemoUser saveUser(DemoUser user);
-    DemoUser getUserByEmail(String email);
+    Optional<DemoUser> getUserByEmail(String email);
 }
