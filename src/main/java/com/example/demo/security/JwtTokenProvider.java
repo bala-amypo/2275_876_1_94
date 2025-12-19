@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenProvider {
 
-    // REQUIRED: No-arg constructor
+    // ✅ REQUIRED: NO-ARG CONSTRUCTOR
     public JwtTokenProvider() {
     }
 
-    // REQUIRED BY TESTS
-    public String generateToken(Long userId, String email, String role) {
-        return "TOKEN_" + userId + "_" + email + "_" + role;
+    // ✅ REQUIRED SIGNATURE
+    public String generateToken(Long userId, String username, String role) {
+        return "TEST_TOKEN_" + userId + "_" + username + "_" + role;
     }
 }

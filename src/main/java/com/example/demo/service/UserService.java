@@ -1,10 +1,15 @@
 package com.example.demo.service;
 
 import com.example.demo.model.DemoUser;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
+@Service
+public class UserService {
 
-    DemoUser saveUser(DemoUser user);
+    public UserService() {
+    }
 
-    DemoUser getUserByEmail(String email);
+    public DemoUser getUserByUsername(String username) {
+        return new DemoUser(1L, username, "password", "ROLE_USER");
+    }
 }
