@@ -1,154 +1,64 @@
-// package com.example.demo.model;
-
-// import com.example.demo.model.Zone;
-// import jakarta.persistence.*;
-
-// @Entity
-// @Table(name = "zones")
-// public class Zone {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     @Column(unique = true, nullable = false)
-//     private String zoneName;
-
-//     private String description;
-
-//     private Boolean active;
-
-//     public Zone() {
-
-//     }
-
-//     public Zone(String zoneName, String description, Boolean active) {
-//         this.zoneName = zoneName;
-//         this.description = description;
-//         this.active = active;
-//     }
-
-//     // Getters and Setters
-//     public Long getId() { 
-//         return id; 
-//     }
-//     public String getZoneName() { 
-//         return zoneName; 
-//     }
-//     public void setZoneName(String zoneName) { 
-//         this.zoneName = zoneName; 
-//     }
-//     public String getDescription() { 
-//         return description; 
-//     }
-//     public void setDescription(String description) { 
-//         this.description = description; 
-//     }
-//     public Boolean getActive() { 
-//         return active; 
-//     }
-//     public void setActive(Boolean active) { 
-//         this.active = active; 
-//     }
-//     public Zone getZone() {
-//         return zone;
-//     }
-//     public void setZone(Zone zone) {
-//         this.zone = zone;
-//     }
-
-// }
-
-
-
-
-
-
-
-
-
-
-// package com.example.demo.model;
-
-// import jakarta.persistence.*;
-
-// @Entity
-// public class Zone {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     private Long id;
-
-//     private String name;
-
-//     // ===== GETTERS & SETTERS =====
-
-//     public Long getId() {
-//         return id;
-//     }
-
-//     public String getName() {
-//         return name;
-//     }
-
-//     public void setName(String name) {
-//         this.name = name;
-//     }
-// }
-
-
-
-
-
-
-
-
-
-
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String zoneName;
 
     private String description;
 
+    @Column(nullable = false)
     private Boolean active = true;
 
-    // ===== GETTERS & SETTERS =====
+    // // Default Constructor
+    // public Zone() {}
 
-    public Long getId() {
-        return id;
-    }
+    // // Parameterized Constructor
+    // public Zone(String zoneName, String description) {
+    //     this.zoneName = zoneName;
+    //     this.description = description;
+    //     this.active = true;
+    // }
 
-    public String getZoneName() {
-        return zoneName;
-    }
+    // // Getters & Setters
+    // public Long getId() { 
+    //     return id; 
+    // }
+    // public void setId(Long id) { 
+    //     this.id = id; 
+    // }
 
-    public void setZoneName(String zoneName) {
-        this.zoneName = zoneName;
-    }
+    // public String getZoneName() { 
+    //     return zoneName; 
+    // }
+    // public void setZoneName(String zoneName) { 
+    //     this.zoneName = zoneName; 
+    // }
 
-    public String getDescription() {
-        return description;
-    }
+    // public String getDescription() { 
+    //     return description; 
+    // }
+    // public void setDescription(String description) {
+    //     this.description = description;
+    // }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    // public Boolean getActive() { 
+    //     return active; 
+    // }
+    // public void setActive(Boolean active) { 
+    //     this.active = active; 
+    // }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
 }
