@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.User;
 
+@Service
 public interface UserService {
 
     User registerUser(String fullName, String email, String password);

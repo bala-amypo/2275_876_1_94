@@ -4,6 +4,7 @@ import com.example.demo.model.UsagePatternModel;
 
 import java.util.List;
 
+@Service
 public interface UsagePatternModelService {
 
     UsagePatternModel createModel(UsagePatternModel model);

@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 
+@Service
 public class BinServiceImpl implements BinService {
 
     private final BinRepository binRepository;

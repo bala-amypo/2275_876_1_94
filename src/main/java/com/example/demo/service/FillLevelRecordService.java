@@ -4,6 +4,7 @@ import com.example.demo.model.FillLevelRecord;
 
 import java.util.List;
 
+@Service
 public interface FillLevelRecordService {
 
     FillLevelRecord createRecord(FillLevelRecord record);

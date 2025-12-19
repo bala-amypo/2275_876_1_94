@@ -10,6 +10,7 @@ import com.example.demo.service.UsagePatternModelService;
 
 import java.util.List;
 
+@Service
 public class UsagePatternModelServiceImpl implements UsagePatternModelService {
 
     private final UsagePatternModelRepository modelRepository;

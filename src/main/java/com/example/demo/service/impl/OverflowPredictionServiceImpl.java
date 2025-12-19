@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.List;
 
+@Service
 public class OverflowPredictionServiceImpl implements OverflowPredictionService {
 
     private final BinRepository binRepository;
