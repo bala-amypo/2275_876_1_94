@@ -1,4 +1,4 @@
-package com.yourpackage.repository;
+package com.example.demo.repository;
 
 import com.yourpackage.entity.UsagePatternModel;
 import com.yourpackage.entity.Bin;

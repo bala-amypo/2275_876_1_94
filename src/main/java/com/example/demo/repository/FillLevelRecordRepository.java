@@ -1,4 +1,4 @@
-package com.yourpackage.repository;
+package com.example.demo.repository;
 
 import com.yourpackage.entity.FillLevelRecord;
 import com.yourpackage.entity.Bin;
