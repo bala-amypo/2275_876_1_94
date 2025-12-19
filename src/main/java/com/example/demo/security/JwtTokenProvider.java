@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -8,21 +9,21 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String jwtSecret = "secretKey";
-    private final long jwtExpirationMs = 86400000;
+    private final String SECRET_KEY = "secret";
+    private final long EXPIRATION = 86400000;
 
-    // REQUIRED NO-ARGS CONSTRUCTOR
+    // ✅ REQUIRED: NO-ARG constructor
     public JwtTokenProvider() {}
 
-    // REQUIRED BY TEST
+    // ✅ REQUIRED BY TESTS
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("userId", userId)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 }
