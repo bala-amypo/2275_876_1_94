@@ -2,30 +2,22 @@ package com.example.demo.security;
 
 import com.example.demo.model.DemoUser;
 import com.example.demo.repository.UserRepository;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService {
 
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    // ✅ REQUIRED BY TESTS
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    // Must match test signature
+    public DemoUser registerUser(String name, String email, String password) {
+        DemoUser user = new DemoUser(name, email, password);
+        return userRepository.save(user);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-
-        DemoUser user = userRepository.findByEmail(email)
-        .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
-
-
-        return User.withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole())
-                .build();
+    public DemoUser getByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
