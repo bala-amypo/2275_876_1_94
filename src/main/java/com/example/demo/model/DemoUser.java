@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -11,31 +10,24 @@ public class DemoUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
     private String email;
     private String password;
-
-    private LocalDateTime createdAt;
+    private String role;
 
     public DemoUser() {}
 
-    public DemoUser(String name, String email, String password) {
-        this.name = name;
+    public DemoUser(String email, String password, String role) {
         this.email = email;
         this.password = password;
-        this.createdAt = LocalDateTime.now();
+        this.role = role;
     }
 
-    // getters and setters
     public Long getId() { return id; }
-    public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public String getRole() { return role; }
 
-    public void setId(Long id) { this.id = id; }
-    public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public void setRole(String role) { this.role = role; }
 }
