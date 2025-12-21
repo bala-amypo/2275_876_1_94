@@ -9,9 +9,6 @@ import java.util.List;
 
 public interface OverflowPredictionRepository extends JpaRepository<OverflowPrediction, Long> {
 
-    @Query("SELECT o FROM OverflowPrediction o WHERE o.bin.zone = :zone " +
-           "AND o.generatedAt = (SELECT MAX(o2.generatedAt) FROM OverflowPrediction o2 WHERE o2.bin = o.bin)")
+    @Query("SELECT p FROM OverflowPrediction p JOIN p.bin b WHERE b.zone = :zone AND p.generatedAt = (SELECT MAX(p2.generatedAt) FROM OverflowPrediction p2 WHERE p2.bin = b)")
     List<OverflowPrediction> findLatestPredictionsForZone(Zone zone);
-
-    List<OverflowPrediction> findByBinId(Long binId);
 }

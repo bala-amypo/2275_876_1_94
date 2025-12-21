@@ -1,17 +1,21 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Bin;
 import com.example.demo.model.OverflowPrediction;
 import com.example.demo.model.UsagePatternModel;
 import com.example.demo.model.Zone;
-import com.example.demo.repository.*;
+import com.example.demo.repository.BinRepository;
+import com.example.demo.repository.FillLevelRecordRepository;
+import com.example.demo.repository.OverflowPredictionRepository;
+import com.example.demo.repository.UsagePatternModelRepository;
+import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.OverflowPredictionService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -42,23 +46,29 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id: " + binId));
 
         UsagePatternModel model = modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin)
-                .orElseThrow(() -> new ResourceNotFoundException("Usage model not found for bin: " + binId));
+                .orElseThrow(() -> new ResourceNotFoundException("Usage model not found for bin id: " + binId));
 
-        double currentFillPercent = recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin)
+        double currentFill = recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin)
                 .map(r -> r.getFillPercentage())
                 .orElse(0.0);
 
-        double dailyIncrease = LocalDate.now().getDayOfWeek().getValue() < 6 ?
-                model.getAvgDailyIncreaseWeekday() : model.getAvgDailyIncreaseWeekend();
+        if (currentFill >= 100) {
+            throw new BadRequestException("Bin is already full");
+        }
 
-        int daysUntilFull = (int) Math.ceil((100 - currentFillPercent) / dailyIncrease);
-        if (daysUntilFull < 0) daysUntilFull = 0;
+        // Simplified calculation: assume today is the start
+        LocalDate today = LocalDate.now();
+        double avgIncrease = (today.getDayOfWeek().getValue() >= 6) ? model.getAvgDailyIncreaseWeekend() : model.getAvgDailyIncreaseWeekday();
+        if (avgIncrease <= 0) avgIncrease = 1; // prevent divide by zero
+        int daysUntilFull = (int) Math.ceil((100 - currentFill) / avgIncrease);
+        LocalDate predictedDate = today.plusDays(daysUntilFull);
 
-        Date predictedDate = Date.from(LocalDate.now().plusDays(daysUntilFull)
-                .atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        OverflowPrediction prediction = new OverflowPrediction(bin, predictedDate, daysUntilFull, model,
-                new Timestamp(System.currentTimeMillis()));
+        OverflowPrediction prediction = new OverflowPrediction();
+        prediction.setBin(bin);
+        prediction.setModelUsed(model);
+        prediction.setDaysUntilFull(daysUntilFull);
+        prediction.setPredictedFullDate(java.sql.Date.valueOf(predictedDate));
+        prediction.setGeneratedAt(new Timestamp(System.currentTimeMillis()));
 
         return predictionRepository.save(prediction);
     }
@@ -71,7 +81,11 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
 
     @Override
     public List<OverflowPrediction> getPredictionsForBin(Long binId) {
-        return predictionRepository.findByBinId(binId);
+        Bin bin = binRepository.findById(binId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id: " + binId));
+        return predictionRepository.findAll().stream()
+                .filter(p -> p.getBin().getId().equals(binId))
+                .toList();
     }
 
     @Override

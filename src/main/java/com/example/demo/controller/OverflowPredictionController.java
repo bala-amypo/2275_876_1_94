@@ -19,8 +19,7 @@ public class OverflowPredictionController {
 
     @PostMapping("/generate/{binId}")
     public ResponseEntity<OverflowPrediction> generatePrediction(@PathVariable Long binId) {
-        OverflowPrediction prediction = predictionService.generatePrediction(binId);
-        return ResponseEntity.ok(prediction);
+        return ResponseEntity.ok(predictionService.generatePrediction(binId));
     }
 
     @GetMapping("/{id}")
