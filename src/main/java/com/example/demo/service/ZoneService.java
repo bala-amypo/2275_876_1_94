@@ -1,12 +1,19 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Zone;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface ZoneService {
+
     List<Zone> getAllZones();
-    Zone getZoneById(Long id);
+
+    Optional<Zone> getZoneById(Long id);
+
     Zone createZone(Zone zone);
+
     Zone updateZone(Long id, Zone zone);
-    void deleteZone(Long id);
+
+    boolean deleteZone(Long id); // ✅ return boolean instead of void
 }

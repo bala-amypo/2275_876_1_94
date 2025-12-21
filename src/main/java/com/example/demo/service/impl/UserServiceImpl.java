@@ -3,39 +3,30 @@ package com.example.demo.service.impl;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public void registerUser(String username, String email, String password, String role) {
+    public User registerUser(String username, String email, String password, String role) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(password); // In production, hash passwords!
         user.setRole(role);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public boolean authenticateUser(String email, String password) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isPresent()) {
-            return passwordEncoder.matches(password, optionalUser.get().getPassword());
-        }
-        return false;
+    public User authenticateUser(String username, String password) {
+        return userRepository.findByUsername(username)
+                .filter(user -> user.getPassword().equals(password))
+                .orElse(null);
     }
 
     @Override
