@@ -3,7 +3,10 @@ package com.example.demo.service;
 import com.example.demo.model.User;
 
 public interface UserService {
-    User registerUser(User user);
-    String authenticateUser(String email, String password);
-    User getUserById(Long userId);
+
+    User registerUser(String username, String email, String password, String role);
+
+    User authenticateUser(String email, String password);
+
+    User getUserById(Long id);
 }

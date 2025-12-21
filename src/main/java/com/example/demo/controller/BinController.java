@@ -2,17 +2,19 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Bin;
 import com.example.demo.service.BinService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bins")
+@RequestMapping("/bins")
 public class BinController {
 
-    @Autowired
-    private BinService binService;
+    private final BinService binService;
+
+    public BinController(BinService binService) {
+        this.binService = binService;
+    }
 
     @GetMapping
     public List<Bin> getAllBins() {
@@ -34,9 +36,8 @@ public class BinController {
         return binService.updateBin(id, bin);
     }
 
-    @DeleteMapping("/{id}")
-    public String deactivateBin(@PathVariable Long id) {
+    @PatchMapping("/deactivate/{id}")
+    public void deactivateBin(@PathVariable Long id) {
         binService.deactivateBin(id);
-        return "Bin deactivated successfully";
     }
 }
