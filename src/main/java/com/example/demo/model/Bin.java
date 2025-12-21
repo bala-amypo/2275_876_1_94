@@ -1,7 +1,3 @@
-package com.example.demo.model;
-
-import jakarta.persistence.*;
-
 @Entity
 @Table(name = "bin")
 public class Bin {
@@ -13,6 +9,7 @@ public class Bin {
     @Column(nullable = false)
     private String name;
 
+    // 🔑 DEFAULT VALUE ADDED
     @Column(name = "capacity_liters", nullable = false)
     private Integer capacityLiters = 100;
 
@@ -34,9 +31,4 @@ public class Bin {
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
-
-    // ✅ REQUIRED BY SERVICE
-    public boolean isActive() {
-        return Boolean.TRUE.equals(active);
-    }
 }
