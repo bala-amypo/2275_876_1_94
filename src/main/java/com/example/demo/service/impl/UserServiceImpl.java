@@ -4,18 +4,15 @@ import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -23,8 +20,7 @@ public class UserServiceImpl implements UserService {
         if (exists(email)) {
             throw new BadRequestException("Email already registered: " + email);
         }
-        String hashedPassword = passwordEncoder.encode(password);
-        User user = new User(fullName, email, hashedPassword, role);
+        User user = new User(fullName, email, password, role);
         return userRepository.save(user);
     }
 
