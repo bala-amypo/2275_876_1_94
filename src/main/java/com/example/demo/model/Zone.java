@@ -10,12 +10,14 @@ public class Zone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "zone_name", nullable = false)
+    private String name;   // mapped to zone_name column
 
+    @Column(nullable = false)
     private String location;
 
     @Column(nullable = false)
-    private Boolean active = true;   // ✅ DEFAULT VALUE
+    private Boolean active = true;
 
     public Zone() {
     }
