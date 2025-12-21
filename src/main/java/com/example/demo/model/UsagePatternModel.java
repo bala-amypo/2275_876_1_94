@@ -1,41 +1,51 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.dto.ApiResponse;
-import com.example.demo.model.FillLevelRecord;
-import com.example.demo.service.FillLevelRecordService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.sql.Timestamp;
 
-import java.util.List;
+@Entity
+@Table(name = "usage_pattern_models")
+public class UsagePatternModel {
 
-@RestController
-@RequestMapping("/api/fill-records")
-public class FillLevelRecordController {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final FillLevelRecordService recordService;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bin_id")
+    private Bin bin;
 
-    public FillLevelRecordController(FillLevelRecordService recordService) {
-        this.recordService = recordService;
+    @Column(nullable = false)
+    private Double avgDailyIncreaseWeekday;
+
+    @Column(nullable = false)
+    private Double avgDailyIncreaseWeekend;
+
+    @Column(nullable = false)
+    private Timestamp lastUpdated;
+
+    public UsagePatternModel() {}
+
+    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday, Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
+        this.bin = bin;
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
+        this.lastUpdated = lastUpdated;
     }
 
-    @PostMapping
-    public ResponseEntity<FillLevelRecord> createRecord(@RequestBody FillLevelRecord record) {
-        return ResponseEntity.ok(recordService.createRecord(record));
-    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FillLevelRecord> getRecord(@PathVariable Long id) {
-        return ResponseEntity.ok(recordService.getRecordById(id));
-    }
+    public Bin getBin() { return bin; }
+    public void setBin(Bin bin) { this.bin = bin; }
 
-    @GetMapping("/bin/{binId}")
-    public ResponseEntity<List<FillLevelRecord>> getRecordsForBin(@PathVariable Long binId) {
-        return ResponseEntity.ok(recordService.getRecordsForBin(binId));
-    }
+    public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
+    public void setAvgDailyIncreaseWeekday(Double avgDailyIncreaseWeekday) { this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday; }
 
-    @GetMapping("/bin/{binId}/recent")
-    public ResponseEntity<List<FillLevelRecord>> getRecentRecords(
-            @PathVariable Long binId, @RequestParam int limit) {
-        return ResponseEntity.ok(recordService.getRecentRecords(binId, limit));
-    }
+    public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
+    public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) { this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend; }
+
+    public Timestamp getLastUpdated() { return lastUpdated; }
+    public void setLastUpdated(Timestamp lastUpdated) { this.lastUpdated = lastUpdated; }
 }

@@ -1,43 +1,45 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.dto.ApiResponse;
-import com.example.demo.model.UsagePatternModel;
-import com.example.demo.service.UsagePatternModelService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
-@RestController
-@RequestMapping("/api/models")
-public class UsagePatternModelController {
+@Entity
+@Table(name = "overflow_predictions")
+public class OverflowPrediction {
 
-    private final UsagePatternModelService modelService;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public UsagePatternModelController(UsagePatternModelService modelService) {
-        this.modelService = modelService;
+    @ManyToOne
+    @JoinColumn(name = "bin_id", nullable = false)
+    private Bin bin;
+
+    @Column(name = "predicted_full_date", nullable = false)
+    private Date predictedFullDate;
+
+    @Column(name = "days_until_full", nullable = false)
+    private Integer daysUntilFull;
+
+    @ManyToOne
+    @JoinColumn(name = "model_id", nullable = false)
+    private UsagePatternModel modelUsed;
+
+    @Column(name = "generated_at", nullable = false)
+    private Timestamp generatedAt;
+
+    public OverflowPrediction() {}
+
+    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull,
+                              UsagePatternModel modelUsed, Timestamp generatedAt) {
+        this.bin = bin;
+        this.predictedFullDate = predictedFullDate;
+        this.daysUntilFull = daysUntilFull;
+        this.modelUsed = modelUsed;
+        this.generatedAt = generatedAt;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> createModel(@RequestBody UsagePatternModel model) {
-        UsagePatternModel created = modelService.createModel(model);
-        return ResponseEntity.ok(new ApiResponse(true, "Model created", created));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateModel(@PathVariable Long id, @RequestBody UsagePatternModel model) {
-        UsagePatternModel updated = modelService.updateModel(id, model);
-        return ResponseEntity.ok(new ApiResponse(true, "Model updated", updated));
-    }
-
-    @GetMapping("/bin/{binId}")
-    public ResponseEntity<ApiResponse> getModelForBin(@PathVariable Long binId) {
-        UsagePatternModel model = modelService.getModelForBin(binId);
-        return ResponseEntity.ok(new ApiResponse(true, "Model fetched", model));
-    }
-
-    @GetMapping
-    public ResponseEntity<ApiResponse> getAllModels() {
-        List<UsagePatternModel> models = modelService.getAllModels();
-        return ResponseEntity.ok(new ApiResponse(true, "All models fetched", models));
-    }
+    // Getters and Setters
+    // ...
 }

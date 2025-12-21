@@ -1,46 +1,51 @@
-package com.example.demo.controller;
+package com.example.demo.model;
 
-import com.example.demo.dto.ApiResponse;
-import com.example.demo.model.Zone;
-import com.example.demo.service.ZoneService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
+import java.sql.Timestamp;
 
-import java.util.List;
+@Entity
+@Table(name = "fill_level_records")
+public class FillLevelRecord {
 
-@RestController
-@RequestMapping("/api/zones")
-public class ZoneController {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final ZoneService zoneService;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "bin_id")
+    private Bin bin;
 
-    public ZoneController(ZoneService zoneService) {
-        this.zoneService = zoneService;
+    @Column(nullable = false)
+    private Double fillPercentage;
+
+    @Column(nullable = false)
+    private Timestamp recordedAt;
+
+    @Column(nullable = false)
+    private Boolean isWeekend;
+
+    public FillLevelRecord() {}
+
+    public FillLevelRecord(Bin bin, Double fillPercentage, Timestamp recordedAt, Boolean isWeekend) {
+        this.bin = bin;
+        this.fillPercentage = fillPercentage;
+        this.recordedAt = recordedAt;
+        this.isWeekend = isWeekend;
     }
 
-    @PostMapping
-    public ResponseEntity<Zone> createZone(@RequestBody Zone zone) {
-        return ResponseEntity.ok(zoneService.createZone(zone));
-    }
+    // Getters and setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Zone> updateZone(@PathVariable Long id, @RequestBody Zone zone) {
-        return ResponseEntity.ok(zoneService.updateZone(id, zone));
-    }
+    public Bin getBin() { return bin; }
+    public void setBin(Bin bin) { this.bin = bin; }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Zone> getZone(@PathVariable Long id) {
-        return ResponseEntity.ok(zoneService.getZoneById(id));
-    }
+    public Double getFillPercentage() { return fillPercentage; }
+    public void setFillPercentage(Double fillPercentage) { this.fillPercentage = fillPercentage; }
 
-    @GetMapping
-    public ResponseEntity<List<Zone>> getAllZones() {
-        return ResponseEntity.ok(zoneService.getAllZones());
-    }
+    public Timestamp getRecordedAt() { return recordedAt; }
+    public void setRecordedAt(Timestamp recordedAt) { this.recordedAt = recordedAt; }
 
-    @PutMapping("/{id}/deactivate")
-    public ResponseEntity<ApiResponse> deactivateZone(@PathVariable Long id) {
-        zoneService.deactivateZone(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Zone deactivated successfully", null));
-    }
+    public Boolean getIsWeekend() { return isWeekend; }
+    public void setIsWeekend(Boolean isWeekend) { this.isWeekend = isWeekend; }
 }
