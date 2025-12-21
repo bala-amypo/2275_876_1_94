@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Zone;
 import com.example.demo.repository.ZoneRepository;
@@ -19,16 +20,37 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone createZone(Zone zone) {
-        zone.setActive(zone.getActive() != null ? zone.getActive() : true);
+        // Ensure zone name is unique
+        zoneRepository.findByZoneName(zone.getZoneName()).ifPresent(existing -> {
+            throw new BadRequestException("Zone name must be unique");
+        });
+
+        if (zone.getActive() == null) {
+            zone.setActive(true); // Default active
+        }
+
         return zoneRepository.save(zone);
     }
 
     @Override
     public Zone updateZone(Long id, Zone zone) {
-        Zone existing = getZoneById(id);
-        existing.setZoneName(zone.getZoneName() != null ? zone.getZoneName() : existing.getZoneName());
-        existing.setDescription(zone.getDescription() != null ? zone.getDescription() : existing.getDescription());
-        return zoneRepository.save(existing);
+        Zone existingZone = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id " + id));
+
+        if (!existingZone.getZoneName().equals(zone.getZoneName())) {
+            // Check unique name on update
+            zoneRepository.findByZoneName(zone.getZoneName()).ifPresent(other -> {
+                throw new BadRequestException("Zone name must be unique");
+            });
+        }
+
+        existingZone.setZoneName(zone.getZoneName());
+        existingZone.setDescription(zone.getDescription());
+        if (zone.getActive() != null) {
+            existingZone.setActive(zone.getActive());
+        }
+
+        return zoneRepository.save(existingZone);
     }
 
     @Override
@@ -44,7 +66,8 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void deactivateZone(Long id) {
-        Zone zone = getZoneById(id);
+        Zone zone = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id " + id));
         zone.setActive(false);
         zoneRepository.save(zone);
     }

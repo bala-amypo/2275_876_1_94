@@ -1,36 +1,47 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public User registerUser(String username, String email, String password, String role) {
+    public User registerUser(String fullName, String email, String password, String role) {
+        if (exists(email)) {
+            throw new BadRequestException("Email is already registered");
+        }
+
         User user = new User();
-        user.setUsername(username);
+        user.setFullName(fullName);
         user.setEmail(email);
-        user.setPassword(password); // In production, hash passwords!
         user.setRole(role);
+        user.setPassword(passwordEncoder.encode(password)); // Hash password
+
         return userRepository.save(user);
     }
 
     @Override
-    public User authenticateUser(String username, String password) {
-        return userRepository.findByUsername(username)
-                .filter(user -> user.getPassword().equals(password))
-                .orElse(null);
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+    public boolean exists(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }
