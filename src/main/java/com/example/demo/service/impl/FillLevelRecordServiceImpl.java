@@ -8,6 +8,7 @@ import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.FillLevelRecordRepository;
 import com.example.demo.service.FillLevelRecordService;
 import org.springframework.stereotype.Service;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,34 +27,26 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
     @Override
     public FillLevelRecord createRecord(FillLevelRecord record) {
         Bin bin = binRepository.findById(record.getBin().getId())
-                .orElseThrow(() -> new BadRequestException("Bin not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id " + record.getBin().getId()));
 
-        if (!bin.getActive()) {
-            throw new BadRequestException("Cannot create record for inactive bin");
+        if (!bin.isActive()) {
+            throw new BadRequestException("Cannot add record for inactive bin");
         }
-
         if (record.getFillPercentage() < 0 || record.getFillPercentage() > 100) {
             throw new BadRequestException("Fill percentage must be between 0 and 100");
         }
-
-        if (record.getRecordedAt().after(new Timestamp(System.currentTimeMillis()))) {
-            throw new BadRequestException("RecordedAt cannot be in the future");
+        if (record.getRecordedAt().after(Timestamp.valueOf(LocalDateTime.now()))) {
+            throw new BadRequestException("Recorded time cannot be in the future");
         }
 
         record.setBin(bin);
-
-        // Determine if weekend
-        LocalDateTime dateTime = record.getRecordedAt().toLocalDateTime();
-        int dayOfWeek = dateTime.getDayOfWeek().getValue(); // 1=Monday, 7=Sunday
-        record.setIsWeekend(dayOfWeek == 6 || dayOfWeek == 7);
-
         return recordRepository.save(record);
     }
 
     @Override
     public FillLevelRecord getRecordById(Long id) {
         return recordRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("FillLevelRecord not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Fill level record not found with id " + id));
     }
 
     @Override
@@ -65,7 +58,7 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
 
     @Override
     public List<FillLevelRecord> getRecentRecords(Long binId, int limit) {
-        List<FillLevelRecord> records = getRecordsForBin(binId);
-        return records.stream().limit(limit).toList();
+        List<FillLevelRecord> allRecords = getRecordsForBin(binId);
+        return allRecords.stream().limit(limit).toList();
     }
 }

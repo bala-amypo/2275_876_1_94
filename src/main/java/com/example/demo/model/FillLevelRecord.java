@@ -1,49 +1,46 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ApiResponse;
-import com.example.demo.model.Bin;
-import com.example.demo.service.BinService;
+import com.example.demo.model.Zone;
+import com.example.demo.service.ZoneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/bins")
-public class BinController {
+@RequestMapping("/api/zones")
+public class ZoneController {
 
-    private final BinService binService;
+    private final ZoneService zoneService;
 
-    public BinController(BinService binService) {
-        this.binService = binService;
+    public ZoneController(ZoneService zoneService) {
+        this.zoneService = zoneService;
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createBin(@RequestBody Bin bin) {
-        Bin created = binService.createBin(bin);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin created successfully", created));
+    public ResponseEntity<Zone> createZone(@RequestBody Zone zone) {
+        return ResponseEntity.ok(zoneService.createZone(zone));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateBin(@PathVariable Long id, @RequestBody Bin bin) {
-        Bin updated = binService.updateBin(id, bin);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin updated successfully", updated));
+    public ResponseEntity<Zone> updateZone(@PathVariable Long id, @RequestBody Zone zone) {
+        return ResponseEntity.ok(zoneService.updateZone(id, zone));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getBin(@PathVariable Long id) {
-        Bin bin = binService.getBinById(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin fetched successfully", bin));
+    public ResponseEntity<Zone> getZone(@PathVariable Long id) {
+        return ResponseEntity.ok(zoneService.getZoneById(id));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllBins() {
-        List<Bin> bins = binService.getAllBins();
-        return ResponseEntity.ok(new ApiResponse(true, "All bins fetched successfully", bins));
+    public ResponseEntity<List<Zone>> getAllZones() {
+        return ResponseEntity.ok(zoneService.getAllZones());
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<ApiResponse> deactivateBin(@PathVariable Long id) {
-        binService.deactivateBin(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin deactivated successfully", null));
+    public ResponseEntity<ApiResponse> deactivateZone(@PathVariable Long id) {
+        zoneService.deactivateZone(id);
+        return ResponseEntity.ok(new ApiResponse(true, "Zone deactivated successfully", null));
     }
 }

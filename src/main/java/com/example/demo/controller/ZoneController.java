@@ -19,27 +19,23 @@ public class ZoneController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createZone(@RequestBody Zone zone) {
-        Zone created = zoneService.createZone(zone);
-        return ResponseEntity.ok(new ApiResponse(true, "Zone created successfully", created));
+    public ResponseEntity<Zone> createZone(@RequestBody Zone zone) {
+        return ResponseEntity.ok(zoneService.createZone(zone));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateZone(@PathVariable Long id, @RequestBody Zone zone) {
-        Zone updated = zoneService.updateZone(id, zone);
-        return ResponseEntity.ok(new ApiResponse(true, "Zone updated successfully", updated));
+    public ResponseEntity<Zone> updateZone(@PathVariable Long id, @RequestBody Zone zone) {
+        return ResponseEntity.ok(zoneService.updateZone(id, zone));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getZoneById(@PathVariable Long id) {
-        Zone zone = zoneService.getZoneById(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Zone fetched successfully", zone));
+    public ResponseEntity<Zone> getZone(@PathVariable Long id) {
+        return ResponseEntity.ok(zoneService.getZoneById(id));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllZones() {
-        List<Zone> zones = zoneService.getAllZones();
-        return ResponseEntity.ok(new ApiResponse(true, "All zones fetched successfully", zones));
+    public ResponseEntity<List<Zone>> getAllZones() {
+        return ResponseEntity.ok(zoneService.getAllZones());
     }
 
     @PutMapping("/{id}/deactivate")

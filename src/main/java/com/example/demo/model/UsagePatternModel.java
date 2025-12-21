@@ -5,6 +5,7 @@ import com.example.demo.model.FillLevelRecord;
 import com.example.demo.service.FillLevelRecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,26 +19,23 @@ public class FillLevelRecordController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createRecord(@RequestBody FillLevelRecord record) {
-        FillLevelRecord created = recordService.createRecord(record);
-        return ResponseEntity.ok(new ApiResponse(true, "Fill record created", created));
+    public ResponseEntity<FillLevelRecord> createRecord(@RequestBody FillLevelRecord record) {
+        return ResponseEntity.ok(recordService.createRecord(record));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getRecord(@PathVariable Long id) {
-        FillLevelRecord record = recordService.getRecordById(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Fill record fetched", record));
+    public ResponseEntity<FillLevelRecord> getRecord(@PathVariable Long id) {
+        return ResponseEntity.ok(recordService.getRecordById(id));
     }
 
     @GetMapping("/bin/{binId}")
-    public ResponseEntity<ApiResponse> getRecordsForBin(@PathVariable Long binId) {
-        List<FillLevelRecord> records = recordService.getRecordsForBin(binId);
-        return ResponseEntity.ok(new ApiResponse(true, "Records fetched", records));
+    public ResponseEntity<List<FillLevelRecord>> getRecordsForBin(@PathVariable Long binId) {
+        return ResponseEntity.ok(recordService.getRecordsForBin(binId));
     }
 
     @GetMapping("/bin/{binId}/recent")
-    public ResponseEntity<ApiResponse> getRecentRecords(@PathVariable Long binId, @RequestParam int limit) {
-        List<FillLevelRecord> records = recordService.getRecentRecords(binId, limit);
-        return ResponseEntity.ok(new ApiResponse(true, "Recent records fetched", records));
+    public ResponseEntity<List<FillLevelRecord>> getRecentRecords(
+            @PathVariable Long binId, @RequestParam int limit) {
+        return ResponseEntity.ok(recordService.getRecentRecords(binId, limit));
     }
 }
