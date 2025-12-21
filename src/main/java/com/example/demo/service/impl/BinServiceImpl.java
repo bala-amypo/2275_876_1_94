@@ -25,39 +25,52 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public Bin createBin(Bin bin) {
-        if (bin.getCapacityLiters() <= 0) {
-            throw new BadRequestException("Bin capacity must be greater than 0");
+        if (bin.getCapacityLiters() == null || bin.getCapacityLiters() <= 0) {
+            throw new BadRequestException("capacity must be greater than 0");
         }
-        if (binRepository.findByIdentifier(bin.getIdentifier()).isPresent()) {
-            throw new BadRequestException("Bin identifier must be unique");
+
+        if (bin.getIdentifier() == null || bin.getIdentifier().isEmpty()) {
+            throw new BadRequestException("identifier is required");
         }
-        Zone zone = zoneRepository.findById(bin.getZone().getId())
-                .orElseThrow(() -> new BadRequestException("Zone not found"));
-        bin.setZone(zone);
-        bin.setActive(true);
-        bin.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        bin.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        binRepository.findByIdentifier(bin.getIdentifier())
+                .ifPresent(b -> { throw new BadRequestException("Bin identifier already exists"); });
+
+        if (bin.getZone() != null) {
+            Zone zone = zoneRepository.findById(bin.getZone().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
+            bin.setZone(zone);
+        }
+
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        bin.setCreatedAt(now);
+        bin.setUpdatedAt(now);
+        if (bin.getActive() == null) bin.setActive(true);
+
         return binRepository.save(bin);
     }
 
     @Override
     public Bin updateBin(Long id, Bin bin) {
         Bin existing = getBinById(id);
+
         if (bin.getCapacityLiters() != null && bin.getCapacityLiters() <= 0) {
-            throw new BadRequestException("Bin capacity must be greater than 0");
+            throw new BadRequestException("capacity must be greater than 0");
         }
+
         existing.setCapacityLiters(bin.getCapacityLiters() != null ? bin.getCapacityLiters() : existing.getCapacityLiters());
         existing.setLocationDescription(bin.getLocationDescription() != null ? bin.getLocationDescription() : existing.getLocationDescription());
         existing.setLatitude(bin.getLatitude() != null ? bin.getLatitude() : existing.getLatitude());
         existing.setLongitude(bin.getLongitude() != null ? bin.getLongitude() : existing.getLongitude());
         existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
         return binRepository.save(existing);
     }
 
     @Override
     public Bin getBinById(Long id) {
         return binRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id: " + id));
     }
 
     @Override

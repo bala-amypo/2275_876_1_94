@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Zone;
 import com.example.demo.repository.ZoneRepository;
@@ -19,18 +20,26 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone createZone(Zone zone) {
-        zone.setActive(true);
+        if (zone.getZoneName() == null || zone.getZoneName().isEmpty()) {
+            throw new BadRequestException("zoneName is required");
+        }
+
+        zoneRepository.findByZoneName(zone.getZoneName())
+                .ifPresent(z -> { throw new BadRequestException("Zone name already exists"); });
+
+        if (zone.getActive() == null) zone.setActive(true);
+
         return zoneRepository.save(zone);
     }
 
     @Override
     public Zone updateZone(Long id, Zone zone) {
-        Zone existingZone = zoneRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
+        Zone existing = getZoneById(id);
 
-        existingZone.setZoneName(zone.getZoneName());
-        existingZone.setDescription(zone.getDescription());
-        return zoneRepository.save(existingZone);
+        existing.setZoneName(zone.getZoneName() != null ? zone.getZoneName() : existing.getZoneName());
+        existing.setDescription(zone.getDescription() != null ? zone.getDescription() : existing.getDescription());
+
+        return zoneRepository.save(existing);
     }
 
     @Override
@@ -46,8 +55,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void deactivateZone(Long id) {
-        Zone zone = zoneRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
+        Zone zone = getZoneById(id);
         zone.setActive(false);
         zoneRepository.save(zone);
     }

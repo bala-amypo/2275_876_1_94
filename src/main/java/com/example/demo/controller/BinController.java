@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.Bin;
 import com.example.demo.service.BinService;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +38,8 @@ public class BinController {
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<ApiResponse> deactivateBin(@PathVariable Long id) {
+    public ResponseEntity<Void> deactivateBin(@PathVariable Long id) {
         binService.deactivateBin(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin deactivated successfully", null));
+        return ResponseEntity.noContent().build();
     }
 }
