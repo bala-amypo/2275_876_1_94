@@ -1,17 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.model.DemoUser;
-import com.example.demo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.example.demo.model.User;
 
-@Service
-public class UserService {
+public interface UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    User registerUser(String fullName, String email, String password);
 
-    public DemoUser save(DemoUser user) {
-        return userRepository.save(user);
-    }
+    User getByEmail(String email);
+
+    boolean exists(String email);
 }
