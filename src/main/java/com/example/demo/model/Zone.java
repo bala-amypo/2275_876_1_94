@@ -1,44 +1,51 @@
-package com.example.demo.dto;
+package com.example.demo.model;
 
-public class ApiResponse {
+import jakarta.persistence.*;
+import java.util.List;
 
-    private boolean success;
-    private String message;
-    private Object data;
+@Entity
+@Table(name = "zones")
+public class Zone {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "zone_name", unique = true, nullable = false)
+    private String zoneName;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
+
+    @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bin> bins;
 
     // No-arg constructor
-    public ApiResponse() {
-    }
+    public Zone() {}
 
-    // All-args constructor
-    public ApiResponse(boolean success, String message, Object data) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
+    // Parameterized constructor
+    public Zone(String zoneName, String description, Boolean active) {
+        this.zoneName = zoneName;
+        this.description = description;
+        this.active = active;
     }
 
     // Getters and setters
-    public boolean isSuccess() {
-        return success;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+    public String getZoneName() { return zoneName; }
+    public void setZoneName(String zoneName) { this.zoneName = zoneName; }
 
-    public String getMessage() {
-        return message;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
+    public List<Bin> getBins() { return bins; }
+    public void setBins(List<Bin> bins) { this.bins = bins; }
 }

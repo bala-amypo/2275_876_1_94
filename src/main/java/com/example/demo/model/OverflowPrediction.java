@@ -1,44 +1,43 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import lombok.*;
-import java.sql.Timestamp;
-import java.util.Date;
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.model.UsagePatternModel;
+import com.example.demo.service.UsagePatternModelService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-@Table(name = "overflow_predictions")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class OverflowPrediction {
+@RestController
+@RequestMapping("/api/models")
+public class UsagePatternModelController {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final UsagePatternModelService modelService;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bin_id", nullable = false)
-    private Bin bin;
+    public UsagePatternModelController(UsagePatternModelService modelService) {
+        this.modelService = modelService;
+    }
 
-    @Column(nullable = false)
-    private Date predictedFullDate;
+    @PostMapping
+    public ResponseEntity<ApiResponse> createModel(@RequestBody UsagePatternModel model) {
+        UsagePatternModel created = modelService.createModel(model);
+        return ResponseEntity.ok(new ApiResponse(true, "Model created", created));
+    }
 
-    @Column(nullable = false)
-    private Integer daysUntilFull;
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateModel(@PathVariable Long id, @RequestBody UsagePatternModel model) {
+        UsagePatternModel updated = modelService.updateModel(id, model);
+        return ResponseEntity.ok(new ApiResponse(true, "Model updated", updated));
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "model_id")
-    private UsagePatternModel modelUsed;
+    @GetMapping("/bin/{binId}")
+    public ResponseEntity<ApiResponse> getModelForBin(@PathVariable Long binId) {
+        UsagePatternModel model = modelService.getModelForBin(binId);
+        return ResponseEntity.ok(new ApiResponse(true, "Model fetched", model));
+    }
 
-    @Column(nullable = false)
-    private Timestamp generatedAt;
-
-    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull, UsagePatternModel modelUsed, Timestamp generatedAt) {
-        this.bin = bin;
-        this.predictedFullDate = predictedFullDate;
-        this.daysUntilFull = daysUntilFull;
-        this.modelUsed = modelUsed;
-        this.generatedAt = generatedAt;
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllModels() {
+        List<UsagePatternModel> models = modelService.getAllModels();
+        return ResponseEntity.ok(new ApiResponse(true, "All models fetched", models));
     }
 }

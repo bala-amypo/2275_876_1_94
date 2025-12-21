@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -39,38 +38,27 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
         Bin bin = binRepository.findById(binId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id " + binId));
 
-        if (!bin.getActive()) {
-            throw new BadRequestException("Cannot generate prediction for inactive bin");
-        }
-
         FillLevelRecord latestRecord = recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin)
-                .orElseThrow(() -> new BadRequestException("No fill record found for bin"));
+                .orElseThrow(() -> new BadRequestException("No fill records found for bin " + binId));
 
-        UsagePatternModel latestModel = modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin)
-                .orElseThrow(() -> new BadRequestException("No usage model found for bin"));
+        UsagePatternModel model = modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin)
+                .orElseThrow(() -> new BadRequestException("No usage model found for bin " + binId));
 
-        double currentFill = latestRecord.getFillPercentage();
-        double capacityLiters = bin.getCapacityLiters();
-        double dailyIncrease = latestRecord.getIsWeekend() ? latestModel.getAvgDailyIncreaseWeekend()
-                : latestModel.getAvgDailyIncreaseWeekday();
+        double remainingCapacity = 100 - latestRecord.getFillPercentage();
+        double dailyIncrease = LocalDate.now().getDayOfWeek().getValue() >= 6 ? model.getAvgDailyIncreaseWeekend() : model.getAvgDailyIncreaseWeekday();
 
         if (dailyIncrease <= 0) {
-            throw new BadRequestException("Daily increase must be greater than 0 to predict overflow");
+            throw new BadRequestException("Daily increase must be positive to generate prediction");
         }
 
-        // Calculate days until full
-        double litersFilled = currentFill / 100 * capacityLiters;
-        double litersRemaining = capacityLiters - litersFilled;
-        int daysUntilFull = (int) Math.ceil(litersRemaining / dailyIncrease);
-
+        int daysUntilFull = (int) Math.ceil(remainingCapacity / dailyIncrease);
         LocalDate predictedDate = LocalDate.now().plusDays(daysUntilFull);
-        Date predictedFullDate = Date.from(predictedDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         OverflowPrediction prediction = new OverflowPrediction();
         prediction.setBin(bin);
-        prediction.setModelUsed(latestModel);
         prediction.setDaysUntilFull(daysUntilFull);
-        prediction.setPredictedFullDate(predictedFullDate);
+        prediction.setPredictedFullDate(java.sql.Date.valueOf(predictedDate));
+        prediction.setModelUsed(model);
         prediction.setGeneratedAt(new Timestamp(System.currentTimeMillis()));
 
         return predictionRepository.save(prediction);
@@ -84,15 +72,14 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
 
     @Override
     public List<OverflowPrediction> getPredictionsForBin(Long binId) {
-        Bin bin = binRepository.findById(binId)
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id " + binId));
-        return predictionRepository.findByBin(bin);
+        return predictionRepository.findByBinIdOrderByGeneratedAtDesc(binId);
     }
 
     @Override
     public List<OverflowPrediction> getLatestPredictionsForZone(Long zoneId) {
         Zone zone = zoneRepository.findById(zoneId)
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id " + zoneId));
+
         return predictionRepository.findLatestPredictionsForZone(zone);
     }
 }
