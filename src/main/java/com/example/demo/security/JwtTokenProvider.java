@@ -1,6 +1,5 @@
 package com.example.demo.security;
 
-import com.example.demo.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -10,16 +9,19 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private final String secret = "VerySecretKeyForJWT"; // replace with config
+    private final String secret = "mySecretKey123456"; // replace with env variable
     private final long validityInMs = 3600000; // 1 hour
 
-    public String generateToken(User user) {
+    public String generateToken(Long userId, String email, String role) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMs);
+
         return Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("role", user.getRole())
-                .claim("userId", user.getId())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + validityInMs))
+                .setSubject(email)
+                .claim("userId", userId)
+                .claim("role", role)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }

@@ -20,17 +20,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(String fullName, String email, String password, String role) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new BadRequestException("Email already exists");
+        if (exists(email)) {
+            throw new BadRequestException("Email already registered: " + email);
         }
-        User user = new User(fullName, email, passwordEncoder.encode(password), role);
+        String hashedPassword = passwordEncoder.encode(password);
+        User user = new User(fullName, email, hashedPassword, role);
         return userRepository.save(user);
     }
 
     @Override
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("User not found with email " + email));
+                .orElseThrow(() -> new BadRequestException("User not found with email: " + email));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Zone;
 import com.example.demo.repository.ZoneRepository;
@@ -20,25 +19,24 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone createZone(Zone zone) {
-        if (zoneRepository.findByZoneName(zone.getZoneName()).isPresent()) {
-            throw new BadRequestException("Zone name must be unique");
-        }
         zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
     @Override
     public Zone updateZone(Long id, Zone zone) {
-        Zone existing = getZoneById(id);
-        existing.setZoneName(zone.getZoneName() != null ? zone.getZoneName() : existing.getZoneName());
-        existing.setDescription(zone.getDescription() != null ? zone.getDescription() : existing.getDescription());
-        return zoneRepository.save(existing);
+        Zone existingZone = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
+
+        existingZone.setZoneName(zone.getZoneName());
+        existingZone.setDescription(zone.getDescription());
+        return zoneRepository.save(existingZone);
     }
 
     @Override
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
     }
 
     @Override
@@ -48,7 +46,8 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void deactivateZone(Long id) {
-        Zone zone = getZoneById(id);
+        Zone zone = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
         zone.setActive(false);
         zoneRepository.save(zone);
     }

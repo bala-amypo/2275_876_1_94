@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.Zone;
 import com.example.demo.service.ZoneService;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +28,7 @@ public class ZoneController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Zone> getZone(@PathVariable Long id) {
+    public ResponseEntity<Zone> getZoneById(@PathVariable Long id) {
         return ResponseEntity.ok(zoneService.getZoneById(id));
     }
 
@@ -39,8 +38,8 @@ public class ZoneController {
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<ApiResponse> deactivateZone(@PathVariable Long id) {
+    public ResponseEntity<Void> deactivateZone(@PathVariable Long id) {
         zoneService.deactivateZone(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Zone deactivated successfully", null));
+        return ResponseEntity.ok().build();
     }
 }
