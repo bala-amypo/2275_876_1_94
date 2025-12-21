@@ -15,11 +15,15 @@ public class OverflowPrediction {
     @JoinColumn(name = "bin_id", nullable = false)
     private Bin bin;
 
-    @Column(nullable = false)
+    @Column(name = "predicted_level", nullable = false)
     private Integer predictedLevel;
 
-    @Column(nullable = false)
+    @Column(name = "predicted_at", nullable = false)
     private LocalDateTime predictedAt = LocalDateTime.now();
+
+    // ✅ REQUIRED BY REPOSITORY
+    @Column(name = "generated_at", nullable = false)
+    private LocalDateTime generatedAt = LocalDateTime.now();
 
     public OverflowPrediction() {}
 
@@ -37,5 +41,11 @@ public class OverflowPrediction {
     public LocalDateTime getPredictedAt() { return predictedAt; }
     public void setPredictedAt(LocalDateTime predictedAt) {
         this.predictedAt = predictedAt;
+    }
+
+    // ✅ REQUIRED BY findByBinOrderByGeneratedAtDesc
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
     }
 }
