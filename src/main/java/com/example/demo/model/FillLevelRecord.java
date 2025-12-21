@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
@@ -13,6 +14,8 @@ public class FillLevelRecord {
 
     @ManyToOne
     @JoinColumn(name = "bin_id", nullable = false)
+    @JsonIgnoreProperties({"zone"}) 
+    // prevents recursion in swagger
     private Bin bin;
 
     @Column(nullable = false)
@@ -33,14 +36,39 @@ public class FillLevelRecord {
         this.isWeekend = isWeekend;
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
-    public Double getFillPercentage() { return fillPercentage; }
-    public void setFillPercentage(Double fillPercentage) { this.fillPercentage = fillPercentage; }
-    public Timestamp getRecordedAt() { return recordedAt; }
-    public void setRecordedAt(Timestamp recordedAt) { this.recordedAt = recordedAt; }
-    public Boolean getIsWeekend() { return isWeekend; }
-    public void setIsWeekend(Boolean isWeekend) { this.isWeekend = isWeekend; }
+    public Long getId() {
+        return id;
+    }
+
+    public Bin getBin() {
+        return bin;
+    }
+
+    public void setBin(Bin bin) {
+        this.bin = bin;
+    }
+
+    public Double getFillPercentage() {
+        return fillPercentage;
+    }
+
+    public void setFillPercentage(Double fillPercentage) {
+        this.fillPercentage = fillPercentage;
+    }
+
+    public Timestamp getRecordedAt() {
+        return recordedAt;
+    }
+
+    public void setRecordedAt(Timestamp recordedAt) {
+        this.recordedAt = recordedAt;
+    }
+
+    public Boolean getIsWeekend() {
+        return isWeekend;
+    }
+
+    public void setIsWeekend(Boolean isWeekend) {
+        this.isWeekend = isWeekend;
+    }
 }
