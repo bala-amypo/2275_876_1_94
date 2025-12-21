@@ -4,30 +4,36 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "fill_level_record")
 public class FillLevelRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private float level;
-
     @ManyToOne
-    @JoinColumn(name = "bin_id")
+    @JoinColumn(name = "bin_id", nullable = false)
     private Bin bin;
 
-    private LocalDateTime generatedAt;  // This is required for sorting
+    @Column(nullable = false)
+    private Integer level;
 
-    // Getters and Setters
+    @Column(name = "recorded_at", nullable = false)
+    private LocalDateTime recordedAt = LocalDateTime.now();
+
+    public FillLevelRecord() {}
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
-    public float getLevel() { return level; }
-    public void setLevel(float level) { this.level = level; }
 
     public Bin getBin() { return bin; }
     public void setBin(Bin bin) { this.bin = bin; }
 
-    public LocalDateTime getGeneratedAt() { return generatedAt; }
-    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
+    public Integer getLevel() { return level; }
+    public void setLevel(Integer level) { this.level = level; }
+
+    public LocalDateTime getRecordedAt() { return recordedAt; }
+    public void setRecordedAt(LocalDateTime recordedAt) {
+        this.recordedAt = recordedAt;
+    }
 }

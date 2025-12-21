@@ -1,75 +1,32 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
-@Table(name = "usage_pattern_models")
+@Table(name = "usage_pattern_model")
 public class UsagePatternModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String modelName;
+
     @ManyToOne
-    @JoinColumn(name = "bin_id")
+    @JoinColumn(name = "bin_id", nullable = false)
     private Bin bin;
 
-    private Double avgDailyIncreaseWeekday;
-    private Double avgDailyIncreaseWeekend;
+    public UsagePatternModel() {}
 
-    private Timestamp lastUpdated;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public UsagePatternModel() {
+    public String getModelName() { return modelName; }
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
     }
 
-    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday,
-                             Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
-        this.bin = bin;
-        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
-        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-        this.lastUpdated = lastUpdated;
-    }
-
-    // Getters and Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public Bin getBin() {
-        return bin;
-    }
-
-    public Double getAvgDailyIncreaseWeekday() {
-        return avgDailyIncreaseWeekday;
-    }
-
-    public Double getAvgDailyIncreaseWeekend() {
-        return avgDailyIncreaseWeekend;
-    }
-
-    public Timestamp getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setBin(Bin bin) {
-        this.bin = bin;
-    }
-
-    public void setAvgDailyIncreaseWeekday(Double avgDailyIncreaseWeekday) {
-        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
-    }
-
-    public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) {
-        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-    }
-
-    public void setLastUpdated(Timestamp lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
+    public Bin getBin() { return bin; }
+    public void setBin(Bin bin) { this.bin = bin; }
 }

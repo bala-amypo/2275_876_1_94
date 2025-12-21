@@ -11,7 +11,7 @@ public class Zone {
     private Long id;
 
     @Column(name = "zone_name", nullable = false)
-    private String name;   // mapped to zone_name column
+    private String name;
 
     @Column(nullable = false)
     private String location;
@@ -19,44 +19,17 @@ public class Zone {
     @Column(nullable = false)
     private Boolean active = true;
 
-    public Zone() {
-    }
+    public Zone() {}
 
-    public Zone(String name, String location) {
-        this.name = name;
-        this.location = location;
-        this.active = true;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }
