@@ -5,11 +5,8 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CustomUserDetailsService {
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -18,12 +15,11 @@ public class CustomUserDetailsService {
     }
 
     public User getByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        return user.orElse(null);
+        return userRepository.findByEmail(email); // make sure UserRepository has findByEmail(String)
     }
 
-    public User registerUser(String email, String role) {
-        User user = new User(email, role);
-        return userRepository.save(user);
+    public void registerUser(String email, String password, String role) {
+        User user = new User(email, password, role);
+        userRepository.save(user);
     }
 }
