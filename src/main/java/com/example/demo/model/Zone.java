@@ -4,30 +4,33 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "zones", uniqueConstraints = @UniqueConstraint(columnNames = "zoneName"))
+@Table(name = "zones")
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "zone_name", unique = true, nullable = false)
     private String zoneName;
 
+    @Column(nullable = true)
     private String description;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private Boolean active;
 
     @OneToMany(mappedBy = "zone")
     private List<Bin> bins;
 
-    public Zone() {}
+    public Zone() {
+        this.active = true; // default active
+    }
 
     public Zone(String zoneName, String description, Boolean active) {
         this.zoneName = zoneName;
         this.description = description;
-        this.active = active;
+        this.active = active != null ? active : true;
     }
 
     // Getters & Setters

@@ -28,7 +28,7 @@ public class ZoneController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Zone> getZone(@PathVariable Long id) {
+    public ResponseEntity<Zone> getZoneById(@PathVariable Long id) {
         return ResponseEntity.ok(zoneService.getZoneById(id));
     }
 
@@ -40,6 +40,6 @@ public class ZoneController {
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateZone(@PathVariable Long id) {
         zoneService.deactivateZone(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

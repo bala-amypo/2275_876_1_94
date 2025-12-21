@@ -20,24 +20,27 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone createZone(Zone zone) {
-        if (zone.getZoneName() == null || zone.getZoneName().isEmpty()) {
-            throw new BadRequestException("zoneName is required");
-        }
-
-        zoneRepository.findByZoneName(zone.getZoneName())
-                .ifPresent(z -> { throw new BadRequestException("Zone name already exists"); });
-
+        zoneRepository.findByZoneName(zone.getZoneName()).ifPresent(z -> {
+            throw new BadRequestException("Zone with name '" + zone.getZoneName() + "' already exists");
+        });
         if (zone.getActive() == null) zone.setActive(true);
-
         return zoneRepository.save(zone);
     }
 
     @Override
     public Zone updateZone(Long id, Zone zone) {
-        Zone existing = getZoneById(id);
+        Zone existing = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
 
-        existing.setZoneName(zone.getZoneName() != null ? zone.getZoneName() : existing.getZoneName());
-        existing.setDescription(zone.getDescription() != null ? zone.getDescription() : existing.getDescription());
+        if (zone.getZoneName() != null && !zone.getZoneName().equals(existing.getZoneName())) {
+            zoneRepository.findByZoneName(zone.getZoneName()).ifPresent(z -> {
+                throw new BadRequestException("Zone with name '" + zone.getZoneName() + "' already exists");
+            });
+            existing.setZoneName(zone.getZoneName());
+        }
+
+        if (zone.getDescription() != null) existing.setDescription(zone.getDescription());
+        if (zone.getActive() != null) existing.setActive(zone.getActive());
 
         return zoneRepository.save(existing);
     }
@@ -55,7 +58,8 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void deactivateZone(Long id) {
-        Zone zone = getZoneById(id);
+        Zone zone = zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id: " + id));
         zone.setActive(false);
         zoneRepository.save(zone);
     }
