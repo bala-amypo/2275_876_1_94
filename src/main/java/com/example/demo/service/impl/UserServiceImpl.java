@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -21,23 +20,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(String fullName, String email, String password, String role) {
-        if (exists(email)) {
-            throw new BadRequestException("Email is already registered");
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new BadRequestException("Email already exists");
         }
-
-        User user = new User();
-        user.setFullName(fullName);
-        user.setEmail(email);
-        user.setRole(role);
-        user.setPassword(passwordEncoder.encode(password)); // Hash password
-
+        User user = new User(fullName, email, passwordEncoder.encode(password), role);
         return userRepository.save(user);
     }
 
     @Override
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new BadRequestException("User not found with email " + email));
     }
 
     @Override

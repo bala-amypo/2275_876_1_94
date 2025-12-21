@@ -5,6 +5,7 @@ import com.example.demo.model.Zone;
 import com.example.demo.service.ZoneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -30,7 +31,7 @@ public class ZoneController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getZone(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse> getZoneById(@PathVariable Long id) {
         Zone zone = zoneService.getZoneById(id);
         return ResponseEntity.ok(new ApiResponse(true, "Zone fetched successfully", zone));
     }
