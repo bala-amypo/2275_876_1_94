@@ -75,7 +75,7 @@
 			<version>0.9.1</version>
 		</dependency>
 
-		<!-- Validation -->
+		<!-- Validation
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
@@ -86,7 +86,7 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
 
     </dependencies>
 
