@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "bins")
 public class Bin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String identifier;
 
     private String locationDescription;
@@ -19,105 +18,23 @@ public class Bin {
     private Double longitude;
 
     @ManyToOne
-    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     private Double capacityLiters;
-    private Boolean active;
+    private Boolean active = true;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    public Bin() {
+    @PrePersist
+    public void onCreate() {
+        createdAt = new Timestamp(System.currentTimeMillis());
     }
 
-    public Bin(String identifier, String locationDescription, Double latitude, Double longitude,
-               Zone zone, Double capacityLiters, Boolean active,
-               Timestamp createdAt, Timestamp updatedAt) {
-        this.identifier = identifier;
-        this.locationDescription = locationDescription;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.zone = zone;
-        this.capacityLiters = capacityLiters;
-        this.active = active;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public String getLocationDescription() {
-        return locationDescription;
-    }
-
-    public void setLocationDescription(String locationDescription) {
-        this.locationDescription = locationDescription;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Zone getZone() {
-        return zone;
-    }
-
-    public void setZone(Zone zone) {
-        this.zone = zone;
-    }
-
-    public Double getCapacityLiters() {
-        return capacityLiters;
-    }
-
-    public void setCapacityLiters(Double capacityLiters) {
-        this.capacityLiters = capacityLiters;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    // getters & setters
 }

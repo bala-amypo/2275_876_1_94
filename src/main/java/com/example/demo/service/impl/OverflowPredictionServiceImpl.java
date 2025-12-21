@@ -4,14 +4,10 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.OverflowPredictionService;
-import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.List;
+import java.time.LocalDate;
 
-@Service
 public class OverflowPredictionServiceImpl implements OverflowPredictionService {
 
     private final BinRepository binRepository;
@@ -20,6 +16,7 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
     private final OverflowPredictionRepository predictionRepository;
     private final ZoneRepository zoneRepository;
 
+    // ⚠️ EXACT ORDER REQUIRED
     public OverflowPredictionServiceImpl(
             BinRepository binRepository,
             FillLevelRecordRepository recordRepository,
@@ -36,59 +33,33 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
 
     @Override
     public OverflowPrediction generatePrediction(Long binId) {
+
         Bin bin = binRepository.findById(binId)
-                .orElseThrow(() -> new ResourceNotFoundException("bin not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
 
-        FillLevelRecord latestRecord = recordRepository
-                .findTop1ByBinOrderByRecordedAtDesc(bin)
-                .orElseThrow(() -> new ResourceNotFoundException("record not found"));
+        FillLevelRecord latest =
+                recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin);
 
-        UsagePatternModel model = modelRepository
-                .findTop1ByBinOrderByLastUpdatedDesc(bin)
-                .orElseThrow(() -> new ResourceNotFoundException("model not found"));
+        UsagePatternModel model =
+                modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin);
 
-        double remaining = 100 - latestRecord.getFillPercentage();
-        double dailyIncrease = latestRecord.getIsWeekend()
-                ? model.getAvgDailyIncreaseWeekend()
-                : model.getAvgDailyIncreaseWeekday();
+        double remaining =
+                100 - latest.getFillPercentage();
 
-        int daysUntilFull = dailyIncrease == 0 ? Integer.MAX_VALUE :
-                (int) Math.ceil(remaining / dailyIncrease);
+        double dailyIncrease =
+                latest.getIsWeekend()
+                        ? model.getAvgDailyIncreaseWeekend()
+                        : model.getAvgDailyIncreaseWeekday();
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_YEAR, daysUntilFull);
+        int days = (int) Math.ceil(remaining / dailyIncrease);
 
-        OverflowPrediction prediction = new OverflowPrediction(
-                bin,
-                cal.getTime(),
-                daysUntilFull,
-                model,
-                Timestamp.from(Instant.now())
-        );
+        OverflowPrediction prediction = new OverflowPrediction();
+        prediction.setBin(bin);
+        prediction.setDaysUntilFull(days);
+        prediction.setPredictedFullDate(LocalDate.now().plusDays(days));
+        prediction.setModelUsed(model);
+        prediction.setGeneratedAt(new Timestamp(System.currentTimeMillis()));
 
         return predictionRepository.save(prediction);
-    }
-
-    @Override
-    public OverflowPrediction getPredictionById(Long id) {
-        return predictionRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("prediction not found"));
-    }
-
-    @Override
-    public List<OverflowPrediction> getPredictionsForBin(Long binId) {
-        Bin bin = binRepository.findById(binId)
-                .orElseThrow(() -> new ResourceNotFoundException("bin not found"));
-        return predictionRepository.findAll()
-                .stream()
-                .filter(p -> p.getBin().getId().equals(bin.getId()))
-                .toList();
-    }
-
-    @Override
-    public List<OverflowPrediction> getLatestPredictionsForZone(Long zoneId) {
-        Zone zone = zoneRepository.findById(zoneId)
-                .orElseThrow(() -> new ResourceNotFoundException("zone not found"));
-        return predictionRepository.findLatestPredictionsForZone(zone);
     }
 }
