@@ -1,61 +1,40 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Bin;
+import com.example.demo.model.FillLevelRecord;
+import com.example.demo.repository.FillLevelRecordRepository;
 import com.example.demo.service.FillLevelRecordService;
+import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class FillLevelRecordServiceImpl implements FillLevelRecordService {
 
     private final FillLevelRecordRepository recordRepository;
-    private final BinRepository binRepository;
 
-    public FillLevelRecordServiceImpl(FillLevelRecordRepository recordRepository,
-                                      BinRepository binRepository) {
+    public FillLevelRecordServiceImpl(FillLevelRecordRepository recordRepository) {
         this.recordRepository = recordRepository;
-        this.binRepository = binRepository;
     }
 
     @Override
-    public FillLevelRecord createRecord(FillLevelRecord record) {
-        Bin bin = binRepository.findById(record.getBin().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
-
-        if (!bin.getActive()) {
-            throw new BadRequestException("bin is inactive");
-        }
-
-        if (record.getFillPercentage() < 0 || record.getFillPercentage() > 100) {
-            throw new BadRequestException("fillPercentage must be between 0 and 100");
-        }
-
-        if (record.getRecordedAt().after(new Timestamp(System.currentTimeMillis()))) {
-            throw new BadRequestException("recordedAt cannot be in the future");
-        }
-
-        record.setBin(bin);
+    public FillLevelRecord save(FillLevelRecord record) {
         return recordRepository.save(record);
     }
 
     @Override
-    public List<FillLevelRecord> getRecordsForBin(Long binId) {
-        Bin bin = binRepository.findById(binId)
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+    public List<FillLevelRecord> getRecordsByBin(Bin bin) {
         return recordRepository.findByBinOrderByRecordedAtDesc(bin);
     }
 
     @Override
-    public FillLevelRecord getRecordById(Long id) {
-        return recordRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Fill record not found"));
+    public List<FillLevelRecord> getRecordsBetween(Bin bin, LocalDateTime start, LocalDateTime end) {
+        return recordRepository.findByBinAndRecordedAtBetween(bin, start, end);
     }
 
     @Override
-    public List<FillLevelRecord> getRecentRecords(Long binId, int limit) {
-        List<FillLevelRecord> records = getRecordsForBin(binId);
-        return records.stream().limit(limit).toList();
+    public FillLevelRecord getLatestRecord(Bin bin) {
+        return recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin);
     }
 }

@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,42 +9,23 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    @Autowired
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
+    }
+
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userService.save(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
-        // Authenticate user (implement your authentication logic in UserService)
-        User user = userService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
-        if (user == null) {
-            return ResponseEntity.status(401).body("Invalid credentials");
-        }
-
-        // **Fix here:** Pass username (String), not User object
-        String token = jwtUtil.generateToken(user.getUsername());
-
-        return ResponseEntity.ok().body(new AuthResponse(token));
-    }
-
-    // Response class for returning JWT
-    private static class AuthResponse {
-        private String token;
-
-        public AuthResponse(String token) {
-            this.token = token;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
+    public String login(@RequestBody User loginRequest) {
+        User user = userService.findByUsername(loginRequest.getUsername());
+        if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
+            return "Login successful!";
+        } else {
+            return "Invalid username or password!";
         }
     }
 }
