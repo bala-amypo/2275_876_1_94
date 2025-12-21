@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/fill-records")
+@RequestMapping("/api/fill-levels")
 public class FillLevelRecordController {
 
     private final FillLevelRecordService recordService;
@@ -33,8 +33,9 @@ public class FillLevelRecordController {
     }
 
     @GetMapping("/bin/{binId}/recent")
-    public ResponseEntity<List<FillLevelRecord>> getRecentRecords(@PathVariable Long binId,
-                                                                  @RequestParam int limit) {
+    public ResponseEntity<List<FillLevelRecord>> getRecentRecords(
+            @PathVariable Long binId,
+            @RequestParam(defaultValue = "5") int limit) {
         return ResponseEntity.ok(recordService.getRecentRecords(binId, limit));
     }
 }
