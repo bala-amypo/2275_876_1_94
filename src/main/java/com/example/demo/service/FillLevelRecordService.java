@@ -1,20 +1,11 @@
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
+package com.example.demo.service;
+
+import com.example.demo.model.FillLevelRecord;
 import java.util.List;
 
-@Service
-public class FillLevelRecordServiceImpl implements FillLevelRecordService {
+public interface FillLevelRecordService {
 
-    private final FillLevelRecordRepository repository;
+    FillLevelRecord createRecord(FillLevelRecord record);
 
-    public FillLevelRecordServiceImpl(FillLevelRecordRepository repository) {
-        this.repository = repository;
-    }
-
-    @Override
-    public List<FillLevelRecord> getRecentRecords(Long binId, int n) {
-        Bin bin = new Bin();
-        bin.setId(binId); // assuming you only need the ID
-        return repository.findTopNByBinOrderByGeneratedAtDesc(bin, PageRequest.of(0, n));
-    }
+    List<FillLevelRecord> getRecentRecords(Long binId, int n);
 }

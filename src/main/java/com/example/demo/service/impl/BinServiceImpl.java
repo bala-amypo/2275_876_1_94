@@ -3,19 +3,16 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Bin;
 import com.example.demo.repository.BinRepository;
 import com.example.demo.service.BinService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BinServiceImpl implements BinService {
 
-    private final BinRepository binRepository;
-
-    public BinServiceImpl(BinRepository binRepository) {
-        this.binRepository = binRepository;
-    }
+    @Autowired
+    private BinRepository binRepository;
 
     @Override
     public List<Bin> getAllBins() {
@@ -24,8 +21,7 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public Bin getBinById(Long id) {
-        Optional<Bin> bin = binRepository.findById(id);
-        return bin.orElse(null);
+        return binRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -34,21 +30,22 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
-    public Bin updateBin(Long id, Bin binDetails) {
-        return binRepository.findById(id).map(bin -> {
-            bin.setName(binDetails.getName());
-            bin.setLocation(binDetails.getLocation());
-            bin.setZone(binDetails.getZone());
-            return binRepository.save(bin);
-        }).orElse(null);
+    public Bin updateBin(Long id, Bin bin) {
+        Bin existing = binRepository.findById(id).orElse(null);
+        if (existing != null) {
+            existing.setName(bin.getName());
+            existing.setActive(bin.isActive());
+            return binRepository.save(existing);
+        }
+        return null;
     }
 
     @Override
-    public boolean deactivateBin(Long id) {
-        return binRepository.findById(id).map(bin -> {
+    public void deactivateBin(Long id) {
+        Bin bin = binRepository.findById(id).orElse(null);
+        if (bin != null) {
             bin.setActive(false);
             binRepository.save(bin);
-            return true;
-        }).orElse(false);
+        }
     }
 }
