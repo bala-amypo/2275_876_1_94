@@ -2,10 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -14,22 +15,26 @@ public class AuthController {
         this.userService = userService;
     }
 
+    // Register user
     @PostMapping("/register")
-    public User register(@RequestParam String username,
-                         @RequestParam String email,
-                         @RequestParam String password,
-                         @RequestParam String role) {
-        return userService.registerUser(username, email, password, role);
+    public ResponseEntity<?> register(@RequestBody User user) {
+        userService.registerUser(user.getUsername(), user.getEmail(), user.getPassword(), user.getRole());
+        return ResponseEntity.ok("User registered successfully");
     }
 
+    // Authenticate user
     @PostMapping("/login")
-    public User login(@RequestParam String email,
-                      @RequestParam String password) {
-        return userService.authenticateUser(email, password);
+    public ResponseEntity<?> login(@RequestBody User user) {
+        boolean success = userService.authenticateUser(user.getEmail(), user.getPassword());
+        if (success) return ResponseEntity.ok("Login successful");
+        else return ResponseEntity.status(401).body("Invalid credentials");
     }
 
+    // Get user by ID
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        if (user != null) return ResponseEntity.ok(user);
+        else return ResponseEntity.notFound().build();
     }
 }

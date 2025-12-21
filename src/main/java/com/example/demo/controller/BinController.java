@@ -2,12 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Bin;
 import com.example.demo.service.BinService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/bins")
+@RequestMapping("/api/bins")
 public class BinController {
 
     private final BinService binService;
@@ -22,8 +23,10 @@ public class BinController {
     }
 
     @GetMapping("/{id}")
-    public Bin getBinById(@PathVariable Long id) {
-        return binService.getBinById(id);
+    public ResponseEntity<Bin> getBin(@PathVariable Long id) {
+        Bin bin = binService.getBinById(id);
+        if (bin != null) return ResponseEntity.ok(bin);
+        else return ResponseEntity.notFound().build();
     }
 
     @PostMapping
@@ -32,12 +35,16 @@ public class BinController {
     }
 
     @PutMapping("/{id}")
-    public Bin updateBin(@PathVariable Long id, @RequestBody Bin bin) {
-        return binService.updateBin(id, bin);
+    public ResponseEntity<Bin> updateBin(@PathVariable Long id, @RequestBody Bin bin) {
+        Bin updated = binService.updateBin(id, bin);
+        if (updated != null) return ResponseEntity.ok(updated);
+        else return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/deactivate/{id}")
-    public void deactivateBin(@PathVariable Long id) {
-        binService.deactivateBin(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deactivateBin(@PathVariable Long id) {
+        boolean success = binService.deactivateBin(id);
+        if (success) return ResponseEntity.ok().build();
+        else return ResponseEntity.notFound().build();
     }
 }

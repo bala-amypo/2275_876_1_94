@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "fill_level_records")
 public class FillLevelRecord {
 
     @Id
@@ -16,18 +17,16 @@ public class FillLevelRecord {
     @JoinColumn(name = "bin_id")
     private Bin bin;
 
-    private LocalDateTime generatedAt; // timestamp for the record
+    private LocalDateTime createdAt;
 
-    // Constructors
     public FillLevelRecord() {}
 
-    public FillLevelRecord(int level, Bin bin, LocalDateTime generatedAt) {
+    public FillLevelRecord(int level, Bin bin, LocalDateTime createdAt) {
         this.level = level;
         this.bin = bin;
-        this.generatedAt = generatedAt;
+        this.createdAt = createdAt;
     }
 
-    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -37,6 +36,6 @@ public class FillLevelRecord {
     public Bin getBin() { return bin; }
     public void setBin(Bin bin) { this.bin = bin; }
 
-    public LocalDateTime getGeneratedAt() { return generatedAt; }
-    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
