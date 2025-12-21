@@ -3,8 +3,5 @@ package com.example.demo.service;
 import com.example.demo.model.User;
 
 public interface UserService {
-
-    User registerUser(User user);
-
-    User getByEmail(String email);
+    User authenticate(String username, String password);
 }
