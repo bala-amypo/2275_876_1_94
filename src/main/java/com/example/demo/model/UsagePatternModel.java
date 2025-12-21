@@ -20,21 +20,51 @@ public class UsagePatternModel {
 
     public UsagePatternModel() {}
 
-    public UsagePatternModel(Bin bin, Double weekday,
-                             Double weekend, Timestamp lastUpdated) {
+    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday,
+                             Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
         this.bin = bin;
-        this.avgDailyIncreaseWeekday = weekday;
-        this.avgDailyIncreaseWeekend = weekend;
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
         this.lastUpdated = lastUpdated;
     }
 
-    public Long getId() { return id; }
-    public Bin getBin() { return bin; }
-    public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
-    public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
-    public void setBin(Bin bin) { this.bin = bin; }
-    public void setAvgDailyIncreaseWeekday(Double v) { this.avgDailyIncreaseWeekday = v; }
-    public void setAvgDailyIncreaseWeekend(Double v) { this.avgDailyIncreaseWeekend = v; }
+    public Bin getBin() {
+        return bin;
+    }
+
+    public Double getAvgDailyIncreaseWeekday() {
+        return avgDailyIncreaseWeekday;
+    }
+
+    public Double getAvgDailyIncreaseWeekend() {
+        return avgDailyIncreaseWeekend;
+    }
+
+    public Timestamp getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setBin(Bin bin) {
+        this.bin = bin;
+    }
+
+    public void setAvgDailyIncreaseWeekday(Double avgDailyIncreaseWeekday) {
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
+    }
+
+    public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) {
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
+    }
+
+    public void setLastUpdated(Timestamp lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }
