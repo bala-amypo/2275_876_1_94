@@ -1,35 +1,44 @@
-package com.example.demo.model;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
-import lombok.*;
-import java.util.List;
+public class ApiResponse {
 
-@Entity
-@Table(name = "zones")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Zone {
+    private boolean success;
+    private String message;
+    private Object data;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    // No-arg constructor
+    public ApiResponse() {
+    }
 
-    @Column(nullable = false, unique = true)
-    private String zoneName;
+    // All-args constructor
+    public ApiResponse(boolean success, String message, Object data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+    }
 
-    private String description;
+    // Getters and setters
+    public boolean isSuccess() {
+        return success;
+    }
 
-    @Column(nullable = false)
-    private Boolean active = true;
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
-    @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL)
-    private List<Bin> bins;
+    public String getMessage() {
+        return message;
+    }
 
-    public Zone(String zoneName, String description, Boolean active) {
-        this.zoneName = zoneName;
-        this.description = description;
-        this.active = active;
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }
