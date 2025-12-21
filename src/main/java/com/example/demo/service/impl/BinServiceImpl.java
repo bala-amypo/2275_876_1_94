@@ -1,12 +1,15 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Bin;
+import com.example.demo.repository.BinRepository;
+import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.BinService;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class BinServiceImpl implements BinService {
 
     private final BinRepository binRepository;
@@ -24,6 +27,17 @@ public class BinServiceImpl implements BinService {
         }
         bin.setActive(true);
         return binRepository.save(bin);
+    }
+
+    @Override
+    public Bin updateBin(Long id, Bin updated) {
+        Bin existing = getBinById(id);
+
+        existing.setIdentifier(updated.getIdentifier());
+        existing.setCapacityLiters(updated.getCapacityLiters());
+        existing.setZone(updated.getZone());
+
+        return binRepository.save(existing);
     }
 
     @Override

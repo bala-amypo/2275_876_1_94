@@ -32,9 +32,11 @@ public class FillLevelRecord {
     public Bin getBin() { return bin; }
     public Double getFillPercentage() { return fillPercentage; }
     public Timestamp getRecordedAt() { return recordedAt; }
+    public Boolean getIsWeekend() { return isWeekend; }
 
     public void setId(Long id) { this.id = id; }
     public void setBin(Bin bin) { this.bin = bin; }
     public void setFillPercentage(Double fillPercentage) { this.fillPercentage = fillPercentage; }
     public void setRecordedAt(Timestamp recordedAt) { this.recordedAt = recordedAt; }
+    public void setIsWeekend(Boolean isWeekend) { this.isWeekend = isWeekend; }
 }
