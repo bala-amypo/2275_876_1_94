@@ -1,76 +1,42 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "fill_level_records")
 public class FillLevelRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int level;
+
     @ManyToOne
     @JoinColumn(name = "bin_id")
     private Bin bin;
 
-    private Double fillPercentage;
+    private LocalDateTime generatedAt; // timestamp for the record
 
-    private Timestamp recordedAt;
+    // Constructors
+    public FillLevelRecord() {}
 
-    private Boolean isWeekend;
-
-    public FillLevelRecord() {
-    }
-
-    public FillLevelRecord(Bin bin, Double fillPercentage,
-                           Timestamp recordedAt, Boolean isWeekend) {
+    public FillLevelRecord(int level, Bin bin, LocalDateTime generatedAt) {
+        this.level = level;
         this.bin = bin;
-        this.fillPercentage = fillPercentage;
-        this.recordedAt = recordedAt;
-        this.isWeekend = isWeekend;
+        this.generatedAt = generatedAt;
     }
 
-    // Getters and Setters
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public int getLevel() { return level; }
+    public void setLevel(int level) { this.level = level; }
 
-    public Bin getBin() {
-        return bin;
-    }
+    public Bin getBin() { return bin; }
+    public void setBin(Bin bin) { this.bin = bin; }
 
-    public Double getFillPercentage() {
-        return fillPercentage;
-    }
-
-    public Timestamp getRecordedAt() {
-        return recordedAt;
-    }
-
-    public Boolean getIsWeekend() {
-        return isWeekend;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setBin(Bin bin) {
-        this.bin = bin;
-    }
-
-    public void setFillPercentage(Double fillPercentage) {
-        this.fillPercentage = fillPercentage;
-    }
-
-    public void setRecordedAt(Timestamp recordedAt) {
-        this.recordedAt = recordedAt;
-    }
-
-    public void setIsWeekend(Boolean isWeekend) {
-        this.isWeekend = isWeekend;
-    }
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
+    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
 }
