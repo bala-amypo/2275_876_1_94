@@ -2,12 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Zone;
 import com.example.demo.service.ZoneService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/zones")
+@Tag(name = "Zones")
 public class ZoneController {
 
     private final ZoneService zoneService;

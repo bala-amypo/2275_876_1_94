@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "usage_pattern_models")
 public class UsagePatternModel {
 
     @Id
@@ -12,23 +11,20 @@ public class UsagePatternModel {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "bin_id")
     private Bin bin;
 
     private Double avgDailyIncreaseWeekday;
     private Double avgDailyIncreaseWeekend;
+
     private Timestamp lastUpdated;
 
-    public UsagePatternModel() {
+    @PrePersist
+    @PreUpdate
+    public void updateTimestamp() {
+        lastUpdated = new Timestamp(System.currentTimeMillis());
     }
 
-    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday,
-                             Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
-        this.bin = bin;
-        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
-        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-        this.lastUpdated = lastUpdated;
-    }
+    // getters and setters
 
     public Long getId() {
         return id;
@@ -61,9 +57,4 @@ public class UsagePatternModel {
     public Timestamp getLastUpdated() {
         return lastUpdated;
     }
-
-    public void setLastUpdated(Timestamp lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 }
-

@@ -2,12 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Bin;
 import com.example.demo.service.BinService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/bins")
+@Tag(name = "Bins")
 public class BinController {
 
     private final BinService binService;
