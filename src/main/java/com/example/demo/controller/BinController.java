@@ -5,6 +5,7 @@ import com.example.demo.model.Bin;
 import com.example.demo.service.BinService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,27 +19,23 @@ public class BinController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createBin(@RequestBody Bin bin) {
-        Bin created = binService.createBin(bin);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin created successfully", created));
+    public ResponseEntity<Bin> createBin(@RequestBody Bin bin) {
+        return ResponseEntity.ok(binService.createBin(bin));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateBin(@PathVariable Long id, @RequestBody Bin bin) {
-        Bin updated = binService.updateBin(id, bin);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin updated successfully", updated));
+    public ResponseEntity<Bin> updateBin(@PathVariable Long id, @RequestBody Bin bin) {
+        return ResponseEntity.ok(binService.updateBin(id, bin));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getBin(@PathVariable Long id) {
-        Bin bin = binService.getBinById(id);
-        return ResponseEntity.ok(new ApiResponse(true, "Bin fetched successfully", bin));
+    public ResponseEntity<Bin> getBin(@PathVariable Long id) {
+        return ResponseEntity.ok(binService.getBinById(id));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllBins() {
-        List<Bin> bins = binService.getAllBins();
-        return ResponseEntity.ok(new ApiResponse(true, "All bins fetched successfully", bins));
+    public ResponseEntity<List<Bin>> getAllBins() {
+        return ResponseEntity.ok(binService.getAllBins());
     }
 
     @PutMapping("/{id}/deactivate")
