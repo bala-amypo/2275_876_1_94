@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.FillLevelRecord;
 import com.example.demo.service.FillLevelRecordService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class FillLevelRecordController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FillLevelRecord> getRecord(@PathVariable Long id) {
+    public ResponseEntity<FillLevelRecord> getRecordById(@PathVariable Long id) {
         return ResponseEntity.ok(recordService.getRecordById(id));
     }
 
@@ -34,8 +33,8 @@ public class FillLevelRecordController {
     }
 
     @GetMapping("/bin/{binId}/recent")
-    public ResponseEntity<List<FillLevelRecord>> getRecentRecords(
-            @PathVariable Long binId, @RequestParam int limit) {
+    public ResponseEntity<List<FillLevelRecord>> getRecentRecords(@PathVariable Long binId,
+                                                                  @RequestParam int limit) {
         return ResponseEntity.ok(recordService.getRecentRecords(binId, limit));
     }
 }
