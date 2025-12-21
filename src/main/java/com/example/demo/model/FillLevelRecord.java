@@ -18,8 +18,8 @@ public class FillLevelRecord {
     @Column(nullable = false)
     private Integer level;
 
-    @Column(name = "recorded_at", nullable = false)
-    private LocalDateTime recordedAt = LocalDateTime.now();
+    @Column(name = "generated_at", nullable = false)
+    private LocalDateTime generatedAt = LocalDateTime.now();
 
     public FillLevelRecord() {}
 
@@ -32,8 +32,9 @@ public class FillLevelRecord {
     public Integer getLevel() { return level; }
     public void setLevel(Integer level) { this.level = level; }
 
-    public LocalDateTime getRecordedAt() { return recordedAt; }
-    public void setRecordedAt(LocalDateTime recordedAt) {
-        this.recordedAt = recordedAt;
+    // ✅ REQUIRED BY SERVICE
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+        this.generatedAt = generatedAt;
     }
 }

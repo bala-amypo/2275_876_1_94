@@ -34,4 +34,9 @@ public class Bin {
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
+
+    // ✅ REQUIRED BY SERVICE
+    public boolean isActive() {
+        return Boolean.TRUE.equals(active);
+    }
 }
