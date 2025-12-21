@@ -15,7 +15,7 @@ public class CustomUserDetailsService {
     }
 
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email); // make sure UserRepository has findByEmail(String)
+        return userRepository.findByEmail(email);
     }
 
     public void registerUser(String email, String password, String role) {
