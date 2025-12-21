@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ApiResponse;
 import com.example.demo.model.UsagePatternModel;
 import com.example.demo.service.UsagePatternModelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -18,26 +18,22 @@ public class UsagePatternModelController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createModel(@RequestBody UsagePatternModel model) {
-        UsagePatternModel created = modelService.createModel(model);
-        return ResponseEntity.ok(new ApiResponse(true, "Model created", created));
+    public ResponseEntity<UsagePatternModel> createModel(@RequestBody UsagePatternModel model) {
+        return ResponseEntity.ok(modelService.createModel(model));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateModel(@PathVariable Long id, @RequestBody UsagePatternModel model) {
-        UsagePatternModel updated = modelService.updateModel(id, model);
-        return ResponseEntity.ok(new ApiResponse(true, "Model updated", updated));
+    public ResponseEntity<UsagePatternModel> updateModel(@PathVariable Long id, @RequestBody UsagePatternModel model) {
+        return ResponseEntity.ok(modelService.updateModel(id, model));
     }
 
     @GetMapping("/bin/{binId}")
-    public ResponseEntity<ApiResponse> getModelForBin(@PathVariable Long binId) {
-        UsagePatternModel model = modelService.getModelForBin(binId);
-        return ResponseEntity.ok(new ApiResponse(true, "Model fetched", model));
+    public ResponseEntity<UsagePatternModel> getModelForBin(@PathVariable Long binId) {
+        return ResponseEntity.ok(modelService.getModelForBin(binId));
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllModels() {
-        List<UsagePatternModel> models = modelService.getAllModels();
-        return ResponseEntity.ok(new ApiResponse(true, "All models fetched", models));
+    public ResponseEntity<List<UsagePatternModel>> getAllModels() {
+        return ResponseEntity.ok(modelService.getAllModels());
     }
 }
