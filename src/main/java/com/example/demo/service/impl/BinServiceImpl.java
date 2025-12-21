@@ -33,4 +33,9 @@ public class BinServiceImpl implements BinService {
     public void deleteBin(Long id) {
         // TODO: Delete bin
     }
+
+    @Override
+    public void deactivateBin(Long id) {
+        // TODO: Add deactivate logic
+    }
 }

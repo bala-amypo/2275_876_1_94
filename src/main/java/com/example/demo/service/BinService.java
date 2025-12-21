@@ -9,4 +9,7 @@ public interface BinService {
     Bin createBin(Bin bin);
     Bin updateBin(Long id, Bin bin);
     void deleteBin(Long id);
+
+    // Add this method
+    void deactivateBin(Long id);
 }
