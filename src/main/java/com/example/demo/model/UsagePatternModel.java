@@ -1,38 +1,43 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import lombok.*;
-import java.sql.Timestamp;
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.model.FillLevelRecord;
+import com.example.demo.service.FillLevelRecordService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-@Table(name = "usage_pattern_models")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class UsagePatternModel {
+@RestController
+@RequestMapping("/api/fill-records")
+public class FillLevelRecordController {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final FillLevelRecordService recordService;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bin_id", nullable = false)
-    private Bin bin;
+    public FillLevelRecordController(FillLevelRecordService recordService) {
+        this.recordService = recordService;
+    }
 
-    @Column(nullable = false)
-    private Double avgDailyIncreaseWeekday;
+    @PostMapping
+    public ResponseEntity<ApiResponse> createRecord(@RequestBody FillLevelRecord record) {
+        FillLevelRecord created = recordService.createRecord(record);
+        return ResponseEntity.ok(new ApiResponse(true, "Fill record created", created));
+    }
 
-    @Column(nullable = false)
-    private Double avgDailyIncreaseWeekend;
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getRecord(@PathVariable Long id) {
+        FillLevelRecord record = recordService.getRecordById(id);
+        return ResponseEntity.ok(new ApiResponse(true, "Fill record fetched", record));
+    }
 
-    @Column(nullable = false)
-    private Timestamp lastUpdated;
+    @GetMapping("/bin/{binId}")
+    public ResponseEntity<ApiResponse> getRecordsForBin(@PathVariable Long binId) {
+        List<FillLevelRecord> records = recordService.getRecordsForBin(binId);
+        return ResponseEntity.ok(new ApiResponse(true, "Records fetched", records));
+    }
 
-    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday, Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
-        this.bin = bin;
-        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
-        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-        this.lastUpdated = lastUpdated;
+    @GetMapping("/bin/{binId}/recent")
+    public ResponseEntity<ApiResponse> getRecentRecords(@PathVariable Long binId, @RequestParam int limit) {
+        List<FillLevelRecord> records = recordService.getRecentRecords(binId, limit);
+        return ResponseEntity.ok(new ApiResponse(true, "Recent records fetched", records));
     }
 }

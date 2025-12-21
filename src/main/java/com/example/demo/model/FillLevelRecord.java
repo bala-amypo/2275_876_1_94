@@ -1,38 +1,49 @@
-package com.example.demo.model;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
-import lombok.*;
-import java.sql.Timestamp;
+import com.example.demo.dto.ApiResponse;
+import com.example.demo.model.Bin;
+import com.example.demo.service.BinService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Entity
-@Table(name = "fill_level_records")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class FillLevelRecord {
+@RestController
+@RequestMapping("/api/bins")
+public class BinController {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final BinService binService;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bin_id", nullable = false)
-    private Bin bin;
+    public BinController(BinService binService) {
+        this.binService = binService;
+    }
 
-    @Column(nullable = false)
-    private Double fillPercentage;
+    @PostMapping
+    public ResponseEntity<ApiResponse> createBin(@RequestBody Bin bin) {
+        Bin created = binService.createBin(bin);
+        return ResponseEntity.ok(new ApiResponse(true, "Bin created successfully", created));
+    }
 
-    @Column(nullable = false)
-    private Timestamp recordedAt;
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateBin(@PathVariable Long id, @RequestBody Bin bin) {
+        Bin updated = binService.updateBin(id, bin);
+        return ResponseEntity.ok(new ApiResponse(true, "Bin updated successfully", updated));
+    }
 
-    @Column(nullable = false)
-    private Boolean isWeekend;
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getBin(@PathVariable Long id) {
+        Bin bin = binService.getBinById(id);
+        return ResponseEntity.ok(new ApiResponse(true, "Bin fetched successfully", bin));
+    }
 
-    public FillLevelRecord(Bin bin, Double fillPercentage, Timestamp recordedAt, Boolean isWeekend) {
-        this.bin = bin;
-        this.fillPercentage = fillPercentage;
-        this.recordedAt = recordedAt;
-        this.isWeekend = isWeekend;
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllBins() {
+        List<Bin> bins = binService.getAllBins();
+        return ResponseEntity.ok(new ApiResponse(true, "All bins fetched successfully", bins));
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<ApiResponse> deactivateBin(@PathVariable Long id) {
+        binService.deactivateBin(id);
+        return ResponseEntity.ok(new ApiResponse(true, "Bin deactivated successfully", null));
     }
 }
