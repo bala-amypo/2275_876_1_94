@@ -1,3 +1,7 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "bin")
 public class Bin {
@@ -9,7 +13,6 @@ public class Bin {
     @Column(nullable = false)
     private String name;
 
-    // 🔑 DEFAULT VALUE ADDED
     @Column(name = "capacity_liters", nullable = false)
     private Integer capacityLiters = 100;
 
@@ -25,10 +28,14 @@ public class Bin {
     public void setName(String name) { this.name = name; }
 
     public Integer getCapacityLiters() { return capacityLiters; }
-    public void setCapacityLiters(Integer capacityLiters) {
-        this.capacityLiters = capacityLiters;
-    }
+    public void setCapacityLiters(Integer capacityLiters) { this.capacityLiters = capacityLiters; }
 
+    // ✅ Add proper getter for 'active'
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
+
+    // ✅ Add boolean style getter for 'isActive' so service can call bin.isActive()
+    public boolean isActive() {
+        return active != null && active;
+    }
 }
