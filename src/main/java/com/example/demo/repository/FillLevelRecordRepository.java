@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface FillLevelRecordRepository extends JpaRepository<FillLevelRecord, Long> {
 
-    // Fetch recent records for a bin with limit
-    List<FillLevelRecord> findByBinOrderByCreatedAtDesc(Bin bin, Pageable pageable);
+    List<FillLevelRecord> findByBinOrderByGeneratedAtDesc(Bin bin, Pageable pageable);
+
 }
