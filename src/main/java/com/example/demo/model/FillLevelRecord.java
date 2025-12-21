@@ -1,40 +1,38 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.*;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "fill_level_record")
+@Table(name = "fill_level_records")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FillLevelRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bin_id", nullable = false)
     private Bin bin;
 
     @Column(nullable = false)
-    private Integer level;
+    private Double fillPercentage;
 
-    @Column(name = "generated_at", nullable = false)
-    private LocalDateTime generatedAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private Timestamp recordedAt;
 
-    public FillLevelRecord() {}
+    @Column(nullable = false)
+    private Boolean isWeekend;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
-
-    public Integer getLevel() { return level; }
-    public void setLevel(Integer level) { this.level = level; }
-
-    // ✅ REQUIRED BY SERVICE
-    public LocalDateTime getGeneratedAt() { return generatedAt; }
-    public void setGeneratedAt(LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt;
+    public FillLevelRecord(Bin bin, Double fillPercentage, Timestamp recordedAt, Boolean isWeekend) {
+        this.bin = bin;
+        this.fillPercentage = fillPercentage;
+        this.recordedAt = recordedAt;
+        this.isWeekend = isWeekend;
     }
 }

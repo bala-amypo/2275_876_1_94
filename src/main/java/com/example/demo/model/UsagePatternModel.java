@@ -1,32 +1,38 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "usage_pattern_model")
+@Table(name = "usage_pattern_models")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsagePatternModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String modelName;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bin_id", nullable = false)
     private Bin bin;
 
-    public UsagePatternModel() {}
+    @Column(nullable = false)
+    private Double avgDailyIncreaseWeekday;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @Column(nullable = false)
+    private Double avgDailyIncreaseWeekend;
 
-    public String getModelName() { return modelName; }
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
+    @Column(nullable = false)
+    private Timestamp lastUpdated;
+
+    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday, Double avgDailyIncreaseWeekend, Timestamp lastUpdated) {
+        this.bin = bin;
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
+        this.lastUpdated = lastUpdated;
     }
-
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
 }

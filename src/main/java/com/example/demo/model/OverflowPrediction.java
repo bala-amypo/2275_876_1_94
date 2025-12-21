@@ -1,51 +1,44 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
-@Table(name = "overflow_prediction")
+@Table(name = "overflow_predictions")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OverflowPrediction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bin_id", nullable = false)
     private Bin bin;
 
-    @Column(name = "predicted_level", nullable = false)
-    private Integer predictedLevel;
+    @Column(nullable = false)
+    private Date predictedFullDate;
 
-    @Column(name = "predicted_at", nullable = false)
-    private LocalDateTime predictedAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private Integer daysUntilFull;
 
-    // ✅ REQUIRED BY REPOSITORY
-    @Column(name = "generated_at", nullable = false)
-    private LocalDateTime generatedAt = LocalDateTime.now();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "model_id")
+    private UsagePatternModel modelUsed;
 
-    public OverflowPrediction() {}
+    @Column(nullable = false)
+    private Timestamp generatedAt;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
-
-    public Integer getPredictedLevel() { return predictedLevel; }
-    public void setPredictedLevel(Integer predictedLevel) {
-        this.predictedLevel = predictedLevel;
-    }
-
-    public LocalDateTime getPredictedAt() { return predictedAt; }
-    public void setPredictedAt(LocalDateTime predictedAt) {
-        this.predictedAt = predictedAt;
-    }
-
-    // ✅ REQUIRED BY findByBinOrderByGeneratedAtDesc
-    public LocalDateTime getGeneratedAt() { return generatedAt; }
-    public void setGeneratedAt(LocalDateTime generatedAt) {
+    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull, UsagePatternModel modelUsed, Timestamp generatedAt) {
+        this.bin = bin;
+        this.predictedFullDate = predictedFullDate;
+        this.daysUntilFull = daysUntilFull;
+        this.modelUsed = modelUsed;
         this.generatedAt = generatedAt;
     }
 }

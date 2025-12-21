@@ -1,41 +1,35 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.util.List;
 
 @Entity
-@Table(name = "zone")
+@Table(name = "zones")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Zone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "zone_name", nullable = false)
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String zoneName;
 
-    @Column(nullable = false)
-    private String location = "UNKNOWN";
+    private String description;
 
     @Column(nullable = false)
     private Boolean active = true;
 
-    public Zone() {}
+    @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL)
+    private List<Bin> bins;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    // ✅ The service was calling getName(), so make sure the field is 'name' with getter
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
-
-    // Optional boolean style getter
-    public boolean isActive() {
-        return active != null && active;
+    public Zone(String zoneName, String description, Boolean active) {
+        this.zoneName = zoneName;
+        this.description = description;
+        this.active = active;
     }
 }

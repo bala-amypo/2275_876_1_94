@@ -1,41 +1,60 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
-@Table(name = "bin")
+@Table(name = "bins")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Bin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String identifier;
 
-    @Column(name = "capacity_liters", nullable = false)
-    private Integer capacityLiters = 100;
+    private String locationDescription;
+
+    private Double latitude;
+    private Double longitude;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zone_id")
+    private Zone zone;
+
+    @Column(nullable = false)
+    private Double capacityLiters;
 
     @Column(nullable = false)
     private Boolean active = true;
 
-    public Bin() {}
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @OneToMany(mappedBy = "bin", cascade = CascadeType.ALL)
+    private List<FillLevelRecord> fillLevelRecords;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    @OneToMany(mappedBy = "bin", cascade = CascadeType.ALL)
+    private List<OverflowPrediction> overflowPredictions;
 
-    public Integer getCapacityLiters() { return capacityLiters; }
-    public void setCapacityLiters(Integer capacityLiters) { this.capacityLiters = capacityLiters; }
-
-    // ✅ Add proper getter for 'active'
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
-
-    // ✅ Add boolean style getter for 'isActive' so service can call bin.isActive()
-    public boolean isActive() {
-        return active != null && active;
+    // Convenience constructor without id
+    public Bin(String identifier, String locationDescription, Double latitude, Double longitude,
+               Zone zone, Double capacityLiters, Boolean active, Timestamp createdAt, Timestamp updatedAt) {
+        this.identifier = identifier;
+        this.locationDescription = locationDescription;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.zone = zone;
+        this.capacityLiters = capacityLiters;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
