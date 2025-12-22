@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.OverflowPrediction;
 import com.example.demo.service.OverflowPredictionService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +10,24 @@ import java.util.List;
 @RequestMapping("/api/predictions")
 public class OverflowPredictionController {
 
-    private final OverflowPredictionService predictionService;
+    private final OverflowPredictionService service;
 
-    public OverflowPredictionController(OverflowPredictionService predictionService) {
-        this.predictionService = predictionService;
+    public OverflowPredictionController(OverflowPredictionService service) {
+        this.service = service;
     }
 
-    @PostMapping("/generate/{binId}")
-    public ResponseEntity<OverflowPrediction> generatePrediction(@PathVariable Long binId) {
-        return ResponseEntity.ok(predictionService.generatePrediction(binId));
+    @PostMapping
+    public OverflowPrediction create(@RequestBody OverflowPrediction prediction) {
+        return service.createPrediction(prediction);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OverflowPrediction> getPredictionById(@PathVariable Long id) {
-        return ResponseEntity.ok(predictionService.getPredictionById(id));
+    public OverflowPrediction get(@PathVariable Long id) {
+        return service.getPredictionById(id);
     }
 
     @GetMapping("/bin/{binId}")
-    public ResponseEntity<List<OverflowPrediction>> getPredictionsForBin(@PathVariable Long binId) {
-        return ResponseEntity.ok(predictionService.getPredictionsForBin(binId));
-    }
-
-    @GetMapping("/zone/{zoneId}/latest")
-    public ResponseEntity<List<OverflowPrediction>> getLatestPredictionsForZone(@PathVariable Long zoneId) {
-        return ResponseEntity.ok(predictionService.getLatestPredictionsForZone(zoneId));
+    public List<OverflowPrediction> getForBin(@PathVariable Long binId) {
+        return service.getPredictionsForBin(binId);
     }
 }

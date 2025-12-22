@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Zone;
 import com.example.demo.service.ZoneService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,35 +10,34 @@ import java.util.List;
 @RequestMapping("/api/zones")
 public class ZoneController {
 
-    private final ZoneService zoneService;
+    private final ZoneService service;
 
-    public ZoneController(ZoneService zoneService) {
-        this.zoneService = zoneService;
+    public ZoneController(ZoneService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<Zone> createZone(@RequestBody Zone zone) {
-        return ResponseEntity.ok(zoneService.createZone(zone));
+    public Zone create(@RequestBody Zone zone) {
+        return service.createZone(zone);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Zone> updateZone(@PathVariable Long id, @RequestBody Zone zone) {
-        return ResponseEntity.ok(zoneService.updateZone(id, zone));
+    public Zone update(@PathVariable Long id, @RequestBody Zone zone) {
+        return service.updateZone(id, zone);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Zone> getZone(@PathVariable Long id) {
-        return ResponseEntity.ok(zoneService.getZoneById(id));
+    public Zone get(@PathVariable Long id) {
+        return service.getZoneById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<Zone>> getAllZones() {
-        return ResponseEntity.ok(zoneService.getAllZones());
+    public List<Zone> getAll() {
+        return service.getAllZones();
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateZone(@PathVariable Long id) {
-        zoneService.deactivateZone(id);
-        return ResponseEntity.noContent().build();
+    public void deactivate(@PathVariable Long id) {
+        service.deactivateZone(id);
     }
 }

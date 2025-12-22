@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.UsagePatternModel;
 import com.example.demo.service.UsagePatternModelService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +10,29 @@ import java.util.List;
 @RequestMapping("/api/models")
 public class UsagePatternModelController {
 
-    private final UsagePatternModelService modelService;
+    private final UsagePatternModelService service;
 
-    public UsagePatternModelController(UsagePatternModelService modelService) {
-        this.modelService = modelService;
+    public UsagePatternModelController(UsagePatternModelService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<UsagePatternModel> createModel(@RequestBody UsagePatternModel model) {
-        return ResponseEntity.ok(modelService.createModel(model));
+    public UsagePatternModel create(@RequestBody UsagePatternModel model) {
+        return service.createModel(model);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsagePatternModel> updateModel(@PathVariable Long id, @RequestBody UsagePatternModel model) {
-        return ResponseEntity.ok(modelService.updateModel(id, model));
+    public UsagePatternModel update(@PathVariable Long id, @RequestBody UsagePatternModel model) {
+        return service.updateModel(id, model);
     }
 
-    @GetMapping("/bin/{binId}")
-    public ResponseEntity<UsagePatternModel> getModelForBin(@PathVariable Long binId) {
-        return ResponseEntity.ok(modelService.getModelForBin(binId));
+    @GetMapping("/{id}")
+    public UsagePatternModel get(@PathVariable Long id) {
+        return service.getModelById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<UsagePatternModel>> getAllModels() {
-        return ResponseEntity.ok(modelService.getAllModels());
+    public List<UsagePatternModel> getAll() {
+        return service.getAllModels();
     }
 }
