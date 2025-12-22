@@ -7,6 +7,6 @@ import java.util.List;
 public interface UsagePatternModelService {
     UsagePatternModel createModel(UsagePatternModel model);
     UsagePatternModel updateModel(Long id, UsagePatternModel model);
-    UsagePatternModel getModelForBin(Long binId);
+    UsagePatternModel getModelById(Long id);
     List<UsagePatternModel> getAllModels();
 }
