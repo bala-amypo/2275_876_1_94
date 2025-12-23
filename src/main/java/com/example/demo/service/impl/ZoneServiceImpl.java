@@ -5,7 +5,7 @@ import com.example.demo.model.Zone;
 import com.example.demo.repository.ZoneRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ZoneServiceImpl {
@@ -17,29 +17,26 @@ public class ZoneServiceImpl {
     }
 
     public Zone createZone(Zone zone) {
-        if (zone.getActive() == null) zone.setActive(true);
+        zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found with id " + id));
     }
 
-    public Zone updateZone(Long id, Zone updated) {
-        Zone zone = getZoneById(id);
-        if (updated.getZoneName() != null) zone.setZoneName(updated.getZoneName());
-        if (updated.getDescription() != null) zone.setDescription(updated.getDescription());
-        return zoneRepository.save(zone);
+    public Zone updateZone(Long id, Zone update) {
+        Zone existing = getZoneById(id);
+        if (update.getDescription() != null) {
+            existing.setDescription(update.getDescription());
+        }
+        return zoneRepository.save(existing);
     }
 
     public void deactivateZone(Long id) {
         Zone zone = getZoneById(id);
         zone.setActive(false);
         zoneRepository.save(zone);
-    }
-
-    public List<Zone> getAllZones() {
-        return zoneRepository.findAll();
     }
 }

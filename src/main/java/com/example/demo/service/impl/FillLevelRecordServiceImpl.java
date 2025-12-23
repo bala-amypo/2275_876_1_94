@@ -25,33 +25,33 @@ public class FillLevelRecordServiceImpl {
     public FillLevelRecord createRecord(FillLevelRecord record) {
         Bin bin = record.getBin();
         if (bin == null || bin.getId() == null) {
-            throw new BadRequestException("Bin required for record");
+            throw new BadRequestException("Bin required");
         }
 
-        Bin existing = binRepository.findById(bin.getId())
+        Bin fetchedBin = binRepository.findById(bin.getId())
                 .orElseThrow(() -> new BadRequestException("Bin not found"));
 
-        if (!existing.getActive()) {
-            throw new BadRequestException("Cannot add record to inactive bin");
+        if (!fetchedBin.getActive()) {
+            throw new BadRequestException("Bin inactive");
         }
 
-        if (record.getRecordedAt().isAfter(LocalDateTime.now())) {
+        if (record.getRecordedAt() != null && record.getRecordedAt().isAfter(LocalDateTime.now())) {
             throw new BadRequestException("RecordedAt cannot be in the future");
         }
 
-        record.setBin(existing);
+        record.setBin(fetchedBin);
         return recordRepository.save(record);
     }
 
     public FillLevelRecord getRecordById(Long id) {
         return recordRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Fill record not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fill record not found with id " + id));
     }
 
     public List<FillLevelRecord> getRecentRecords(Long binId, int limit) {
         Bin bin = binRepository.findById(binId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
-        List<FillLevelRecord> list = recordRepository.findByBinOrderByRecordedAtDesc(bin);
-        return list.subList(0, Math.min(limit, list.size()));
+        List<FillLevelRecord> allRecords = recordRepository.findByBinOrderByRecordedAtDesc(bin);
+        return allRecords.subList(0, Math.min(limit, allRecords.size()));
     }
 }

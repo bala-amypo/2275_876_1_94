@@ -22,50 +22,42 @@ public class BinServiceImpl {
     }
 
     public Bin createBin(Bin bin) {
-        if (bin.getCapacityLiters() <= 0) {
-            throw new BadRequestException("Capacity must be greater than 0");
+        if (bin.getCapacityLiters() == null || bin.getCapacityLiters() <= 0) {
+            throw new BadRequestException("Capacity must be positive");
         }
 
         Zone zone = bin.getZone();
         if (zone == null || zone.getId() == null) {
-            throw new BadRequestException("Bin must belong to a zone");
+            throw new BadRequestException("Zone required");
         }
 
-        Zone foundZone = zoneRepository.findById(zone.getId())
+        Zone fetchedZone = zoneRepository.findById(zone.getId())
                 .orElseThrow(() -> new BadRequestException("Zone not found"));
 
-        if (!foundZone.getActive()) {
-            throw new BadRequestException("Cannot assign bin to inactive zone");
+        if (!fetchedZone.getActive()) {
+            throw new BadRequestException("Zone inactive");
         }
 
-        bin.setZone(foundZone);
+        bin.setZone(fetchedZone);
         if (bin.getActive() == null) bin.setActive(true);
-
         return binRepository.save(bin);
     }
 
     public Bin getBinById(Long id) {
         return binRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found with id " + id));
     }
 
     public List<Bin> getAllBins() {
         return binRepository.findAll();
     }
 
-    public Bin updateBin(Long id, Bin updated) {
-        Bin bin = getBinById(id);
-        if (updated.getLatitude() != null) bin.setLatitude(updated.getLatitude());
-        if (updated.getLongitude() != null) bin.setLongitude(updated.getLongitude());
-        if (updated.getLocationDescription() != null) bin.setLocationDescription(updated.getLocationDescription());
-
-        if (updated.getZone() != null && updated.getZone().getId() != null) {
-            Zone zone = zoneRepository.findById(updated.getZone().getId())
-                    .orElseThrow(() -> new BadRequestException("Zone not found"));
-            bin.setZone(zone);
+    public Bin updateBin(Long id, Bin update) {
+        Bin existing = getBinById(id);
+        if (update.getLocationDescription() != null) {
+            existing.setLocationDescription(update.getLocationDescription());
         }
-
-        return binRepository.save(bin);
+        return binRepository.save(existing);
     }
 
     public void deactivateBin(Long id) {
