@@ -54,4 +54,8 @@ public class JwtTokenProvider {
             return false;
         }
     }
+    public String getUsernameFromJWT(String token) {
+    return getUsername(token); // delegate to existing method
+}
+
 }
