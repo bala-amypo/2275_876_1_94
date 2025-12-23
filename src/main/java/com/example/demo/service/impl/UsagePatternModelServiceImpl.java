@@ -29,7 +29,7 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
         return modelRepository.findByBinId(binId);
     }
 
-    // Called in tests, not in interface
+    // called in tests
     public UsagePatternModel getModelForBin(long binId) {
         return null; // dummy
     }
