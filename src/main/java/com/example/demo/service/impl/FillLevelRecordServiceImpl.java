@@ -29,11 +29,12 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
         return recordRepository.findById(id).orElse(null);
     }
 
+    @Override
     public List<FillLevelRecord> getRecordsByBinId(Long binId) {
         return List.of(); // dummy to satisfy interface
     }
 
-    // method called in test
+    // Method used in test, NOT part of interface
     public List<FillLevelRecord> getRecentRecords(long binId, int count) {
         return List.of(); // dummy
     }
