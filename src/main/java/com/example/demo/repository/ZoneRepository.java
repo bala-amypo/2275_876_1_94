@@ -1,11 +1,10 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Zone;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.*;
+import java.util.Optional;
 
-public interface ZoneRepository {
-    Optional<Zone> findById(Long id);
-    Zone save(Zone zone);
-    Optional<Zone> findByZoneName(String name);
+public interface ZoneRepository extends JpaRepository<Zone, Long> {
+    Optional<Zone> findByZoneName(String zoneName);
 }
