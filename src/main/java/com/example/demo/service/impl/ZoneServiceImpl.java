@@ -22,18 +22,8 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public Zone updateZone(Long id, Zone zone) {
-        return zoneRepository.findById(id).map(z -> zoneRepository.save(zone)).orElse(null);
-    }
-
-    @Override
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteZone(Long id) {
-        zoneRepository.deleteById(id);
     }
 
     @Override
@@ -41,8 +31,8 @@ public class ZoneServiceImpl implements ZoneService {
         return zoneRepository.findAll();
     }
 
-    // method called in test
+    // Methods used in tests (no @Override)
     public void deactivateZone(long zoneId) {
-        // dummy
+        // dummy method for test
     }
 }

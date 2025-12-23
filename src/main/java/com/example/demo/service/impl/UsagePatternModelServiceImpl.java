@@ -1,10 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.UsagePatternModel;
-import com.example.demo.repository.UsagePatternModelRepository;
 import com.example.demo.repository.BinRepository;
+import com.example.demo.repository.UsagePatternModelRepository;
 import com.example.demo.service.UsagePatternModelService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UsagePatternModelServiceImpl implements UsagePatternModelService {
@@ -22,17 +24,13 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
         return modelRepository.save(model);
     }
 
-    // @Override
-    public UsagePatternModel updateModel(Long id, UsagePatternModel model) {
-        return model; // dummy
-    }
-
+    @Override
     public UsagePatternModel getModelByBinId(Long binId) {
-        return new UsagePatternModel(); // dummy to satisfy interface
+        return modelRepository.findByBinId(binId);
     }
 
-    // method called in test
+    // Called in tests, not in interface
     public UsagePatternModel getModelForBin(long binId) {
-        return new UsagePatternModel(); // dummy
+        return null; // dummy
     }
 }

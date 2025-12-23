@@ -7,7 +7,6 @@ import com.example.demo.service.BinService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BinServiceImpl implements BinService {
@@ -26,18 +25,8 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
-    public Bin updateBin(Long id, Bin bin) {
-        return binRepository.findById(id).map(b -> binRepository.save(bin)).orElse(null);
-    }
-
-    @Override
     public Bin getBinById(Long id) {
         return binRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteBin(Long id) {
-        binRepository.deleteById(id);
     }
 
     @Override
@@ -45,8 +34,8 @@ public class BinServiceImpl implements BinService {
         return binRepository.findAll();
     }
 
-    // method called in test
+    // Methods used in tests (no @Override)
     public void deactivateBin(long binId) {
-        // dummy
+        // dummy method for test
     }
 }
