@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔥 THIS IS WHAT FIXES YOUR ERROR
+@Service
 public class ZoneServiceImpl implements ZoneService {
 
     private final ZoneRepository zoneRepository;
@@ -44,5 +44,12 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public void deleteZone(Long id) {
         zoneRepository.deleteById(id);
+    }
+
+    @Override
+    public void deactivateZone(Long id) {
+        Zone zone = getZoneById(id);
+        zone.setActive(false);
+        zoneRepository.save(zone);
     }
 }
