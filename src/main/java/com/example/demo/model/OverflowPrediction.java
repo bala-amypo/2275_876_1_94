@@ -38,4 +38,47 @@ public class OverflowPrediction {
         this.generatedAt = generatedAt;
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
+
+    public Bin getBin() {
+        return bin;
+    }
+
+    public void setBin(Bin bin) {
+        this.bin = bin;
+    }
+
+    public Date getPredictedFullDate() {
+        return predictedFullDate;
+    }
+
+    public void setPredictedFullDate(Date predictedFullDate) {
+        this.predictedFullDate = predictedFullDate;
+    }
+
+    public Integer getDaysUntilFull() {
+        return daysUntilFull;
+    }
+
+    public void setDaysUntilFull(Integer daysUntilFull) {
+        this.daysUntilFull = daysUntilFull;
+    }
+
+    public UsagePatternModel getModelUsed() {
+        return modelUsed;
+    }
+
+    public void setModelUsed(UsagePatternModel modelUsed) {
+        this.modelUsed = modelUsed;
+    }
+
+    public Timestamp getGeneratedAt() {
+        return generatedAt;
+    }
+
+    public void setGeneratedAt(Timestamp generatedAt) {
+        this.generatedAt = generatedAt;
+    }
+}
