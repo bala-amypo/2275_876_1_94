@@ -5,16 +5,9 @@ import com.example.demo.model.Zone;
 import java.util.List;
 
 public interface ZoneService {
-
     Zone createZone(Zone zone);
-
     Zone getZoneById(Long id);
-
     List<Zone> getAllZones();
-
     Zone updateZone(Long id, Zone zone);
-
     void deleteZone(Long id);
-
-    void deactivateZone(Long id);
 }

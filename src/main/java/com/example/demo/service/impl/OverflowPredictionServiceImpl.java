@@ -1,49 +1,31 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
-import org.springframework.stereotype.Service;
+import com.example.demo.model.OverflowPrediction;
+import com.example.demo.repository.FillLevelRecordRepository;
+import com.example.demo.repository.OverflowPredictionRepository;
+import com.example.demo.repository.UsagePatternModelRepository;
+import com.example.demo.service.OverflowPredictionService;
 
-import java.time.LocalDate;
-import java.util.List;
+public class OverflowPredictionServiceImpl implements OverflowPredictionService {
 
-@Service
-public class OverflowPredictionServiceImpl {
-
-    private final BinRepository binRepository;
+    private final OverflowPredictionRepository predictionRepository;
     private final FillLevelRecordRepository recordRepository;
     private final UsagePatternModelRepository modelRepository;
-    private final OverflowPredictionRepository predictionRepository;
-    private final ZoneRepository zoneRepository;
 
-    public OverflowPredictionServiceImpl(BinRepository binRepository,
-                                         FillLevelRecordRepository recordRepository,
-                                         UsagePatternModelRepository modelRepository,
-                                         OverflowPredictionRepository predictionRepository,
-                                         ZoneRepository zoneRepository) {
-        this.binRepository = binRepository;
+    public OverflowPredictionServiceImpl(
+            OverflowPredictionRepository predictionRepository,
+            FillLevelRecordRepository recordRepository,
+            UsagePatternModelRepository modelRepository) {
+        this.predictionRepository = predictionRepository;
         this.recordRepository = recordRepository;
         this.modelRepository = modelRepository;
-        this.predictionRepository = predictionRepository;
-        this.zoneRepository = zoneRepository;
     }
 
+    @Override
     public OverflowPrediction generatePrediction(Long binId) {
-        Bin bin = binRepository.findById(binId).orElseThrow();
-        FillLevelRecord record = recordRepository.findTop1ByBinOrderByRecordedAtDesc(bin).orElse(null);
-        UsagePatternModel model = modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin).orElse(null);
-
         OverflowPrediction prediction = new OverflowPrediction();
-        prediction.setBin(bin);
-        prediction.setModelUsed(model);
-        prediction.setDaysUntilFull(3);
-        prediction.setPredictedFullDate(LocalDate.now().plusDays(3));
-
+        prediction.setBinId(binId);
+        prediction.setPredictedOverflowTime("Within 24 hours");
         return predictionRepository.save(prediction);
-    }
-
-    public List<OverflowPrediction> getLatestPredictionsForZone(Long zoneId) {
-        Zone zone = zoneRepository.findById(zoneId).orElseThrow();
-        return predictionRepository.findLatestPredictionsForZone(zone);
     }
 }
