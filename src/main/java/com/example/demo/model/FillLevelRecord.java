@@ -11,19 +11,10 @@ public class FillLevelRecord {
     private Long id;
 
     private Double fillPercentage;
-
     private LocalDateTime recordedAt;
 
     @ManyToOne
     private Bin bin;
-
-    public FillLevelRecord() {}
-
-    public FillLevelRecord(Double fillPercentage, LocalDateTime recordedAt, Bin bin) {
-        this.fillPercentage = fillPercentage;
-        this.recordedAt = recordedAt;
-        this.bin = bin;
-    }
 
     public Long getId() { return id; }
     public Double getFillPercentage() { return fillPercentage; }

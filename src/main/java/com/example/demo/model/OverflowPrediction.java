@@ -19,13 +19,11 @@ public class OverflowPrediction {
     @ManyToOne
     private UsagePatternModel modelUsed;
 
-    public OverflowPrediction() {}
-
     public Long getId() { return id; }
     public Integer getDaysUntilFull() { return daysUntilFull; }
-    public void setDaysUntilFull(Integer daysUntilFull) { this.daysUntilFull = daysUntilFull; }
+    public void setDaysUntilFull(Integer d) { this.daysUntilFull = d; }
     public LocalDate getPredictedFullDate() { return predictedFullDate; }
-    public void setPredictedFullDate(LocalDate predictedFullDate) { this.predictedFullDate = predictedFullDate; }
+    public void setPredictedFullDate(LocalDate d) { this.predictedFullDate = d; }
     public Bin getBin() { return bin; }
     public void setBin(Bin bin) { this.bin = bin; }
     public UsagePatternModel getModelUsed() { return modelUsed; }

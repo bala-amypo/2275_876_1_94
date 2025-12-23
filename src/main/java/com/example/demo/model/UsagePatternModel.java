@@ -17,21 +17,12 @@ public class UsagePatternModel {
     @ManyToOne
     private Bin bin;
 
-    public UsagePatternModel() {}
-
-    public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday, Double avgDailyIncreaseWeekend) {
-        this.bin = bin;
-        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
-        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-    }
-
     public Long getId() { return id; }
     public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
-    public void setAvgDailyIncreaseWeekday(Double avgDailyIncreaseWeekday) { this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday; }
+    public void setAvgDailyIncreaseWeekday(Double v) { this.avgDailyIncreaseWeekday = v; }
     public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
-    public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) { this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend; }
+    public void setAvgDailyIncreaseWeekend(Double v) { this.avgDailyIncreaseWeekend = v; }
+    public LocalDateTime getLastUpdated() { return lastUpdated; }
     public Bin getBin() { return bin; }
     public void setBin(Bin bin) { this.bin = bin; }
-    public LocalDateTime getLastUpdated() { return lastUpdated; }
-    public void setLastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; }
 }

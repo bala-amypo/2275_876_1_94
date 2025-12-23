@@ -1,12 +1,10 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Zone;
+import com.example.demo.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
+import java.util.*;
 
-import java.util.Optional;
-
-@Repository
 public interface ZoneRepository extends JpaRepository<Zone, Long> {
-    Optional<Zone> findByZoneName(String zoneName);
+    Optional<Zone> findByZoneName(String name);
 }
