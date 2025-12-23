@@ -18,6 +18,7 @@ public class Bin {
 
     @ManyToOne
     private Zone zone;
+    private boolean active;
 
     public Bin() {}
 
