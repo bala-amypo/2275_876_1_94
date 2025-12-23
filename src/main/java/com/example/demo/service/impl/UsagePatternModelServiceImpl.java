@@ -22,12 +22,11 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
         return modelRepository.save(model);
     }
 
-    @Override
+    // @Override
     public UsagePatternModel updateModel(Long id, UsagePatternModel model) {
         return model; // dummy
     }
 
-    @Override
     public UsagePatternModel getModelByBinId(Long binId) {
         return new UsagePatternModel(); // dummy to satisfy interface
     }
