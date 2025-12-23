@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "bins")
@@ -11,46 +10,33 @@ public class Bin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String identifier;
+    private String binName;
 
-    private String locationDescription;
-    private Double latitude;
-    private Double longitude;
+    private double latitude;      // latitude field
+    private double longitude;     // longitude field
+    private String locationDescription;  // location description
 
     @ManyToOne
     private Zone zone;
 
-    private Double capacityLiters;
-    private Boolean active;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
-
+    // Default constructor
     public Bin() {}
 
-    public Bin(String identifier, String locationDescription, Double latitude,
-               Double longitude, Zone zone, Double capacityLiters,
-               Boolean active, Timestamp createdAt, Timestamp updatedAt) {
-        this.identifier = identifier;
-        this.locationDescription = locationDescription;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.zone = zone;
-        this.capacityLiters = capacityLiters;
-        this.active = active;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
+    // Getters & Setters
     public Long getId() { return id; }
-    public String getIdentifier() { return identifier; }
-    public void setIdentifier(String identifier) { this.identifier = identifier; }
+
+    public String getBinName() { return binName; }
+    public void setBinName(String binName) { this.binName = binName; }
+
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+
+    public String getLocationDescription() { return locationDescription; }
+    public void setLocationDescription(String locationDescription) { this.locationDescription = locationDescription; }
+
     public Zone getZone() { return zone; }
     public void setZone(Zone zone) { this.zone = zone; }
-    public Double getCapacityLiters() { return capacityLiters; }
-    public void setCapacityLiters(Double capacityLiters) { this.capacityLiters = capacityLiters; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 }
