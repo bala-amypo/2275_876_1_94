@@ -1,16 +1,15 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.Bin;
 import com.example.demo.model.FillLevelRecord;
 import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.FillLevelRecordRepository;
-import com.example.demo.service.FillLevelRecordService;
-import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
-public class FillLevelRecordServiceImpl implements FillLevelRecordService {
-
+public class FillLevelRecordServiceImpl {
     private final FillLevelRecordRepository recordRepository;
     private final BinRepository binRepository;
 
@@ -19,22 +18,29 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
         this.binRepository = binRepository;
     }
 
-    @Override
     public FillLevelRecord createRecord(FillLevelRecord record) {
+        if (record.getBin() == null || record.getBin().getId() == null) {
+            throw new BadRequestException("Bin required");
+        }
+        Bin bin = binRepository.findById(record.getBin().getId()).orElseThrow(() -> new BadRequestException("Bin not found"));
+        if (Boolean.FALSE.equals(bin.getActive())) {
+            throw new BadRequestException("Inactive bin");
+        }
+        if (record.getRecordedAt() == null) record.setRecordedAt(LocalDateTime.now());
+        if (record.getRecordedAt().isAfter(LocalDateTime.now())) {
+            throw new BadRequestException("recordedAt cannot be in the future");
+        }
+        record.setBin(bin);
         return recordRepository.save(record);
     }
 
-    @Override
     public FillLevelRecord getRecordById(Long id) {
-        return recordRepository.findById(id).orElse(null);
+        return recordRepository.findById(id).orElseThrow(() -> new BadRequestException("Record not found"));
     }
 
-    // remove @Override
-    public List<FillLevelRecord> getRecordsByBinId(Long binId) {
-        return List.of(); // dummy for test
-    }
-
-    public List<FillLevelRecord> getRecentRecords(long binId, int count) {
-        return List.of(); // dummy for test
+    public List<FillLevelRecord> getRecentRecords(Long binId, int limit) {
+        Bin bin = binRepository.findById(binId).orElseThrow(() -> new BadRequestException("Bin not found"));
+        List<FillLevelRecord> all = recordRepository.findByBinOrderByRecordedAtDesc(bin);
+        return all.subList(0, Math.min(limit, all.size()));
     }
 }

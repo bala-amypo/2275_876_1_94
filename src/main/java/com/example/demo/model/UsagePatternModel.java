@@ -1,28 +1,26 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
 public class UsagePatternModel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Bin bin;
     private Double avgDailyIncreaseWeekday;
     private Double avgDailyIncreaseWeekend;
-    private LocalDateTime lastUpdated = LocalDateTime.now();
-
-    @ManyToOne
-    private Bin bin;
+    private LocalDateTime lastUpdated;
 
     public Long getId() { return id; }
-    public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
-    public void setAvgDailyIncreaseWeekday(Double v) { this.avgDailyIncreaseWeekday = v; }
-    public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
-    public void setAvgDailyIncreaseWeekend(Double v) { this.avgDailyIncreaseWeekend = v; }
-    public LocalDateTime getLastUpdated() { return lastUpdated; }
+    public void setId(Long id) { this.id = id; }
+
     public Bin getBin() { return bin; }
     public void setBin(Bin bin) { this.bin = bin; }
+
+    public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
+    public void setAvgDailyIncreaseWeekday(Double v) { this.avgDailyIncreaseWeekday = v; }
+
+    public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
+    public void setAvgDailyIncreaseWeekend(Double v) { this.avgDailyIncreaseWeekend = v; }
+
+    public LocalDateTime getLastUpdated() { return lastUpdated; }
+    public void setLastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; }
 }
