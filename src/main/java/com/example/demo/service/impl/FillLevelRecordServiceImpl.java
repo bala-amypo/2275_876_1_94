@@ -23,25 +23,35 @@ public class FillLevelRecordServiceImpl {
     }
 
     public FillLevelRecord createRecord(FillLevelRecord record) {
-        Bin bin = binRepository.findById(record.getBin().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+        Bin bin = record.getBin();
+        if (bin == null || bin.getId() == null) {
+            throw new BadRequestException("Bin required for record");
+        }
 
-        if (!bin.getActive()) throw new BadRequestException("Cannot record fill for inactive bin");
-        if (record.getRecordedAt().isAfter(LocalDateTime.now())) throw new BadRequestException("RecordedAt cannot be in the future");
+        Bin existing = binRepository.findById(bin.getId())
+                .orElseThrow(() -> new BadRequestException("Bin not found"));
 
-        record.setBin(bin);
+        if (!existing.getActive()) {
+            throw new BadRequestException("Cannot add record to inactive bin");
+        }
+
+        if (record.getRecordedAt().isAfter(LocalDateTime.now())) {
+            throw new BadRequestException("RecordedAt cannot be in the future");
+        }
+
+        record.setBin(existing);
         return recordRepository.save(record);
     }
 
     public FillLevelRecord getRecordById(Long id) {
         return recordRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Fill record not found"));
     }
 
     public List<FillLevelRecord> getRecentRecords(Long binId, int limit) {
         Bin bin = binRepository.findById(binId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
-        List<FillLevelRecord> all = recordRepository.findByBinOrderByRecordedAtDesc(bin);
-        return all.subList(0, Math.min(limit, all.size()));
+        List<FillLevelRecord> list = recordRepository.findByBinOrderByRecordedAtDesc(bin);
+        return list.subList(0, Math.min(limit, list.size()));
     }
 }

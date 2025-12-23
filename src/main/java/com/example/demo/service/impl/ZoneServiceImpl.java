@@ -17,7 +17,7 @@ public class ZoneServiceImpl {
     }
 
     public Zone createZone(Zone zone) {
-        zone.setActive(true);
+        if (zone.getActive() == null) zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
@@ -26,10 +26,10 @@ public class ZoneServiceImpl {
                 .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
     }
 
-    public Zone updateZone(Long id, Zone update) {
+    public Zone updateZone(Long id, Zone updated) {
         Zone zone = getZoneById(id);
-        if (update.getZoneName() != null) zone.setZoneName(update.getZoneName());
-        if (update.getDescription() != null) zone.setDescription(update.getDescription());
+        if (updated.getZoneName() != null) zone.setZoneName(updated.getZoneName());
+        if (updated.getDescription() != null) zone.setDescription(updated.getDescription());
         return zoneRepository.save(zone);
     }
 

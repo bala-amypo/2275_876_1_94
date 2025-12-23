@@ -8,6 +8,9 @@ import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.UsagePatternModelRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 public class UsagePatternModelServiceImpl {
 
@@ -20,30 +23,45 @@ public class UsagePatternModelServiceImpl {
     }
 
     public UsagePatternModel createModel(UsagePatternModel model) {
-        Bin bin = binRepository.findById(model.getBin().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+        Bin bin = model.getBin();
+        if (bin == null || bin.getId() == null) {
+            throw new BadRequestException("Bin required for model");
+        }
 
-        if (model.getAvgDailyIncreaseWeekday() < 0 || model.getAvgDailyIncreaseWeekend() < 0)
-            throw new BadRequestException("Average daily increase cannot be negative");
+        Bin existing = binRepository.findById(bin.getId())
+                .orElseThrow(() -> new BadRequestException("Bin not found"));
 
-        model.setBin(bin);
+        if (model.getAvgDailyIncreaseWeekday() < 0 || model.getAvgDailyIncreaseWeekend() < 0) {
+            throw new BadRequestException("Average increase cannot be negative");
+        }
+
+        model.setBin(existing);
+        model.setLastUpdated(LocalDateTime.now());
+
         return modelRepository.save(model);
     }
 
-    public UsagePatternModel updateModel(Long id, UsagePatternModel update) {
-        UsagePatternModel existing = modelRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usage model not found"));
+    public UsagePatternModel updateModel(Long id, UsagePatternModel updated) {
+        UsagePatternModel model = modelRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Model not found"));
 
-        if (update.getAvgDailyIncreaseWeekday() != null) existing.setAvgDailyIncreaseWeekday(update.getAvgDailyIncreaseWeekday());
-        if (update.getAvgDailyIncreaseWeekend() != null) existing.setAvgDailyIncreaseWeekend(update.getAvgDailyIncreaseWeekend());
+        if (updated.getAvgDailyIncreaseWeekday() >= 0) {
+            model.setAvgDailyIncreaseWeekday(updated.getAvgDailyIncreaseWeekday());
+        }
 
-        return modelRepository.save(existing);
+        if (updated.getAvgDailyIncreaseWeekend() >= 0) {
+            model.setAvgDailyIncreaseWeekend(updated.getAvgDailyIncreaseWeekend());
+        }
+
+        model.setLastUpdated(LocalDateTime.now());
+        return modelRepository.save(model);
     }
 
     public UsagePatternModel getModelForBin(Long binId) {
         Bin bin = binRepository.findById(binId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
-        return modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin)
-                .orElse(null);
+
+        Optional<UsagePatternModel> latest = modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin);
+        return latest.orElse(null);
     }
 }
