@@ -1,6 +1,8 @@
 package com.example.demo.security;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,32 +10,41 @@ import java.util.*;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final Map<String, DemoUser> users = new HashMap<>();
+    private final Map<String, DemoUser> userStore = new HashMap<>();
 
     public CustomUserDetailsService() {
-        // Add default admin user
+        // default admin user
         DemoUser admin = new DemoUser(1L, "Admin", "admin@city.com", "admin123", "ADMIN");
-        users.put(admin.getEmail(), admin);
+        userStore.put(admin.getEmail(), admin);
     }
 
-    @Override
-    public DemoUser loadUserByUsername(String email) {
-        DemoUser user = users.get(email);
-        if (user == null) throw new RuntimeException("User not found");
+    public DemoUser registerUser(String name, String email, String password) {
+        if (userStore.containsKey(email)) {
+            throw new RuntimeException("User with email already exists");
+        }
+        DemoUser user = new DemoUser(System.currentTimeMillis(), name, email, password, "USER");
+        userStore.put(email, user);
         return user;
     }
 
     public DemoUser getByEmail(String email) {
-        return users.get(email);
+        return userStore.get(email);
     }
 
-    public DemoUser registerUser(String name, String email, String password) {
-        if (users.containsKey(email)) throw new RuntimeException("User with email already exists");
-        DemoUser user = new DemoUser((long) (users.size() + 1), name, email, password, "USER");
-        users.put(email, user);
-        return user;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        DemoUser user = userStore.get(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
+                .roles(user.getRole())
+                .build();
     }
 
+    // Inner class to hold demo user info
     public static class DemoUser {
         private Long id;
         private String name;
@@ -49,7 +60,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             this.role = role;
         }
 
-        // Getters
+        // getters
         public Long getId() { return id; }
         public String getName() { return name; }
         public String getEmail() { return email; }
