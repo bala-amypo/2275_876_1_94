@@ -6,7 +6,6 @@ import com.example.demo.service.BinService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BinServiceImpl implements BinService {
@@ -23,13 +22,18 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
-    public Optional<Bin> getBinById(Long id) {
-        return binRepository.findById(id);
+    public Bin getBinById(Long id) {
+        return binRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Bin> getAllBins() {
         return binRepository.findAll();
+    }
+
+    @Override
+    public Bin updateBin(Long id, Bin bin) {
+        return bin;
     }
 
     @Override

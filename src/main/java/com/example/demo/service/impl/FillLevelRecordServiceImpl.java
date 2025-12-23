@@ -6,7 +6,6 @@ import com.example.demo.service.FillLevelRecordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FillLevelRecordServiceImpl implements FillLevelRecordService {
@@ -23,8 +22,8 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
     }
 
     @Override
-    public Optional<FillLevelRecord> getRecordById(Long id) {
-        return repository.findById(id);
+    public FillLevelRecord getRecordById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.example.demo.service.ZoneService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ZoneServiceImpl implements ZoneService {
@@ -23,8 +22,8 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
-    public Optional<Zone> getZoneById(Long id) {
-        return zoneRepository.findById(id);
+    public Zone getZoneById(Long id) {
+        return zoneRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -33,7 +32,12 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     @Override
+    public Zone updateZone(Long id, Zone zone) {
+        return zone;
+    }
+
+    @Override
     public void deleteZone(Long id) {
-        // no-op for test
+        // no-op
     }
 }
