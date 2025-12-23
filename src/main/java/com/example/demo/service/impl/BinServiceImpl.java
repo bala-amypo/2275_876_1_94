@@ -1,17 +1,12 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.Bin;
-import com.example.demo.repository.BinRepository;
-import com.example.demo.repository.ZoneRepository;
-import com.example.demo.service.BinService;
-import org.springframework.stereotype.Service;
+import com.example.demo.exception.*;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
-@Service
-public class BinServiceImpl implements BinService {
+public class BinServiceImpl {
 
     private final BinRepository binRepository;
     private final ZoneRepository zoneRepository;
@@ -21,41 +16,40 @@ public class BinServiceImpl implements BinService {
         this.zoneRepository = zoneRepository;
     }
 
-    @Override
     public Bin createBin(Bin bin) {
-        bin.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        bin.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        if (bin.getCapacityLiters() == null || bin.getCapacityLiters() <= 0)
+            throw new BadRequestException("Invalid capacity");
+
+        Zone zone = zoneRepository.findById(bin.getZone().getId())
+                .orElseThrow(() -> new BadRequestException("Zone not found"));
+
+        if (!zone.getActive())
+            throw new BadRequestException("Zone inactive");
+
         if (bin.getActive() == null) bin.setActive(true);
+        bin.setZone(zone);
         return binRepository.save(bin);
     }
 
-    @Override
-    public Bin updateBin(Long id, Bin bin) {
-        Bin existing = getBinById(id);
-        existing.setIdentifier(bin.getIdentifier());
-        existing.setLocationDescription(bin.getLocationDescription());
-        existing.setLatitude(bin.getLatitude());
-        existing.setLongitude(bin.getLongitude());
-        existing.setCapacityLiters(bin.getCapacityLiters());
-        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        return binRepository.save(existing);
-    }
-
-    @Override
     public Bin getBinById(Long id) {
-        return binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+        return binRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
     }
 
-    @Override
     public List<Bin> getAllBins() {
         return binRepository.findAll();
     }
 
-    @Override
+    public Bin updateBin(Long id, Bin update) {
+        Bin bin = getBinById(id);
+        if (update.getLocationDescription() != null)
+            bin.setLocationDescription(update.getLocationDescription());
+        return binRepository.save(bin);
+    }
+
     public void deactivateBin(Long id) {
         Bin bin = getBinById(id);
         bin.setActive(false);
-        bin.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         binRepository.save(bin);
     }
 }
