@@ -1,10 +1,8 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -13,51 +11,46 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    // Secret key for signing JWT
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    private final String SECRET_KEY = "MySuperSecretKeyForJWTGenerationMySuperSecretKeyForJWTGeneration";
+    private final long VALIDITY_IN_MS = 3600000; // 1 hour
 
-    // Token validity in milliseconds
-    @Value("${jwt.expiration}")
-    private long jwtExpirationInMs;
-
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
-    }
+    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     // Generate token
-    public String generateToken(String username) {
+    public String createToken(String username) {
+        Claims claims = Jwts.claims().setSubject(username);
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+        Date validity = new Date(now.getTime() + VALIDITY_IN_MS);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // Get username from JWT
-    public String getUsernameFromJWT(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    // Extract username from token
+    public String getUsername(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody().getSubject();
+    }
 
-        return claims.getSubject();
+    // Resolve token from request header
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
     // Validate token
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (Exception ex) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }
