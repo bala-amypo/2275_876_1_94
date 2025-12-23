@@ -1,26 +1,41 @@
 package com.example.demo.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
+@Entity
+@Table(name = "overflow_predictions")
 public class OverflowPrediction {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private Bin bin;
-    private UsagePatternModel modelUsed;
+
+    private Date predictedFullDate;
+
     private Integer daysUntilFull;
-    private LocalDate predictedFullDate;
+
+    @ManyToOne
+    private UsagePatternModel modelUsed;
+
+    private Timestamp generatedAt;
+
+    public OverflowPrediction() {}
+
+    public OverflowPrediction(Bin bin,
+                              Date predictedFullDate,
+                              Integer daysUntilFull,
+                              UsagePatternModel modelUsed,
+                              Timestamp generatedAt) {
+        this.bin = bin;
+        this.predictedFullDate = predictedFullDate;
+        this.daysUntilFull = daysUntilFull;
+        this.modelUsed = modelUsed;
+        this.generatedAt = generatedAt;
+    }
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
-
-    public UsagePatternModel getModelUsed() { return modelUsed; }
-    public void setModelUsed(UsagePatternModel modelUsed) { this.modelUsed = modelUsed; }
-
-    public Integer getDaysUntilFull() { return daysUntilFull; }
-    public void setDaysUntilFull(Integer daysUntilFull) { this.daysUntilFull = daysUntilFull; }
-
-    public LocalDate getPredictedFullDate() { return predictedFullDate; }
-    public void setPredictedFullDate(LocalDate predictedFullDate) { this.predictedFullDate = predictedFullDate; }
-}
