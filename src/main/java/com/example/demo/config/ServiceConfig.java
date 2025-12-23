@@ -11,69 +11,42 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class ServiceConfig {
 
-    // ---------- BIN ----------
     @Bean
-    public BinService binService(
-            BinRepository binRepository,
-            ZoneRepository zoneRepository) {
+    public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        return new UserServiceImpl(userRepository, passwordEncoder);
+    }
+
+    @Bean
+    public BinService binService(BinRepository binRepository, ZoneRepository zoneRepository) {
         return new BinServiceImpl(binRepository, zoneRepository);
     }
 
-    // ---------- ZONE ----------
     @Bean
-    public ZoneService zoneService(
-            ZoneRepository zoneRepository) {
+    public ZoneService zoneService(ZoneRepository zoneRepository) {
         return new ZoneServiceImpl(zoneRepository);
     }
 
-    // ---------- FILL LEVEL RECORD ----------
     @Bean
-    public FillLevelRecordService fillLevelRecordService(
-            FillLevelRecordRepository recordRepository,
-            BinRepository binRepository) {
-        return new FillLevelRecordServiceImpl(
-                recordRepository, binRepository);
+    public FillLevelRecordService fillLevelRecordService(FillLevelRecordRepository recordRepository, BinRepository binRepository) {
+        return new FillLevelRecordServiceImpl(recordRepository, binRepository);
     }
 
-    // ---------- USAGE PATTERN MODEL ----------
     @Bean
-    public UsagePatternModelService usagePatternModelService(
-            UsagePatternModelRepository modelRepository,
-            BinRepository binRepository) {
-        return new UsagePatternModelServiceImpl(
-                modelRepository, binRepository);
+    public UsagePatternModelService usagePatternModelService(UsagePatternModelRepository modelRepository, BinRepository binRepository) {
+        return new UsagePatternModelServiceImpl(modelRepository, binRepository);
     }
 
-    // ---------- OVERFLOW PREDICTION ----------
     @Bean
-    public OverflowPredictionService overflowPredictionService(
-            BinRepository binRepository,
-            FillLevelRecordRepository recordRepository,
-            UsagePatternModelRepository modelRepository,
-            OverflowPredictionRepository predictionRepository,
-            ZoneRepository zoneRepository) {
-
-        return new OverflowPredictionServiceImpl(
-                binRepository,
-                recordRepository,
-                modelRepository,
-                predictionRepository,
-                zoneRepository);
+    public OverflowPredictionService overflowPredictionService(BinRepository binRepository,
+                                                               FillLevelRecordRepository recordRepository,
+                                                               UsagePatternModelRepository modelRepository,
+                                                               OverflowPredictionRepository predictionRepository,
+                                                               ZoneRepository zoneRepository) {
+        return new OverflowPredictionServiceImpl(binRepository, recordRepository, modelRepository, predictionRepository, zoneRepository);
     }
 
-    // ---------- USER ----------
     @Bean
-    public UserService userService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
-        return new UserServiceImpl(
-                userRepository, passwordEncoder);
-    }
-
-    // ---------- SECURITY ----------
-    @Bean
-    public CustomUserDetailsService customUserDetailsService(
-            UserRepository userRepository) {
+    public CustomUserDetailsService customUserDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
     }
 }
