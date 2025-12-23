@@ -19,22 +19,22 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
         this.binRepository = binRepository;
     }
 
-    // @Override
+    @Override
     public FillLevelRecord createRecord(FillLevelRecord record) {
         return recordRepository.save(record);
     }
 
-    // @Override
+    @Override
     public FillLevelRecord getRecordById(Long id) {
         return recordRepository.findById(id).orElse(null);
     }
 
-    // Removed @Override because this method is not declared in the interface
+    // REMOVE @Override here — interface does not have this method
     public List<FillLevelRecord> getRecordsByBinId(Long binId) {
-        return List.of(); // dummy to satisfy test calls
+        return List.of(); // dummy
     }
 
-    // Method used in test, NOT part of interface
+    // Method used in test, not part of interface
     public List<FillLevelRecord> getRecentRecords(long binId, int count) {
         return List.of(); // dummy
     }
