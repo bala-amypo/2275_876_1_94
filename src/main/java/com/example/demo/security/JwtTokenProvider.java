@@ -2,34 +2,30 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 
-import org.springframework.security.core.Authentication;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JwtTokenProvider {
-    private final SecretKey jwtSecretKey;
-    private final long jwtExpirationMs = 3600000; // 1 hour default
+
+    private final String secret;
+    private final long validityMs = 24 * 60 * 60 * 1000; // 1 day
 
     public JwtTokenProvider(String secret) {
-        // For HS256, key must be at least 256 bits (32 bytes)
-        this.jwtSecretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.secret = secret;
     }
 
-    public String generateToken(Authentication authentication, Long userId, String role, String email) {
+    public String generateToken(Long userId, String email, String role) {
+
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
+        Date expiry = new Date(now.getTime() + validityMs);
 
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setSubject(email)
+                .claim("userId", userId)
                 .claim("role", role)
-                .claim("email", email)
                 .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(jwtSecretKey, SignatureAlgorithm.HS256)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 }
