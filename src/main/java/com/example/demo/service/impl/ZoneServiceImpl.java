@@ -31,8 +31,13 @@ public class ZoneServiceImpl implements ZoneService {
         return zoneRepository.findById(id).orElse(null);
     }
 
-    // ✅ Method called in test
+    @Override
+    public void deleteZone(Long id) {
+        zoneRepository.deleteById(id);
+    }
+
+    // method called in test
     public void deactivateZone(long zoneId) {
-        // dummy implementation
+        // dummy
     }
 }

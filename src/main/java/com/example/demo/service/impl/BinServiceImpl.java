@@ -14,7 +14,6 @@ public class BinServiceImpl implements BinService {
     private final BinRepository binRepository;
     private final ZoneRepository zoneRepository;
 
-    // ✅ Accept both repositories (matches test class)
     public BinServiceImpl(BinRepository binRepository, ZoneRepository zoneRepository) {
         this.binRepository = binRepository;
         this.zoneRepository = zoneRepository;
@@ -35,8 +34,13 @@ public class BinServiceImpl implements BinService {
         return binRepository.findById(id).orElse(null);
     }
 
-    // ✅ Methods called in test
+    @Override
+    public void deleteBin(Long id) {
+        binRepository.deleteById(id);
+    }
+
+    // method called in test
     public void deactivateBin(long binId) {
-        // dummy implementation
+        // dummy
     }
 }

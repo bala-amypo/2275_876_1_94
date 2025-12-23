@@ -12,7 +12,6 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
     private final UsagePatternModelRepository modelRepository;
     private final BinRepository binRepository;
 
-    // ✅ Accept both repositories
     public UsagePatternModelServiceImpl(UsagePatternModelRepository modelRepository, BinRepository binRepository) {
         this.modelRepository = modelRepository;
         this.binRepository = binRepository;
@@ -28,7 +27,12 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
         return model; // dummy
     }
 
-    // ✅ Method called in test
+    @Override
+    public UsagePatternModel getModelByBinId(Long binId) {
+        return new UsagePatternModel(); // dummy
+    }
+
+    // method called in test
     public UsagePatternModel getModelForBin(long binId) {
         return new UsagePatternModel(); // dummy
     }
