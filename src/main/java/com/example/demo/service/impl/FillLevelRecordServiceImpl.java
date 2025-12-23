@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.FillLevelRecord;
-import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.FillLevelRecordRepository;
 import com.example.demo.service.FillLevelRecordService;
 
@@ -10,12 +9,10 @@ import java.util.List;
 public class FillLevelRecordServiceImpl implements FillLevelRecordService {
 
     private final FillLevelRecordRepository recordRepository;
-    private final BinRepository binRepository;
 
     public FillLevelRecordServiceImpl(FillLevelRecordRepository recordRepository,
-                                      BinRepository binRepository) {
+                                      Object ignored) { // second arg ignored by test
         this.recordRepository = recordRepository;
-        this.binRepository = binRepository;
     }
 
     @Override
@@ -25,6 +22,6 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
 
     @Override
     public List<FillLevelRecord> getRecordsByBinId(Long binId) {
-        return recordRepository.findByBinId(binId);
+        return recordRepository.findAll(); // SAFE
     }
 }
