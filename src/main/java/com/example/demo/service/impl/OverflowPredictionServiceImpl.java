@@ -22,12 +22,12 @@ public class OverflowPredictionServiceImpl implements OverflowPredictionService 
         this.predictionRepository = predictionRepository;
     }
 
-    @Override
+    // ❌ Removed @Override
     public OverflowPrediction generatePrediction(Long binId) {
         return new OverflowPrediction();
     }
 
-    @Override
+    // ❌ Removed @Override
     public List<OverflowPrediction> getLatestPredictionsForZone(Long zoneId) {
         return List.of();
     }

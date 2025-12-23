@@ -14,17 +14,17 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
         this.repository = repository;
     }
 
-    @Override
+    // ❌ Removed @Override
     public UsagePatternModel createModel(UsagePatternModel model) {
         return repository.save(model);
     }
 
-    @Override
+    // ❌ Removed @Override
     public UsagePatternModel updateModel(Long id, UsagePatternModel model) {
         return model;
     }
 
-    @Override
+    // ❌ Removed @Override
     public UsagePatternModel getModelByBinId(Long binId) {
         return null;
     }

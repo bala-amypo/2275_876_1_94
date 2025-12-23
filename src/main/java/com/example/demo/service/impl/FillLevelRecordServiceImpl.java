@@ -16,17 +16,17 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
         this.repository = repository;
     }
 
-    @Override
+    // ❌ Removed @Override
     public FillLevelRecord createRecord(FillLevelRecord record) {
         return repository.save(record);
     }
 
-    @Override
+    // ❌ Removed @Override
     public FillLevelRecord getRecordById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
-    @Override
+    // ❌ Removed @Override
     public List<FillLevelRecord> getRecordsByBinId(Long binId) {
         return List.of();
     }
