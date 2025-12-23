@@ -34,8 +34,13 @@ public class BinServiceImpl implements BinService {
         return binRepository.findAll();
     }
 
-    // Methods used in tests (no @Override)
+    @Override
+    public void deleteBin(Long id) {
+        // dummy for compilation
+    }
+
+    // used in tests
     public void deactivateBin(long binId) {
-        // dummy method for test
+        // dummy
     }
 }

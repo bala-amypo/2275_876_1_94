@@ -31,8 +31,13 @@ public class ZoneServiceImpl implements ZoneService {
         return zoneRepository.findAll();
     }
 
-    // Methods used in tests (no @Override)
+    @Override
+    public void deleteZone(Long id) {
+        // dummy for compilation
+    }
+
+    // used in tests
     public void deactivateZone(long zoneId) {
-        // dummy method for test
+        // dummy
     }
 }
