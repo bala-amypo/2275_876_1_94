@@ -29,7 +29,7 @@ public class UsagePatternModelServiceImpl implements UsagePatternModelService {
 
     @Override
     public UsagePatternModel getModelByBinId(Long binId) {
-        return new UsagePatternModel(); // dummy
+        return new UsagePatternModel(); // dummy to satisfy interface
     }
 
     // method called in test

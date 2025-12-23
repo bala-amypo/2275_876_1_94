@@ -6,6 +6,7 @@ import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.BinService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,11 @@ public class BinServiceImpl implements BinService {
     @Override
     public void deleteBin(Long id) {
         binRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Bin> getAllBins() {
+        return binRepository.findAll();
     }
 
     // method called in test

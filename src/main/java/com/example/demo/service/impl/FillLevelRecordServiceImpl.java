@@ -31,7 +31,7 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
 
     @Override
     public List<FillLevelRecord> getRecordsByBinId(Long binId) {
-        return List.of(); // dummy, satisfies interface
+        return List.of(); // dummy to satisfy interface
     }
 
     // method called in test

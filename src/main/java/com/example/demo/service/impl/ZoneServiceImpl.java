@@ -5,7 +5,7 @@ import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.ZoneService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class ZoneServiceImpl implements ZoneService {
@@ -34,6 +34,11 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public void deleteZone(Long id) {
         zoneRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Zone> getAllZones() {
+        return zoneRepository.findAll();
     }
 
     // method called in test
