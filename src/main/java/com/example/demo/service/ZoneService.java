@@ -1,13 +1,37 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
+import com.example.demo.exception.*;
 import com.example.demo.model.Zone;
+import com.example.demo.repository.ZoneRepository;
 
-import java.util.List;
+public class ZoneServiceImpl {
 
-public interface ZoneService {
-    Zone createZone(Zone zone);
-    Zone updateZone(Long id, Zone zone);
-    Zone getZoneById(Long id);
-    List<Zone> getAllZones();
-    void deactivateZone(Long id);
+    private final ZoneRepository zoneRepository;
+
+    public ZoneServiceImpl(ZoneRepository zoneRepository) {
+        this.zoneRepository = zoneRepository;
+    }
+
+    public Zone createZone(Zone zone) {
+        if (zone.getActive() == null) zone.setActive(true);
+        return zoneRepository.save(zone);
+    }
+
+    public Zone getZoneById(Long id) {
+        return zoneRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
+    }
+
+    public Zone updateZone(Long id, Zone update) {
+        Zone zone = getZoneById(id);
+        if (update.getZoneName() != null) zone.setZoneName(update.getZoneName());
+        if (update.getDescription() != null) zone.setDescription(update.getDescription());
+        return zoneRepository.save(zone);
+    }
+
+    public void deactivateZone(Long id) {
+        Zone zone = getZoneById(id);
+        zone.setActive(false);
+        zoneRepository.save(zone);
+    }
 }
