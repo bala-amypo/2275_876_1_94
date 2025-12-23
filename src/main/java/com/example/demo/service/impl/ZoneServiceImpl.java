@@ -1,14 +1,14 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Zone;
 import com.example.demo.repository.ZoneRepository;
-import com.example.demo.service.ZoneService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ZoneServiceImpl implements ZoneService {
+public class ZoneServiceImpl {
 
     private final ZoneRepository zoneRepository;
 
@@ -16,40 +16,30 @@ public class ZoneServiceImpl implements ZoneService {
         this.zoneRepository = zoneRepository;
     }
 
-    @Override
     public Zone createZone(Zone zone) {
+        zone.setActive(true);
         return zoneRepository.save(zone);
     }
 
-    @Override
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Zone not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
     }
 
-    @Override
-    public List<Zone> getAllZones() {
-        return zoneRepository.findAll();
+    public Zone updateZone(Long id, Zone update) {
+        Zone zone = getZoneById(id);
+        if (update.getZoneName() != null) zone.setZoneName(update.getZoneName());
+        if (update.getDescription() != null) zone.setDescription(update.getDescription());
+        return zoneRepository.save(zone);
     }
 
-    @Override
-    public Zone updateZone(Long id, Zone zone) {
-        Zone existing = getZoneById(id);
-        existing.setZoneName(zone.getZoneName());
-        existing.setDescription(zone.getDescription());
-        existing.setActive(zone.isActive());
-        return zoneRepository.save(existing);
-    }
-
-    @Override
-    public void deleteZone(Long id) {
-        zoneRepository.deleteById(id);
-    }
-
-    @Override
     public void deactivateZone(Long id) {
         Zone zone = getZoneById(id);
         zone.setActive(false);
         zoneRepository.save(zone);
+    }
+
+    public List<Zone> getAllZones() {
+        return zoneRepository.findAll();
     }
 }

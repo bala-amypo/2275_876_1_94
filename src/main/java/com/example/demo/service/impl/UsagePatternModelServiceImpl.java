@@ -1,48 +1,49 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.model.Bin;
 import com.example.demo.model.UsagePatternModel;
+import com.example.demo.repository.BinRepository;
 import com.example.demo.repository.UsagePatternModelRepository;
-import com.example.demo.service.UsagePatternModelService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Service
-public class UsagePatternModelServiceImpl implements UsagePatternModelService {
+public class UsagePatternModelServiceImpl {
 
-    private final UsagePatternModelRepository repository;
+    private final UsagePatternModelRepository modelRepository;
+    private final BinRepository binRepository;
 
-    public UsagePatternModelServiceImpl(UsagePatternModelRepository repository) {
-        this.repository = repository;
+    public UsagePatternModelServiceImpl(UsagePatternModelRepository modelRepository, BinRepository binRepository) {
+        this.modelRepository = modelRepository;
+        this.binRepository = binRepository;
     }
 
-    @Override
     public UsagePatternModel createModel(UsagePatternModel model) {
-        model.setLastUpdated(LocalDateTime.now());
-        return repository.save(model);
+        Bin bin = binRepository.findById(model.getBin().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+
+        if (model.getAvgDailyIncreaseWeekday() < 0 || model.getAvgDailyIncreaseWeekend() < 0)
+            throw new BadRequestException("Average daily increase cannot be negative");
+
+        model.setBin(bin);
+        return modelRepository.save(model);
     }
 
-    @Override
-    public UsagePatternModel updateModel(Long id, UsagePatternModel updated) {
-        UsagePatternModel existing = getModelById(id);
-
-        existing.setAvgDailyIncreaseWeekday(updated.getAvgDailyIncreaseWeekday());
-        existing.setAvgDailyIncreaseWeekend(updated.getAvgDailyIncreaseWeekend());
-        existing.setLastUpdated(LocalDateTime.now());
-
-        return repository.save(existing);
-    }
-
-    @Override
-    public UsagePatternModel getModelById(Long id) {
-        return repository.findById(id)
+    public UsagePatternModel updateModel(Long id, UsagePatternModel update) {
+        UsagePatternModel existing = modelRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usage model not found"));
+
+        if (update.getAvgDailyIncreaseWeekday() != null) existing.setAvgDailyIncreaseWeekday(update.getAvgDailyIncreaseWeekday());
+        if (update.getAvgDailyIncreaseWeekend() != null) existing.setAvgDailyIncreaseWeekend(update.getAvgDailyIncreaseWeekend());
+
+        return modelRepository.save(existing);
     }
 
-    @Override
-    public List<UsagePatternModel> getAllModels() {
-        return repository.findAll();
+    public UsagePatternModel getModelForBin(Long binId) {
+        Bin bin = binRepository.findById(binId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+        return modelRepository.findTop1ByBinOrderByLastUpdatedDesc(bin)
+                .orElse(null);
     }
 }
