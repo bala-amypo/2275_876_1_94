@@ -7,5 +7,7 @@ public interface FillLevelRecordService {
 
     FillLevelRecord createRecord(FillLevelRecord record);
 
-    List<FillLevelRecord> getRecentRecords(Long binId, int limit);
+    FillLevelRecord getRecordById(Long id);
+
+    List<FillLevelRecord> getRecordsForBin(Long binId);
 }

@@ -38,22 +38,21 @@ public class FillLevelRecordServiceImpl implements FillLevelRecordService {
         Bin bin = binRepository.findById(record.getBin().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
 
-        if (!Boolean.TRUE.equals(bin.getActive())) {
-            throw new BadRequestException("Bin is inactive");
-        }
-
         record.setBin(bin);
         return recordRepository.save(record);
     }
 
     @Override
-    public List<FillLevelRecord> getRecentRecords(Long binId, int limit) {
+    public FillLevelRecord getRecordById(Long id) {
+        return recordRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Record not found"));
+    }
+
+    @Override
+    public List<FillLevelRecord> getRecordsForBin(Long binId) {
         Bin bin = binRepository.findById(binId)
                 .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
 
-        List<FillLevelRecord> records =
-                recordRepository.findByBinOrderByRecordedAtDesc(bin);
-
-        return records.stream().limit(limit).toList();
+        return recordRepository.findByBinOrderByRecordedAtDesc(bin);
     }
 }
