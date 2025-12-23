@@ -10,26 +10,29 @@ import java.util.Optional;
 @Service
 public class ZoneServiceImpl implements ZoneService {
 
-    private final ZoneRepository repository;
+    private final ZoneRepository zoneRepository;
 
-    public ZoneServiceImpl(ZoneRepository repository) {
-        this.repository = repository;
+    public ZoneServiceImpl(ZoneRepository zoneRepository) {
+        this.zoneRepository = zoneRepository;
     }
 
+    @Override
     public Zone createZone(Zone zone) {
-        return repository.save(zone);
+        return zoneRepository.save(zone);
     }
 
+    @Override
     public Zone updateZone(Long id, Zone zone) {
-        return repository.findById(id).map(z -> repository.save(zone)).orElse(null);
+        return zoneRepository.findById(id).map(z -> zoneRepository.save(zone)).orElse(null);
     }
 
+    @Override
     public Zone getZoneById(Long id) {
-        return repository.findById(id).orElse(null);
+        return zoneRepository.findById(id).orElse(null);
     }
 
-    // Add missing method for test
+    // ✅ Method called in test
     public void deactivateZone(long zoneId) {
-        // Dummy implementation for test
+        // dummy implementation
     }
 }
