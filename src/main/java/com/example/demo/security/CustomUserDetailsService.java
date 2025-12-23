@@ -1,60 +1,34 @@
 package com.example.demo.security;
 
-import org.springframework.security.core.GrantedAuthority;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.*;
+import java.util.List;
 
-public class CustomUserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
-    public static class DemoUser {
-        private Long id;
-        private String name;
-        private String email;
-        private String password;
-        private String role;
+    private final UserRepository userRepository;
 
-        public DemoUser(Long id, String name, String email, String password, String role) {
-            this.id = id; this.name = name; this.email = email; this.password = password; this.role = role;
-        }
-        public Long getId() { return id; }
-        public String getName() { return name; }
-        public String getEmail() { return email; }
-        public String getPassword() { return password; }
-        public String getRole() { return role; }
+    public CustomUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    private final Map<String, DemoUser> users = new HashMap<>();
-    private long seq = 1L;
+    @Override
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
 
-    public CustomUserDetailsService() {
-        // default admin
-        DemoUser admin = new DemoUser(seq++, "Admin", "admin@city.com", "admin123", "ADMIN");
-        users.put(admin.getEmail(), admin);
-    }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
 
-    public DemoUser getByEmail(String email) {
-        return users.get(email);
-    }
-
-    public DemoUser registerUser(String name, String email, String password) {
-        if (users.containsKey(email)) {
-            throw new RuntimeException("User already exists");
-        }
-        DemoUser user = new DemoUser(seq++, name, email, password, "USER");
-        users.put(email, user);
-        return user;
-    }
-
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        DemoUser user = users.get(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
-        return new User(user.getEmail(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+        );
     }
 }
