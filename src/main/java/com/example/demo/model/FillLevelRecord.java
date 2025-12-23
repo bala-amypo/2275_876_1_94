@@ -1,22 +1,30 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.sql.Timestamp;
 
+@Entity
+@Table(name = "fill_level_records")
 public class FillLevelRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private Bin bin;
+
     private Double fillPercentage;
-    private LocalDateTime recordedAt;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    private Timestamp recordedAt;
 
-    public Bin getBin() { return bin; }
-    public void setBin(Bin bin) { this.bin = bin; }
+    private Boolean isWeekend;
 
-    public Double getFillPercentage() { return fillPercentage; }
-    public void setFillPercentage(Double fillPercentage) { this.fillPercentage = fillPercentage; }
+    public FillLevelRecord() {}
 
-    public LocalDateTime getRecordedAt() { return recordedAt; }
-    public void setRecordedAt(LocalDateTime recordedAt) { this.recordedAt = recordedAt; }
-}
+    public FillLevelRecord(Bin bin, Double fillPercentage,
+                           Timestamp recordedAt, Boolean isWeekend) {
+        this.bin = bin;
+        this.fillPercentage = fillPercentage;
+        this.recordedAt = recordedAt;
+        this
