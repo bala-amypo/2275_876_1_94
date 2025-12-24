@@ -52,6 +52,11 @@ public class OverflowPrediction {
     public Date getPredictedFullDate() { return predictedFullDate; }
     public void setPredictedFullDate(Date predictedFullDate) { this.predictedFullDate = predictedFullDate; }
     
+    // Overloaded setter to accept LocalDate in tests
+    public void setPredictedFullDate(LocalDate predictedFullLocalDate) {
+        this.predictedFullDate = predictedFullLocalDate != null ? Date.valueOf(predictedFullLocalDate) : null;
+    }
+    
     public Integer getDaysUntilFull() { return daysUntilFull; }
     public void setDaysUntilFull(Integer daysUntilFull) { this.daysUntilFull = daysUntilFull; }
     
