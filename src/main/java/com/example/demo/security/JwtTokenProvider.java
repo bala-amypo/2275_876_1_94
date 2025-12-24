@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
@@ -34,6 +35,11 @@ public class JwtTokenProvider {
             .setExpiration(expiryDate)
             .signWith(key, SignatureAlgorithm.HS256)
             .compact();
+    }
+    
+    // Overload commonly used in tests
+    public String generateToken(UsernamePasswordAuthenticationToken authentication, long userId, String email, String role) {
+        return generateToken(userId, email, role);
     }
     
     public String getEmailFromToken(String token) {
