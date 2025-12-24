@@ -118,11 +118,11 @@ public class OverflowPrediction {
              daysUntilFull, modelUsed, generatedAt);
     }
     
-    // Convenience constructor for tests using LocalDateTime for generatedAt
-    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull,
+    // Comprehensive constructor for tests using both LocalDate and LocalDateTime
+    public OverflowPrediction(Bin bin, LocalDate predictedFullLocalDate, Integer daysUntilFull,
                               UsagePatternModel modelUsed, LocalDateTime generatedAt) {
         this.bin = bin;
-        this.predictedFullDate = predictedFullDate;
+        this.predictedFullDate = predictedFullLocalDate != null ? Date.valueOf(predictedFullLocalDate) : null;
         this.daysUntilFull = daysUntilFull;
         this.modelUsed = modelUsed;
         this.generatedAt = generatedAt != null ? Timestamp.valueOf(generatedAt) : null;
