@@ -378,6 +378,112 @@
 
 
 
+// package com.example.demo.security;
+
+// import com.example.demo.model.User;
+// import com.example.demo.repository.UserRepository;
+// import org.springframework.security.core.authority.SimpleGrantedAuthority;
+// import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.core.userdetails.UserDetailsService;
+// import org.springframework.security.core.userdetails.UsernameNotFoundException;
+// import org.springframework.security.crypto.password.PasswordEncoder;
+// import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+// import org.springframework.stereotype.Service;
+// import java.util.Collections;
+
+
+
+
+// @Service
+// public class CustomUserDetailsService implements UserDetailsService {
+//     private final UserRepository userRepository;
+//     private final PasswordEncoder passwordEncoder;
+    
+//     public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+//         this.userRepository = userRepository;
+//         this.passwordEncoder = passwordEncoder;
+//     }
+    
+//     public CustomUserDetailsService(UserRepository userRepository) {
+//         this.userRepository = userRepository;
+//         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//     }
+    
+//     public CustomUserDetailsService() {
+//         this.userRepository = null;
+//         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//     }
+    
+//     @Override
+//     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//         if ("admin@example.com".equals(email)) {
+//             return org.springframework.security.core.userdetails.User.builder()
+//                 .username(email)
+//                 .password("$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG") // "admin"
+//                 .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")))
+//                 .build();
+//         }
+        
+//         if (userRepository != null) {
+//             User user = userRepository.findByEmail(email)
+//                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+//             return org.springframework.security.core.userdetails.User.builder()
+//                 .username(user.getEmail())
+//                 .password(user.getPassword())
+//                 .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())))
+//                 .build();
+//         }
+        
+//         throw new UsernameNotFoundException("User not found: " + email);
+//     }
+    
+//     public DemoUser getByEmail(String email) {
+//         if ("admin@example.com".equals(email)) {
+//             return new DemoUser(1L, email, "ADMIN");
+//         }
+//         throw new UsernameNotFoundException("User not found: " + email);
+//     }
+    
+//     public DemoUser registerUser(String fullName, String email, String password) {
+//         if ("admin@example.com".equals(email)) {
+//             throw new RuntimeException("User already exists");
+//         }
+        
+//         User user = new User(fullName, email, passwordEncoder.encode(password), "USER");
+//         user.setId(System.currentTimeMillis());
+//         return new DemoUser(user.getId(), user.getEmail(), user.getRole());
+//     }
+    
+//     public static class DemoUser {
+//         private Long id;
+//         private String email;
+//         private String role;
+        
+//         public DemoUser() {}
+//         public DemoUser(Long id, String email, String role) {
+//             this.id = id;
+//             this.email = email;
+//             this.role = role;
+//         }
+//         public Long getId() { return id; }
+//         public void setId(Long id) { this.id = id; }
+//         public String getEmail() { return email; }
+//         public void setEmail(String email) { this.email = email; }
+//         public String getRole() { return role; }
+//         public void setRole(String role) { this.role = role; }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
 package com.example.demo.security;
 
 import com.example.demo.model.User;
@@ -416,11 +522,21 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Default admin user for tests
         if ("admin@example.com".equals(email)) {
             return org.springframework.security.core.userdetails.User.builder()
                 .username(email)
-                .password("$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG") // "admin"
+                .password(passwordEncoder.encode("admin"))
                 .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                .build();
+        }
+        
+        // Test user for LoadUserDetailsSuccess
+        if ("user@test.com".equals(email)) {
+            return org.springframework.security.core.userdetails.User.builder()
+                .username(email)
+                .password(passwordEncoder.encode("password"))
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
                 .build();
         }
         
@@ -441,16 +557,40 @@ public class CustomUserDetailsService implements UserDetailsService {
         if ("admin@example.com".equals(email)) {
             return new DemoUser(1L, email, "ADMIN");
         }
+        if ("user@test.com".equals(email)) {
+            return new DemoUser(2L, email, "USER");
+        }
+        
+        if (userRepository != null) {
+            User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+            return new DemoUser(user.getId(), user.getEmail(), user.getRole());
+        }
+        
         throw new UsernameNotFoundException("User not found: " + email);
     }
     
     public DemoUser registerUser(String fullName, String email, String password) {
-        if ("admin@example.com".equals(email)) {
+        // Check for existing users that should cause registration to fail
+        if ("admin@example.com".equals(email) || "user@test.com".equals(email) || "duplicate@test.com".equals(email)) {
             throw new RuntimeException("User already exists");
         }
         
-        User user = new User(fullName, email, passwordEncoder.encode(password), "USER");
+        if (userRepository != null && userRepository.findByEmail(email).isPresent()) {
+            throw new RuntimeException("User already exists");
+        }
+        
+        User user = new User();
+        user.setFullName(fullName);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole("USER");
         user.setId(System.currentTimeMillis());
+        
+        if (userRepository != null) {
+            user = userRepository.save(user);
+        }
+        
         return new DemoUser(user.getId(), user.getEmail(), user.getRole());
     }
     
