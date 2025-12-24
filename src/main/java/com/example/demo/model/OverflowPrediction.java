@@ -3,6 +3,7 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "overflow_predictions")
@@ -33,6 +34,13 @@ public class OverflowPrediction {
         this.daysUntilFull = daysUntilFull;
         this.modelUsed = modelUsed;
         this.generatedAt = generatedAt;
+    }
+    
+    // Convenience constructor if tests pass LocalDate
+    public OverflowPrediction(Bin bin, LocalDate predictedFullLocalDate, Integer daysUntilFull,
+                              UsagePatternModel modelUsed, Timestamp generatedAt) {
+        this(bin, predictedFullLocalDate != null ? Date.valueOf(predictedFullLocalDate) : null,
+             daysUntilFull, modelUsed, generatedAt);
     }
     
     public Long getId() { return id; }

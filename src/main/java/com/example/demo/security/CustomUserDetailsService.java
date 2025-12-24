@@ -54,19 +54,26 @@ public class CustomUserDetailsService implements UserDetailsService {
             .build();
     }
     
-    // Convenience method expected by some tests
-    public Optional<User> getByEmail(String email) {
-        return userRepository.findByEmail(email);
+    // Convenience method expected by some tests (returns DemoUser)
+    public DemoUser getByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        return toDemoUser(user);
     }
     
-    // Convenience method to register user (fullName, email, rawPassword)
-    public User registerUser(String fullName, String email, String password) {
+    // Convenience method to register user (fullName, email, rawPassword) and return DemoUser
+    public DemoUser registerUser(String fullName, String email, String password) {
         User user = new User();
         user.setFullName(fullName);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("USER");
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        return toDemoUser(saved);
+    }
+    
+    private DemoUser toDemoUser(User user) {
+        return new DemoUser(user.getId(), user.getEmail(), user.getRole());
     }
     
     // Minimal inner DemoUser class to satisfy tests referencing CustomUserDetailsService.DemoUser
