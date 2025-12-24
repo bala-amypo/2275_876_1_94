@@ -98,7 +98,7 @@ public class OverflowPrediction {
     @JoinColumn(name = "model_id")
     private UsagePatternModel modelUsed;
     
-    private Timestamp generatedAt;
+    private LocalDateTime generatedAt;
     
     public OverflowPrediction() {}
     
@@ -108,34 +108,25 @@ public class OverflowPrediction {
         this.predictedFullDate = predictedFullDate;
         this.daysUntilFull = daysUntilFull;
         this.modelUsed = modelUsed;
+        this.generatedAt = generatedAt != null ? generatedAt.toLocalDateTime() : null;
+    }
+    
+    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull, 
+                             UsagePatternModel modelUsed, LocalDateTime generatedAt) {
+        this.bin = bin;
+        this.predictedFullDate = predictedFullDate;
+        this.daysUntilFull = daysUntilFull;
+        this.modelUsed = modelUsed;
         this.generatedAt = generatedAt;
     }
     
-    // Convenience constructor if tests pass LocalDate
-    public OverflowPrediction(Bin bin, LocalDate predictedFullLocalDate, Integer daysUntilFull,
-                              UsagePatternModel modelUsed, Timestamp generatedAt) {
-        this(bin, predictedFullLocalDate != null ? Date.valueOf(predictedFullLocalDate) : null,
-             daysUntilFull, modelUsed, generatedAt);
-    }
-    
-    // Comprehensive constructor for tests using both LocalDate and LocalDateTime
     public OverflowPrediction(Bin bin, LocalDate predictedFullLocalDate, Integer daysUntilFull,
                               UsagePatternModel modelUsed, LocalDateTime generatedAt) {
         this.bin = bin;
         this.predictedFullDate = predictedFullLocalDate != null ? Date.valueOf(predictedFullLocalDate) : null;
         this.daysUntilFull = daysUntilFull;
         this.modelUsed = modelUsed;
-        this.generatedAt = generatedAt != null ? Timestamp.valueOf(generatedAt) : null;
-    }
-    
-    // Constructor for tests using Date and LocalDateTime
-    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull,
-                              UsagePatternModel modelUsed, LocalDateTime generatedAt) {
-        this.bin = bin;
-        this.predictedFullDate = predictedFullDate;
-        this.daysUntilFull = daysUntilFull;
-        this.modelUsed = modelUsed;
-        this.generatedAt = generatedAt != null ? Timestamp.valueOf(generatedAt) : null;
+        this.generatedAt = generatedAt;
     }
     
     public Long getId() { return id; }
@@ -147,7 +138,6 @@ public class OverflowPrediction {
     public Date getPredictedFullDate() { return predictedFullDate; }
     public void setPredictedFullDate(Date predictedFullDate) { this.predictedFullDate = predictedFullDate; }
     
-    // Overloaded setter to accept LocalDate in tests
     public void setPredictedFullDate(LocalDate predictedFullLocalDate) {
         this.predictedFullDate = predictedFullLocalDate != null ? Date.valueOf(predictedFullLocalDate) : null;
     }
@@ -158,11 +148,10 @@ public class OverflowPrediction {
     public UsagePatternModel getModelUsed() { return modelUsed; }
     public void setModelUsed(UsagePatternModel modelUsed) { this.modelUsed = modelUsed; }
     
-    public Timestamp getGeneratedAt() { return generatedAt; }
-    public void setGeneratedAt(Timestamp generatedAt) { this.generatedAt = generatedAt; }
+    public LocalDateTime getGeneratedAt() { return generatedAt; }
+    public void setGeneratedAt(LocalDateTime generatedAt) { this.generatedAt = generatedAt; }
     
-    // Convenience setter for tests using LocalDateTime
-    public void setGeneratedAt(LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt != null ? Timestamp.valueOf(generatedAt) : null;
+    public void setGeneratedAt(Timestamp generatedAt) {
+        this.generatedAt = generatedAt != null ? generatedAt.toLocalDateTime() : null;
     }
 }
