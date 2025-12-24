@@ -28,7 +28,6 @@ public class FillLevelRecord {
         this.isWeekend = isWeekend;
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public Bin getBin() { return bin; }
     public Double getFillPercentage() { return fillPercentage; }

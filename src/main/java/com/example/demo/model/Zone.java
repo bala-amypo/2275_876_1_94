@@ -24,7 +24,6 @@ public class Zone {
         this.active = active;
     }
 
-    // getters & setters
     public Long getId() { return id; }
     public String getZoneName() { return zoneName; }
     public void setZoneName(String zoneName) { this.zoneName = zoneName; }

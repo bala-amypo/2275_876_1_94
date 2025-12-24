@@ -11,47 +11,43 @@ public class Bin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String binName;
-    private double latitude;
-    private double longitude;
+    @Column(unique = true)
+    private String identifier;
+
     private String locationDescription;
-    private int capacityLiters;   // Added to fix getCapacityLiters() error
-    private boolean active;       // Added to fix setActive() error
-    private Timestamp createdAt;  // Added to fix setCreatedAt()
-    private Timestamp updatedAt;  // Added to fix setUpdatedAt()
+    private Double latitude;
+    private Double longitude;
+    private Double capacityLiters;
+    private Boolean active;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     @ManyToOne
     private Zone zone;
 
     public Bin() {}
 
-    // Getters & setters
+    public Bin(String identifier, String locationDescription, Double latitude,
+               Double longitude, Zone zone, Double capacityLiters,
+               Boolean active, Timestamp createdAt, Timestamp updatedAt) {
+        this.identifier = identifier;
+        this.locationDescription = locationDescription;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.zone = zone;
+        this.capacityLiters = capacityLiters;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public Long getId() { return id; }
-
-    public String getBinName() { return binName; }
-    public void setBinName(String binName) { this.binName = binName; }
-
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
-
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
-
-    public String getLocationDescription() { return locationDescription; }
-    public void setLocationDescription(String locationDescription) { this.locationDescription = locationDescription; }
-
-    public int getCapacityLiters() { return capacityLiters; }
-    public void setCapacityLiters(int capacityLiters) { this.capacityLiters = capacityLiters; }
-
-    public boolean getActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
-
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
-
-    public Timestamp getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
-
+    public String getIdentifier() { return identifier; }
+    public void setIdentifier(String identifier) { this.identifier = identifier; }
+    public Double getCapacityLiters() { return capacityLiters; }
+    public void setCapacityLiters(Double capacityLiters) { this.capacityLiters = capacityLiters; }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
     public Zone getZone() { return zone; }
     public void setZone(Zone zone) { this.zone = zone; }
 }
