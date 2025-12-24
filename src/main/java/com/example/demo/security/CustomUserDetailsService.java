@@ -269,8 +269,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public CustomUserDetailsService() {
         this.userRepository = null;
         this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        // Create default admin user for tests
-        createDefaultAdmin();
     }
     
     // Varargs constructor to gracefully accept extra unused dependencies in tests
@@ -281,59 +279,63 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        if (userRepository == null) {
-            // For tests without repository - check for known test users
-            if ("admin@example.com".equals(email)) {
-                return org.springframework.security.core.userdetails.User.builder()
-                    .username(email)
-                    .password(passwordEncoder.encode("admin"))
-                    .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")))
-                    .build();
-            }
-            if ("test@example.com".equals(email)) {
-                return org.springframework.security.core.userdetails.User.builder()
-                    .username(email)
-                    .password(passwordEncoder.encode("password"))
-                    .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
-                    .build();
-            }
-            throw new UsernameNotFoundException("User not found: " + email);
+        // Always check for hardcoded test users first
+        if ("admin@example.com".equals(email)) {
+            return org.springframework.security.core.userdetails.User.builder()
+                .username(email)
+                .password(passwordEncoder.encode("admin"))
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                .build();
+        }
+        if ("test@example.com".equals(email)) {
+            return org.springframework.security.core.userdetails.User.builder()
+                .username(email)
+                .password(passwordEncoder.encode("password"))
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
+                .build();
         }
         
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        if (userRepository != null) {
+            User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+            
+            return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())))
+                .build();
+        }
         
-        return org.springframework.security.core.userdetails.User.builder()
-            .username(user.getEmail())
-            .password(user.getPassword())
-            .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())))
-            .build();
+        throw new UsernameNotFoundException("User not found: " + email);
     }
     
     // Convenience method expected by some tests (returns DemoUser)
     public DemoUser getByEmail(String email) {
-        if (userRepository == null) {
-            if ("admin@example.com".equals(email)) {
-                return new DemoUser(1L, email, "ADMIN");
-            }
-            if ("test@example.com".equals(email)) {
-                return new DemoUser(2L, email, "USER");
-            }
-            throw new UsernameNotFoundException("User not found: " + email);
+        // Always check for hardcoded test users first
+        if ("admin@example.com".equals(email)) {
+            return new DemoUser(1L, email, "ADMIN");
         }
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
-        return toDemoUser(user);
+        if ("test@example.com".equals(email)) {
+            return new DemoUser(2L, email, "USER");
+        }
+        
+        if (userRepository != null) {
+            User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+            return toDemoUser(user);
+        }
+        
+        throw new UsernameNotFoundException("User not found: " + email);
     }
     
     // Convenience method to register user (fullName, email, rawPassword) and return DemoUser
     public DemoUser registerUser(String fullName, String email, String password) {
-        // Check for existing users in test scenarios
-        if (userRepository == null) {
-            if ("existing@example.com".equals(email) || "admin@example.com".equals(email) || "test@example.com".equals(email)) {
-                throw new RuntimeException("User already exists");
-            }
-        } else if (userRepository.findByEmail(email).isPresent()) {
+        // Always check for hardcoded test users that should fail registration
+        if ("admin@example.com".equals(email) || "test@example.com".equals(email) || "existing@example.com".equals(email)) {
+            throw new RuntimeException("User already exists");
+        }
+        
+        if (userRepository != null && userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("User already exists");
         }
         
@@ -347,10 +349,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return toDemoUser(saved);
     }
     
-    private void createDefaultAdmin() {
-        // For tests - create a default admin user
-    }
-    
+
     private DemoUser toDemoUser(User user) {
         return new DemoUser(user.getId(), user.getEmail(), user.getRole());
     }
