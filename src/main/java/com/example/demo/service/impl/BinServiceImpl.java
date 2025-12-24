@@ -9,7 +9,6 @@ import com.example.demo.repository.ZoneRepository;
 import com.example.demo.service.BinService;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.List;
 
 public class BinServiceImpl implements BinService {
@@ -17,7 +16,8 @@ public class BinServiceImpl implements BinService {
     private final BinRepository binRepository;
     private final ZoneRepository zoneRepository;
 
-    public BinServiceImpl(BinRepository binRepository, ZoneRepository zoneRepository) {
+    public BinServiceImpl(BinRepository binRepository,
+                          ZoneRepository zoneRepository) {
         this.binRepository = binRepository;
         this.zoneRepository = zoneRepository;
     }
@@ -29,12 +29,12 @@ public class BinServiceImpl implements BinService {
         }
 
         Zone zone = zoneRepository.findById(bin.getZone().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("zone not found"));
 
         bin.setZone(zone);
         bin.setActive(true);
-        bin.setCreatedAt(Timestamp.from(Instant.now()));
-        bin.setUpdatedAt(Timestamp.from(Instant.now()));
+        bin.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        bin.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
         return binRepository.save(bin);
     }
@@ -42,14 +42,16 @@ public class BinServiceImpl implements BinService {
     @Override
     public Bin updateBin(Long id, Bin bin) {
         Bin existing = getBinById(id);
-        existing.setUpdatedAt(Timestamp.from(Instant.now()));
+        existing.setIdentifier(bin.getIdentifier());
+        existing.setCapacityLiters(bin.getCapacityLiters());
+        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return binRepository.save(existing);
     }
 
     @Override
     public Bin getBinById(Long id) {
         return binRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Bin not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("bin not found"));
     }
 
     @Override

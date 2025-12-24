@@ -23,20 +23,16 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone updateZone(Long id, Zone zone) {
-
-        Zone existing = zoneRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
-
+        Zone existing = getZoneById(id);
         existing.setZoneName(zone.getZoneName());
         existing.setDescription(zone.getDescription());
-
         return zoneRepository.save(existing);
     }
 
     @Override
     public Zone getZoneById(Long id) {
         return zoneRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Zone not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("zone not found"));
     }
 
     @Override
