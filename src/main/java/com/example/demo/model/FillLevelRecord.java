@@ -72,7 +72,7 @@ public class FillLevelRecord {
     private Bin bin;
     
     private Double fillPercentage;
-    private Timestamp recordedAt;
+    private LocalDateTime recordedAt;
     private Boolean isWeekend;
     
     public FillLevelRecord() {}
@@ -80,15 +80,14 @@ public class FillLevelRecord {
     public FillLevelRecord(Bin bin, Double fillPercentage, Timestamp recordedAt, Boolean isWeekend) {
         this.bin = bin;
         this.fillPercentage = fillPercentage;
-        this.recordedAt = recordedAt;
+        this.recordedAt = recordedAt != null ? recordedAt.toLocalDateTime() : null;
         this.isWeekend = isWeekend;
     }
     
-    // Convenience constructor for tests using LocalDateTime
     public FillLevelRecord(Bin bin, Double fillPercentage, LocalDateTime recordedAt, Boolean isWeekend) {
         this.bin = bin;
         this.fillPercentage = fillPercentage;
-        this.recordedAt = recordedAt != null ? Timestamp.valueOf(recordedAt) : null;
+        this.recordedAt = recordedAt;
         this.isWeekend = isWeekend;
     }
     
@@ -101,12 +100,11 @@ public class FillLevelRecord {
     public Double getFillPercentage() { return fillPercentage; }
     public void setFillPercentage(Double fillPercentage) { this.fillPercentage = fillPercentage; }
     
-    public Timestamp getRecordedAt() { return recordedAt; }
-    public void setRecordedAt(Timestamp recordedAt) { this.recordedAt = recordedAt; }
+    public LocalDateTime getRecordedAt() { return recordedAt; }
+    public void setRecordedAt(LocalDateTime recordedAt) { this.recordedAt = recordedAt; }
     
-    // Convenience setter for tests using LocalDateTime
-    public void setRecordedAt(LocalDateTime recordedAt) {
-        this.recordedAt = recordedAt != null ? Timestamp.valueOf(recordedAt) : null;
+    public void setRecordedAt(Timestamp recordedAt) {
+        this.recordedAt = recordedAt != null ? recordedAt.toLocalDateTime() : null;
     }
     
     public Boolean getIsWeekend() { return isWeekend; }

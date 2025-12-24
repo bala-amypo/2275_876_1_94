@@ -64,7 +64,7 @@ public class UsagePatternModel {
     
     private Double avgDailyIncreaseWeekday;
     private Double avgDailyIncreaseWeekend;
-    private Timestamp lastUpdated;
+    private LocalDateTime lastUpdated;
     
     public UsagePatternModel() {}
     
@@ -72,15 +72,14 @@ public class UsagePatternModel {
         this.bin = bin;
         this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
         this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-        this.lastUpdated = lastUpdated;
+        this.lastUpdated = lastUpdated != null ? lastUpdated.toLocalDateTime() : null;
     }
     
-    // Convenience constructor for tests using LocalDateTime
     public UsagePatternModel(Bin bin, Double avgDailyIncreaseWeekday, Double avgDailyIncreaseWeekend, LocalDateTime lastUpdated) {
         this.bin = bin;
         this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
         this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
-        this.lastUpdated = lastUpdated != null ? Timestamp.valueOf(lastUpdated) : null;
+        this.lastUpdated = lastUpdated;
     }
     
     public Long getId() { return id; }
@@ -95,11 +94,10 @@ public class UsagePatternModel {
     public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
     public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) { this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend; }
     
-    public Timestamp getLastUpdated() { return lastUpdated; }
-    public void setLastUpdated(Timestamp lastUpdated) { this.lastUpdated = lastUpdated; }
+    public LocalDateTime getLastUpdated() { return lastUpdated; }
+    public void setLastUpdated(LocalDateTime lastUpdated) { this.lastUpdated = lastUpdated; }
     
-    // Convenience setter for tests using LocalDateTime
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated != null ? Timestamp.valueOf(lastUpdated) : null;
+    public void setLastUpdated(Timestamp lastUpdated) {
+        this.lastUpdated = lastUpdated != null ? lastUpdated.toLocalDateTime() : null;
     }
 }
