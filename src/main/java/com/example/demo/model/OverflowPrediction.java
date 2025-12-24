@@ -128,6 +128,16 @@ public class OverflowPrediction {
         this.generatedAt = generatedAt != null ? Timestamp.valueOf(generatedAt) : null;
     }
     
+    // Constructor for tests using Date and LocalDateTime
+    public OverflowPrediction(Bin bin, Date predictedFullDate, Integer daysUntilFull,
+                              UsagePatternModel modelUsed, LocalDateTime generatedAt) {
+        this.bin = bin;
+        this.predictedFullDate = predictedFullDate;
+        this.daysUntilFull = daysUntilFull;
+        this.modelUsed = modelUsed;
+        this.generatedAt = generatedAt != null ? Timestamp.valueOf(generatedAt) : null;
+    }
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
