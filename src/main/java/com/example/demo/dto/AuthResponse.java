@@ -1,45 +1,51 @@
 package com.example.demo.dto;
 
-public class ApiResponse {
+public class AuthResponse {
 
-    private boolean success;
-    private String message;
-    private Object data;
+    private String token;
+    private Long userId;
+    private String email;
+    private String role;
 
-    public ApiResponse() {}
+    public AuthResponse() {}
 
-    public ApiResponse(boolean success, String message) {
-        this.success = success;
-        this.message = message;
+    public AuthResponse(String token, Long userId,
+                        String email, String role) {
+        this.token = token;
+        this.userId = userId;
+        this.email = email;
+        this.role = role;
     }
 
-    public ApiResponse(boolean success, String message, Object data) {
-        this.success = success;
-        this.message = message;
-        this.data = data;
+    public String getToken() {
+        return token;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public Long getUserId() {
+        return userId;
     }
 
-    public String getMessage() {
-        return message;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public String getEmail() {
+        return email;
     }
 
-    public Object getData() {
-        return data;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
