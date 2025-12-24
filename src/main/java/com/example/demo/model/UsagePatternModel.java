@@ -29,7 +29,28 @@ public class UsagePatternModel {
     }
 
     public Long getId() { return id; }
+
     public Bin getBin() { return bin; }
-    public Double getAvgDailyIncreaseWeekday() { return avgDailyIncreaseWeekday; }
-    public Double getAvgDailyIncreaseWeekend() { return avgDailyIncreaseWeekend; }
+    public void setBin(Bin bin) { this.bin = bin; }
+
+    public Double getAvgDailyIncreaseWeekday() {
+        return avgDailyIncreaseWeekday;
+    }
+
+    public void setAvgDailyIncreaseWeekday(Double avgDailyIncreaseWeekday) {
+        this.avgDailyIncreaseWeekday = avgDailyIncreaseWeekday;
+    }
+
+    public Double getAvgDailyIncreaseWeekend() {
+        return avgDailyIncreaseWeekend;
+    }
+
+    public void setAvgDailyIncreaseWeekend(Double avgDailyIncreaseWeekend) {
+        this.avgDailyIncreaseWeekend = avgDailyIncreaseWeekend;
+    }
+
+    public Timestamp getLastUpdated() { return lastUpdated; }
+    public void setLastUpdated(Timestamp lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

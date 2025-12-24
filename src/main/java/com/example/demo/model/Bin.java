@@ -19,6 +19,7 @@ public class Bin {
     private Double longitude;
     private Double capacityLiters;
     private Boolean active;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -41,13 +42,24 @@ public class Bin {
         this.updatedAt = updatedAt;
     }
 
+    // getters & setters
     public Long getId() { return id; }
+
     public String getIdentifier() { return identifier; }
     public void setIdentifier(String identifier) { this.identifier = identifier; }
+
     public Double getCapacityLiters() { return capacityLiters; }
     public void setCapacityLiters(Double capacityLiters) { this.capacityLiters = capacityLiters; }
+
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
+
     public Zone getZone() { return zone; }
     public void setZone(Zone zone) { this.zone = zone; }
+
+    public Timestamp getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public Timestamp getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
 }
