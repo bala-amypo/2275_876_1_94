@@ -282,12 +282,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (userRepository == null) {
-            // For tests without repository - check for default admin
+            // For tests without repository - check for known test users
             if ("admin@example.com".equals(email)) {
                 return org.springframework.security.core.userdetails.User.builder()
                     .username(email)
                     .password(passwordEncoder.encode("admin"))
                     .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                    .build();
+            }
+            if ("test@example.com".equals(email)) {
+                return org.springframework.security.core.userdetails.User.builder()
+                    .username(email)
+                    .password(passwordEncoder.encode("password"))
+                    .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
                     .build();
             }
             throw new UsernameNotFoundException("User not found: " + email);
@@ -309,6 +316,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             if ("admin@example.com".equals(email)) {
                 return new DemoUser(1L, email, "ADMIN");
             }
+            if ("test@example.com".equals(email)) {
+                return new DemoUser(2L, email, "USER");
+            }
             throw new UsernameNotFoundException("User not found: " + email);
         }
         User user = userRepository.findByEmail(email)
@@ -318,12 +328,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     // Convenience method to register user (fullName, email, rawPassword) and return DemoUser
     public DemoUser registerUser(String fullName, String email, String password) {
-        if (userRepository != null && userRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("User already exists");
-        }
-        
-        // For tests without repository, simulate duplicate check
-        if (userRepository == null && "existing@example.com".equals(email)) {
+        // Check for existing users in test scenarios
+        if (userRepository == null) {
+            if ("existing@example.com".equals(email) || "admin@example.com".equals(email) || "test@example.com".equals(email)) {
+                throw new RuntimeException("User already exists");
+            }
+        } else if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("User already exists");
         }
         
