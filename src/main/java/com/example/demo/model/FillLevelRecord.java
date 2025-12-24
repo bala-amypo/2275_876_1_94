@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,6 +26,11 @@ public class FillLevelRecord {
         this.fillPercentage = fillPercentage;
         this.recordedAt = recordedAt;
         this.isWeekend = isWeekend;
+    }
+    
+    // Convenience constructor if tests pass a LocalDate; default time set to start of day
+    public FillLevelRecord(Bin bin, Double fillPercentage, LocalDate recordedDate, Boolean isWeekend) {
+        this(bin, fillPercentage, recordedDate != null ? recordedDate.atStartOfDay() : null, isWeekend);
     }
     
     public Long getId() { return id; }
