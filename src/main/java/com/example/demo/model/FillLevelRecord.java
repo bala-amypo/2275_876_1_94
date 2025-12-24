@@ -58,6 +58,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fill_level_records")
@@ -83,6 +84,14 @@ public class FillLevelRecord {
         this.isWeekend = isWeekend;
     }
     
+    // Convenience constructor for tests using LocalDateTime
+    public FillLevelRecord(Bin bin, Double fillPercentage, LocalDateTime recordedAt, Boolean isWeekend) {
+        this.bin = bin;
+        this.fillPercentage = fillPercentage;
+        this.recordedAt = recordedAt != null ? Timestamp.valueOf(recordedAt) : null;
+        this.isWeekend = isWeekend;
+    }
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
@@ -94,6 +103,11 @@ public class FillLevelRecord {
     
     public Timestamp getRecordedAt() { return recordedAt; }
     public void setRecordedAt(Timestamp recordedAt) { this.recordedAt = recordedAt; }
+    
+    // Convenience setter for tests using LocalDateTime
+    public void setRecordedAt(LocalDateTime recordedAt) {
+        this.recordedAt = recordedAt != null ? Timestamp.valueOf(recordedAt) : null;
+    }
     
     public Boolean getIsWeekend() { return isWeekend; }
     public void setIsWeekend(Boolean isWeekend) { this.isWeekend = isWeekend; }
