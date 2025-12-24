@@ -21,13 +21,18 @@ public class BinController {
         return binService.createBin(bin);
     }
 
+    @PutMapping("/{id}")
+    public Bin update(@PathVariable Long id, @RequestBody Bin bin) {
+        return binService.updateBin(id, bin);
+    }
+
     @GetMapping("/{id}")
     public Bin get(@PathVariable Long id) {
         return binService.getBinById(id);
     }
 
     @GetMapping
-    public List<Bin> getAll() {
+    public List<Bin> all() {
         return binService.getAllBins();
     }
 

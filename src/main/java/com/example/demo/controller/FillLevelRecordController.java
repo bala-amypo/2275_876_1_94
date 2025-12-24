@@ -10,31 +10,30 @@ import java.util.List;
 @RequestMapping("/api/fill-records")
 public class FillLevelRecordController {
 
-    private final FillLevelRecordService recordService;
+    private final FillLevelRecordService service;
 
-    public FillLevelRecordController(FillLevelRecordService recordService) {
-        this.recordService = recordService;
+    public FillLevelRecordController(FillLevelRecordService service) {
+        this.service = service;
     }
 
     @PostMapping
     public FillLevelRecord create(@RequestBody FillLevelRecord record) {
-        return recordService.createRecord(record);
+        return service.createRecord(record);
     }
 
     @GetMapping("/{id}")
-    public FillLevelRecord getById(@PathVariable Long id) {
-        return recordService.getRecordById(id);
+    public FillLevelRecord get(@PathVariable Long id) {
+        return service.getRecordById(id);
     }
 
     @GetMapping("/bin/{binId}")
-    public List<FillLevelRecord> getByBin(@PathVariable Long binId) {
-        return recordService.getRecordsForBin(binId);
+    public List<FillLevelRecord> forBin(@PathVariable Long binId) {
+        return service.getRecordsForBin(binId);
     }
 
     @GetMapping("/bin/{binId}/recent")
-    public List<FillLevelRecord> getRecent(
-            @PathVariable Long binId,
-            @RequestParam int limit) {
-        return recordService.getRecentRecords(binId, limit);
+    public List<FillLevelRecord> recent(@PathVariable Long binId,
+                                        @RequestParam int limit) {
+        return service.getRecentRecords(binId, limit);
     }
 }

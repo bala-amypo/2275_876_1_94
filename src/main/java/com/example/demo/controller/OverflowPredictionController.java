@@ -10,31 +10,24 @@ import java.util.List;
 @RequestMapping("/api/predictions")
 public class OverflowPredictionController {
 
-    private final OverflowPredictionService predictionService;
+    private final OverflowPredictionService service;
 
-    public OverflowPredictionController(
-            OverflowPredictionService predictionService) {
-        this.predictionService = predictionService;
+    public OverflowPredictionController(OverflowPredictionService service) {
+        this.service = service;
     }
 
     @PostMapping("/generate/{binId}")
     public OverflowPrediction generate(@PathVariable Long binId) {
-        return predictionService.generatePrediction(binId);
+        return service.generatePrediction(binId);
     }
 
     @GetMapping("/{id}")
-    public OverflowPrediction getById(@PathVariable Long id) {
-        return predictionService.getPredictionById(id);
+    public OverflowPrediction get(@PathVariable Long id) {
+        return service.getPredictionById(id);
     }
 
     @GetMapping("/bin/{binId}")
-    public List<OverflowPrediction> getByBin(@PathVariable Long binId) {
-        return predictionService.getPredictionsForBin(binId);
-    }
-
-    @GetMapping("/zone/{zoneId}/latest")
-    public List<OverflowPrediction> getLatestForZone(
-            @PathVariable Long zoneId) {
-        return predictionService.getLatestPredictionsForZone(zoneId);
+    public List<OverflowPrediction> forBin(@PathVariable Long binId) {
+        return service.getPredictionsForBin(binId);
     }
 }

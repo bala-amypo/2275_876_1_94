@@ -22,19 +22,17 @@ public class ZoneController {
     }
 
     @PutMapping("/{id}")
-    public Zone update(
-            @PathVariable Long id,
-            @RequestBody Zone zone) {
+    public Zone update(@PathVariable Long id, @RequestBody Zone zone) {
         return zoneService.updateZone(id, zone);
     }
 
     @GetMapping("/{id}")
-    public Zone getById(@PathVariable Long id) {
+    public Zone get(@PathVariable Long id) {
         return zoneService.getZoneById(id);
     }
 
     @GetMapping
-    public List<Zone> getAll() {
+    public List<Zone> all() {
         return zoneService.getAllZones();
     }
 
