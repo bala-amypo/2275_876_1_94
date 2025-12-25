@@ -42,3 +42,67 @@
 //         return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRole()));
 //     }
 // }
+
+
+
+
+
+
+
+
+package com.example.demo.controller;
+
+import com.example.demo.security.CustomUserDetailsService;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+@CrossOrigin
+public class AuthController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private CustomUserDetailsService userService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        return ResponseEntity.ok(
+                new ApiResponse(true, "Login successful", authentication.getName())
+        );
+    }
+
+    @Data
+    static class LoginRequest {
+        private String email;
+        private String password;
+    }
+
+    @Data
+    static class ApiResponse {
+        private boolean success;
+        private String message;
+        private Object data;
+
+        public ApiResponse(boolean success, String message, Object data) {
+            this.success = success;
+            this.message = message;
+            this.data = data;
+        }
+    }
+}
