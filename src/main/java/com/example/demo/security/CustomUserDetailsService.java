@@ -233,31 +233,3 @@
 // }
 
 
-
-
-
-
-
-package com.example.demo.security;
-
-import org.springframework.security.core.userdetails.*;
-import org.springframework.stereotype.Service;
-
-@Service
-public class CustomUserDetailsService implements UserDetailsService {
-
-    @Override
-    public UserDetails loadUserByUsername(String email)
-            throws UsernameNotFoundException {
-
-        if (!email.equals("user3@test.com")) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        // ✅ NO {noop} HERE
-        return User.withUsername(email)
-                .password("123456")
-                .roles("USER")
-                .build();
-    }
-}
