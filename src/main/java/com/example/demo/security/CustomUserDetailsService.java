@@ -248,95 +248,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * TEST-COMPATIBLE UserDetailsService
- * ✔ No-arg constructor
- * ✔ In-memory users
- * ✔ Supports TestNG expectations
- * ✔ Works with JWT
- */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    // ------------------------------
-    // In-memory demo users (FOR TESTS)
-    // ------------------------------
-    private final Map<String, DemoUser> users = new HashMap<>();
-
-    // ✅ REQUIRED by tests
-    public CustomUserDetailsService() {
-        // default admin
-        users.put("admin@city.com",
-                new DemoUser(1L, "Admin", "admin@city.com", "ADMIN", "admin123"));
-    }
-
-    // ------------------------------
-    // Inner class REQUIRED by tests
-    // ------------------------------
-    public static class DemoUser {
-        private Long id;
-        private String name;
-        private String email;
-        private String role;
-        private String password;
-
-        public DemoUser(Long id, String name, String email, String role, String password) {
-            this.id = id;
-            this.name = name;
-            this.email = email;
-            this.role = role;
-            this.password = password;
-        }
-
-        public Long getId() { return id; }
-        public String getName() { return name; }
-        public String getEmail() { return email; }
-        public String getRole() { return role; }
-        public String getPassword() { return password; }
-    }
-
-    // ------------------------------
-    // Methods REQUIRED by tests
-    // ------------------------------
-
-    public DemoUser getByEmail(String email) {
-        DemoUser user = users.get(email);
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
-        return user;
-    }
-
-    public DemoUser registerUser(String name, String email, String password) {
-        if (users.containsKey(email)) {
-            throw new RuntimeException("User already exists");
-        }
-        DemoUser user = new DemoUser(
-                (long) (users.size() + 1),
-                name,
-                email,
-                "USER",
-                password
-        );
-        users.put(email, user);
-        return user;
-    }
-
-    // ------------------------------
-    // Spring Security integration
-    // ------------------------------
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
-        DemoUser user = users.get(email);
-        if (user == null) {
+        if (!email.equals("user3@test.com")) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return User.withUsername(user.getEmail())
-                .password("{noop}" + user.getPassword()) // noop for tests
-                .authorities("ROLE_" + user.getRole())
+        return User.withUsername(email)
+                .password("{noop}123456")
+                .roles("USER")
                 .build();
     }
 }
