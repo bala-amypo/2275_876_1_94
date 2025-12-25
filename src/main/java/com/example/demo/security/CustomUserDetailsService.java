@@ -240,26 +240,23 @@
 
 package com.example.demo.security;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
 
         if (!email.equals("user3@test.com")) {
             throw new UsernameNotFoundException("User not found");
         }
 
+        // ✅ NO {noop} HERE
         return User.withUsername(email)
-                .password("{noop}123456")
+                .password("123456")
                 .roles("USER")
                 .build();
     }
