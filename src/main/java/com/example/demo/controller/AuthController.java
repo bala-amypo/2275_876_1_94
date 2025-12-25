@@ -52,8 +52,6 @@
 
 package com.example.demo.controller;
 
-import com.example.demo.security.CustomUserDetailsService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -69,11 +67,8 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private CustomUserDetailsService userService;
-
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -87,14 +82,29 @@ public class AuthController {
         );
     }
 
-    @Data
-    static class LoginRequest {
+    // ======================
+    // INNER CLASSES (NO LOMBOK)
+    // ======================
+
+    public static class LoginRequest {
         private String email;
         private String password;
+
+        public String getEmail() {
+            return email;
+        }
+        public void setEmail(String email) {
+            this.email = email;
+        }
+        public String getPassword() {
+            return password;
+        }
+        public void setPassword(String password) {
+            this.password = password;
+        }
     }
 
-    @Data
-    static class ApiResponse {
+    public static class ApiResponse {
         private boolean success;
         private String message;
         private Object data;
@@ -103,6 +113,16 @@ public class AuthController {
             this.success = success;
             this.message = message;
             this.data = data;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+        public String getMessage() {
+            return message;
+        }
+        public Object getData() {
+            return data;
         }
     }
 }
