@@ -304,22 +304,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/auth/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**"
-                ).permitAll()
+                .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
+                .permitAll()
                 .anyRequest().authenticated()
             );
-
         return http.build();
     }
 
-    // ✅ THIS IS THE MISSING LINK
     @Bean
     public AuthenticationManager authenticationManager(
             CustomUserDetailsService userDetailsService,
@@ -332,7 +326,6 @@ public class SecurityConfig {
         return new ProviderManager(List.of(provider));
     }
 
-    // ✅ REQUIRED by UserServiceImpl + auth
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();

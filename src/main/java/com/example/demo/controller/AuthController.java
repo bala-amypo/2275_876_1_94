@@ -53,10 +53,13 @@
 package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -68,40 +71,44 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+            return ResponseEntity.ok(
+                    new ApiResponse(true, "Login successful", authentication.getName())
+            );
 
-        return ResponseEntity.ok(
-                new ApiResponse(true, "Login successful", authentication.getName())
-        );
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse(false, "Invalid email or password", null));
+
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse(false, e.getMessage(), null));
+
+        } catch (Exception e) {
+            e.printStackTrace(); // 🔥 THIS PRINTS REAL ERROR IN LOG
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(false, e.getClass().getName(), null));
+        }
     }
 
-    // ======================
-    // INNER CLASSES (NO LOMBOK)
-    // ======================
+    // ---------- DTOs (NO LOMBOK) ----------
 
     public static class LoginRequest {
         private String email;
         private String password;
 
-        public String getEmail() {
-            return email;
-        }
-        public void setEmail(String email) {
-            this.email = email;
-        }
-        public String getPassword() {
-            return password;
-        }
-        public void setPassword(String password) {
-            this.password = password;
-        }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
     }
 
     public static class ApiResponse {
@@ -115,14 +122,8 @@ public class AuthController {
             this.data = data;
         }
 
-        public boolean isSuccess() {
-            return success;
-        }
-        public String getMessage() {
-            return message;
-        }
-        public Object getData() {
-            return data;
-        }
+        public boolean isSuccess() { return success; }
+        public String getMessage() { return message; }
+        public Object getData() { return data; }
     }
 }
