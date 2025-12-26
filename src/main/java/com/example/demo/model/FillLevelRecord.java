@@ -46,10 +46,7 @@ public class FillLevelRecord {
     
     public LocalDateTime getRecordedAt() { return recordedAt; }
     public void setRecordedAt(LocalDateTime recordedAt) { this.recordedAt = recordedAt; }
-    
-    public void setRecordedAt(Timestamp recordedAt) {
-        this.recordedAt = recordedAt != null ? recordedAt.toLocalDateTime() : null;
-    }
+
     
     public Boolean getIsWeekend() { return isWeekend; }
     public void setIsWeekend(Boolean isWeekend) { this.isWeekend = isWeekend; }
