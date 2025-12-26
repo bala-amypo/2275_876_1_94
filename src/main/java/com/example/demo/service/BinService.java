@@ -10,3 +10,11 @@
 //     List<Bin> getAllBins();
 //     void deactivateBin(Long id);
 // }
+
+
+
+
+
+
+
+
