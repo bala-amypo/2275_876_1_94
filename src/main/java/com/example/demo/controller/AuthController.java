@@ -96,7 +96,7 @@ public class AuthController {
             // Wrong credentials - return 401
              return ResponseEntity
             .status(401)
-            .body("Invalid email or password");
+            .body(null);
         }
     }
 }
