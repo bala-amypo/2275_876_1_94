@@ -94,7 +94,9 @@ public class AuthController {
             
         } catch (AuthenticationException e) {
             // Wrong credentials - return 401
-            throw new RuntimeException("Invalid credentials");
+             return ResponseEntity
+            .status(401)
+            .body("Invalid email or password");
         }
     }
 }
