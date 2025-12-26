@@ -15,23 +15,29 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    // ✅ SINGLE constructor – Spring will inject correctly
     public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    // ✅ THIS is the ONLY method Spring Security uses for login
     @Override
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found: " + email)
+                        new UsernameNotFoundException(
+                                "User not found with email: " + email
+                        )
                 );
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
-                user.getPassword(), // ✅ BCrypt hash from DB
-                List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
+                user.getPassword(), // 🔑 MUST be encoded password from DB
+                List.of(
+                        new SimpleGrantedAuthority("ROLE_" + user.getRole())
+                )
         );
     }
 }
