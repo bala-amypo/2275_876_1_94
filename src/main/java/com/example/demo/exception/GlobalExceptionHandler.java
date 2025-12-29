@@ -1,0 +1,1 @@
+//Global Exception For Future Use
